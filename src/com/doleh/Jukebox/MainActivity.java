@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class MainActivity extends Activity
 {
     // UI Elements
@@ -129,7 +131,15 @@ public class MainActivity extends Activity
 
         // Check if requested song exists
         MediaLibraryHelper mediaLibraryHelper = new MediaLibraryHelper();
-        mediaLibraryHelper.getSongList(getContentResolver(), songTitle.getText().toString(), songArtist.getText().toString());
+        ArrayList songIds = mediaLibraryHelper.getSongList(getContentResolver(), songTitle.getText().toString(), songArtist.getText().toString());
+        if (songIds.size() != 0)
+        {
+            // Play song / reply with results
+        }
+        else
+        {
+            System.out.print("No matching songs found.");
+        }
     }
 }
 
