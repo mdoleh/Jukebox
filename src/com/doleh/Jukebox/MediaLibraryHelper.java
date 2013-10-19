@@ -14,13 +14,28 @@ public class MediaLibraryHelper
     {
         // Setup parameters for query
         String[] projection = {"_ID"};
-        String selector = "TITLE=%?% AND ARTIST=%?%";
-        String[] selectionArgs = {songTitle, songArtist};
+        String selector;
+        if (!songTitle.equals("") && !songArtist.equals(""))
+        {
+            selector = "TITLE=%" + songTitle + "% AND ARTIST=%" + songArtist + "%";
+        }
+        else if (!songTitle.equals("") && songArtist.equals(""))
+        {
+            selector = "TITLE=%" + songTitle + "%";
+        }
+        else if (songTitle.equals("") && !songArtist.equals(""))
+        {
+            selector = "ARTIST=%" + songArtist + "%";
+        }
+        else
+        {
+            selector = "";
+        }
 
         List songIds = new ArrayList();
 
-        Uri uri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        Cursor cursor = contentResolver.query(uri, projection, selector, selectionArgs, null);
+        Uri externalContentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        Cursor cursor = contentResolver.query(externalContentUri, projection, selector, null, null);
         if (cursor == null) {
             // query failed, handle error.
         } else if (!cursor.moveToFirst()) {
@@ -32,5 +47,10 @@ public class MediaLibraryHelper
             } while (cursor.moveToNext());
         }
         return songIds;
+    }
+
+    public void playSong(long songId)
+    {
+
     }
 }

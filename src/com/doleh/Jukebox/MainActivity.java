@@ -139,11 +139,8 @@ public class MainActivity extends Activity
     private void startListening()
     {
         // UI Elements
-        final TextView label = (TextView)findViewById(R.id.textView);
         final EditText songTitle = (EditText)findViewById(R.id.songTitle);
         final EditText songArtist = (EditText)findViewById(R.id.songArtist);
-        final Spinner availableDevices = (Spinner)findViewById(R.id.availableDevices);
-        final Button button = ((Button)findViewById(R.id.button));
 
         // Start listening for song requests
 
@@ -153,11 +150,12 @@ public class MainActivity extends Activity
         if (songIds.size() != 0)
         {
             // Play song / reply with results
-            System.out.print(songIds.get(0));
+            System.out.println(songIds.get(0));
+            mediaLibraryHelper.playSong(songIds.get(0));
         }
         else
         {
-            System.out.print("No matching songs found.");
+            System.out.println("No matching songs found.");
         }
     }
 }
