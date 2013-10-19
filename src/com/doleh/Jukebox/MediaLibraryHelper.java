@@ -68,6 +68,8 @@ public class MediaLibraryHelper
             MediaPlayer mMediaPlayer = new MediaPlayer();
             mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mMediaPlayer.setDataSource(context, contentUri);
+            mMediaPlayer.prepare();
+            mMediaPlayer.start();
         }
         catch (IOException e)
         {

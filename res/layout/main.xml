@@ -26,14 +26,19 @@
     <Spinner
             android:layout_width="362dp"
             android:layout_height="26dp"
-            android:id="@+id/availableDevices" android:layout_centerHorizontal="true" android:layout_below="@+id/songArtist"
+            android:id="@+id/availableDevices"
             android:spinnerMode="dropdown"
-            android:layout_alignLeft="@+id/songTitle" android:layout_alignRight="@+id/songTitle"
-            />
+            android:layout_centerHorizontal="true" android:layout_below="@+id/spinnerLabel"/>
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Send Request"
             android:id="@+id/button"
             android:layout_centerHorizontal="true" android:layout_below="@+id/availableDevices"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Available Devices"
+            android:id="@+id/spinnerLabel"
+            android:layout_centerHorizontal="true" android:layout_below="@+id/songArtist"/>
 </RelativeLayout>

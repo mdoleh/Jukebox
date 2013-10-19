@@ -73,10 +73,12 @@ public class MainActivity extends Activity
         final EditText songArtist = (EditText)findViewById(R.id.songArtist);
         final Spinner availableDevices = (Spinner)findViewById(R.id.availableDevices);
         final Button button = ((Button)findViewById(R.id.button));
+        final TextView spinnerLabel = (TextView)findViewById(R.id.spinnerLabel);
 
         songTitle.setVisibility(View.VISIBLE);
         songArtist.setVisibility(View.VISIBLE);
         availableDevices.setVisibility(View.VISIBLE);
+        spinnerLabel.setVisibility(View.VISIBLE);
         populateAvailableDevices();
         label.setText("Request a Song");
         button.setText("Send Request");
@@ -98,10 +100,12 @@ public class MainActivity extends Activity
         final EditText songTitle = (EditText)findViewById(R.id.songTitle);
         final EditText songArtist = (EditText)findViewById(R.id.songArtist);
         final Spinner availableDevices = (Spinner)findViewById(R.id.availableDevices);
+        final TextView spinnerLabel = (TextView)findViewById(R.id.spinnerLabel);
 
         songTitle.setVisibility(View.INVISIBLE);
         songArtist.setVisibility(View.INVISIBLE);
         availableDevices.setVisibility(View.INVISIBLE);
+        spinnerLabel.setVisibility(View.INVISIBLE);
     }
 
     private void hideListenUI()
@@ -147,11 +151,12 @@ public class MainActivity extends Activity
         // Check if requested song exists
         MediaLibraryHelper mediaLibraryHelper = new MediaLibraryHelper();
         List<List> songInfo = mediaLibraryHelper.getSongList(getContentResolver(), songTitle.getText().toString(), songArtist.getText().toString());
-        if (songInfo.size() != 0)
+        List songIds = songInfo.get(0);
+        List songTitles = songInfo.get(1);
+        if (songIds.size() != 0)
         {
             // Play song / reply with results
-            System.out.println(songInfo.get(0).get(0));
-//            mediaLibraryHelper.playSong(songIds.get(0), getApplicationContext());
+            mediaLibraryHelper.playSong((Long)songIds.get(0), getApplicationContext());
         }
         else
         {
