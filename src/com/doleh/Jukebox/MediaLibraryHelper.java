@@ -6,17 +6,18 @@ import android.net.Uri;
 import android.provider.MediaStore;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MediaLibraryHelper
 {
-    public ArrayList getSongList(ContentResolver contentResolver, String songTitle, String songArtist)
+    public List getSongList(ContentResolver contentResolver, String songTitle, String songArtist)
     {
         // Setup parameters for query
         String[] projection = {"_ID"};
         String selector = "TITLE=%?% AND ARTIST=%?%";
         String[] selectionArgs = {songTitle, songArtist};
 
-        ArrayList songIds = new ArrayList();
+        List songIds = new ArrayList();
 
         Uri uri = android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         Cursor cursor = contentResolver.query(uri, projection, selector, selectionArgs, null);

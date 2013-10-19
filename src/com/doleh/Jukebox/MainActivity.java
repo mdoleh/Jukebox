@@ -11,16 +11,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends Activity
 {
-    // UI Elements
-    TextView label = (TextView)findViewById(R.id.textView);
-    EditText songTitle = (EditText)findViewById(R.id.songTitle);
-    EditText songArtist = (EditText)findViewById(R.id.songArtist);
-    Spinner availableDevices = (Spinner)findViewById(R.id.availableDevices);
-    Button button = ((Button)findViewById(R.id.button));
-
     /**
      * Called when the activity is first created.
      */
@@ -73,6 +67,13 @@ public class MainActivity extends Activity
 
     private void showRequestUI()
     {
+        // UI Elements
+        final TextView label = (TextView)findViewById(R.id.textView);
+        final EditText songTitle = (EditText)findViewById(R.id.songTitle);
+        final EditText songArtist = (EditText)findViewById(R.id.songArtist);
+        final Spinner availableDevices = (Spinner)findViewById(R.id.availableDevices);
+        final Button button = ((Button)findViewById(R.id.button));
+
         songTitle.setVisibility(View.VISIBLE);
         songArtist.setVisibility(View.VISIBLE);
         availableDevices.setVisibility(View.VISIBLE);
@@ -83,12 +84,21 @@ public class MainActivity extends Activity
 
     private void showListenUI()
     {
+        // UI Elements
+        final TextView label = (TextView)findViewById(R.id.textView);
+        final Button button = ((Button)findViewById(R.id.button));
+
         label.setText("Listen for Requests");
         button.setText("Start Listening");
     }
 
     private void hideRequestUI()
     {
+        // UI Elements
+        final EditText songTitle = (EditText)findViewById(R.id.songTitle);
+        final EditText songArtist = (EditText)findViewById(R.id.songArtist);
+        final Spinner availableDevices = (Spinner)findViewById(R.id.availableDevices);
+
         songTitle.setVisibility(View.INVISIBLE);
         songArtist.setVisibility(View.INVISIBLE);
         availableDevices.setVisibility(View.INVISIBLE);
@@ -101,6 +111,7 @@ public class MainActivity extends Activity
 
     private void setupButtonEventListener()
     {
+        final Button button = ((Button)findViewById(R.id.button));
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (button.getText() == "Send Request")
@@ -127,14 +138,22 @@ public class MainActivity extends Activity
 
     private void startListening()
     {
+        // UI Elements
+        final TextView label = (TextView)findViewById(R.id.textView);
+        final EditText songTitle = (EditText)findViewById(R.id.songTitle);
+        final EditText songArtist = (EditText)findViewById(R.id.songArtist);
+        final Spinner availableDevices = (Spinner)findViewById(R.id.availableDevices);
+        final Button button = ((Button)findViewById(R.id.button));
+
         // Start listening for song requests
 
         // Check if requested song exists
         MediaLibraryHelper mediaLibraryHelper = new MediaLibraryHelper();
-        ArrayList songIds = mediaLibraryHelper.getSongList(getContentResolver(), songTitle.getText().toString(), songArtist.getText().toString());
+        List songIds = mediaLibraryHelper.getSongList(getContentResolver(), songTitle.getText().toString(), songArtist.getText().toString());
         if (songIds.size() != 0)
         {
             // Play song / reply with results
+            System.out.print(songIds.get(0));
         }
         else
         {
