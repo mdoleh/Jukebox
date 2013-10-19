@@ -15,7 +15,7 @@ import java.util.List;
 
 public class MediaLibraryHelper
 {
-    public List<Long> getSongList(ContentResolver contentResolver, String songTitle, String songArtist)
+    public List<List> getSongList(ContentResolver contentResolver, String songTitle, String songArtist)
     {
         // Setup parameters for query
         String[] projection = {MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE};
@@ -38,6 +38,7 @@ public class MediaLibraryHelper
         }
 
         List<Long> songIds = new ArrayList<Long>();
+        List<String> songTitles = new ArrayList<String>();
 
         Uri externalContentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         Cursor cursor = contentResolver.query(externalContentUri, projection, selector, null, null);
@@ -46,13 +47,15 @@ public class MediaLibraryHelper
         } else if (!cursor.moveToFirst()) {
             // no media on the device
         } else {
-            int idColumn = cursor.getColumnIndex(MediaStore.Audio.Media._ID);
-            int titleColumn = cursor.getColumnIndex(MediaStore.Audio.Media.TITLE);
             do {
                 songIds.add(cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID)));
+                songTitles.add(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));
             } while (cursor.moveToNext());
         }
-        return songIds;
+        ArrayList<List> allInfo = new ArrayList<List>();
+        allInfo.add(songIds);
+        allInfo.add(songTitles);
+        return allInfo;
     }
 
     public void playSong(Long songId, Context context)

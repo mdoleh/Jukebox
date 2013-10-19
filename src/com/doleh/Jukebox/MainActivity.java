@@ -146,11 +146,11 @@ public class MainActivity extends Activity
 
         // Check if requested song exists
         MediaLibraryHelper mediaLibraryHelper = new MediaLibraryHelper();
-        List<Long> songIds = mediaLibraryHelper.getSongList(getContentResolver(), songTitle.getText().toString(), songArtist.getText().toString());
-        if (songIds.size() != 0)
+        List<List> songInfo = mediaLibraryHelper.getSongList(getContentResolver(), songTitle.getText().toString(), songArtist.getText().toString());
+        if (songInfo.size() != 0)
         {
             // Play song / reply with results
-            System.out.println(songIds.get(0));
+            System.out.println(songInfo.get(0).get(0));
 //            mediaLibraryHelper.playSong(songIds.get(0), getApplicationContext());
         }
         else
