@@ -1,13 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
-        >
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Hello World, ACTIVITY_ENTRY_NAME"
-            />
-</LinearLayout>
 
+<RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Request a Song"
+            android:id="@+id/textView"
+            android:layout_centerHorizontal="true" android:layout_alignParentTop="true" android:textSize="30dp"
+            android:layout_gravity="center_horizontal|top"/>
+    <EditText
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/songTitle"
+            android:hint="Song Title"
+            android:gravity="center_horizontal"
+            android:layout_alignLeft="@+id/songArtist" android:layout_alignParentTop="true"
+            android:layout_marginTop="98dp"/>
+    <EditText android:layout_width="300dp" android:layout_height="wrap_content" android:id="@+id/songArtist"
+              android:hint="Artist"
+              android:gravity="center_horizontal"
+              android:layout_centerHorizontal="true" android:layout_alignParentTop="true"
+              android:layout_marginTop="149dp"/>
+    <Spinner
+            android:layout_width="362dp"
+            android:layout_height="26dp"
+            android:id="@+id/availableDevices" android:layout_centerHorizontal="true" android:layout_below="@+id/songArtist"
+            android:spinnerMode="dropdown"
+            android:layout_alignLeft="@+id/songTitle" android:layout_alignRight="@+id/songTitle"
+            />
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send Request"
+            android:id="@+id/button"
+            android:layout_centerHorizontal="true" android:layout_below="@+id/availableDevices"/>
+</RelativeLayout>
