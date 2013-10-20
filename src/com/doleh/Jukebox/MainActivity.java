@@ -17,7 +17,6 @@ import java.util.List;
 public class MainActivity extends Activity
 {
     MediaLibraryHelper mediaLibraryHelper;
-    CommunicationHelper communicationHelper;
     /**
      * Called when the activity is first created.
      */
@@ -160,9 +159,6 @@ public class MainActivity extends Activity
         final EditText songArtist = (EditText)findViewById(R.id.songArtist);
 
         // Start listening for song requests
-        communicationHelper = new CommunicationHelper();
-        communicationHelper.setActivity(this);
-
 
         // Check if requested song exists
         mediaLibraryHelper = new MediaLibraryHelper();
@@ -172,7 +168,7 @@ public class MainActivity extends Activity
         if (songIds.size() != 0)
         {
             // Play song / reply with results
-            mediaLibraryHelper.playSong((Long) songIds.get(0), getApplicationContext());
+            mediaLibraryHelper.playSong((Long)songIds.get(0), getApplicationContext());
         }
         else
         {
