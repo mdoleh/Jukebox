@@ -8,9 +8,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.MediaPlayer;
-import android.net.wifi.p2p.*;
+import android.net.wifi.p2p.WifiP2pDevice;
+import android.net.wifi.p2p.WifiP2pManager;
+import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.*;
 
@@ -19,7 +20,7 @@ import java.util.List;
 
 import static java.sql.DriverManager.println;
 
-public class MainActivity extends Activity implements WifiP2pManager.ChannelListener
+public class MainActivity extends Activity
 {
     private MediaLibraryHelper mediaLibraryHelper;
     private IntentFilter intentFilter = new IntentFilter();
@@ -27,7 +28,6 @@ public class MainActivity extends Activity implements WifiP2pManager.ChannelList
     private WifiP2pManager mManager;
     private BroadcastReceiver receiver;
     private List peers = new ArrayList();
-    private boolean retryChannel = false;
 
     /**
      * Called when the activity is first created.
@@ -154,6 +154,7 @@ public class MainActivity extends Activity implements WifiP2pManager.ChannelList
         songArtist.setVisibility(View.VISIBLE);
         availableDevices.setVisibility(View.VISIBLE);
         spinnerLabel.setVisibility(View.VISIBLE);
+        populateAvailableDevices();
         label.setText("Request a Song");
         button.setText("Send Request");
     }
@@ -214,6 +215,11 @@ public class MainActivity extends Activity implements WifiP2pManager.ChannelList
         }});
     }
 
+    private void populateAvailableDevices()
+    {
+        // Retrieve available devices
+    }
+
     private void sendRequest()
     {
         // Send song request
@@ -226,24 +232,7 @@ public class MainActivity extends Activity implements WifiP2pManager.ChannelList
         final EditText songArtist = (EditText)findViewById(R.id.songArtist);
 
         // Start listening for song requests
-        mManager.createGroup(mChannel, new WifiP2pManager.ActionListener()
-        {
-            @Override
-            public void onSuccess()
-            {}
 
-            @Override
-            public void onFailure(int reason)
-            {}
-        });
-        mManager.requestGroupInfo(mChannel, new WifiP2pManager.GroupInfoListener()
-        {
-            @Override
-            public void onGroupInfoAvailable(WifiP2pGroup group)
-            {
-                println(group.getOwner().deviceAddress);
-            }
-        });
 
         // Check if requested song exists
         mediaLibraryHelper = new MediaLibraryHelper();
@@ -283,9 +272,9 @@ public class MainActivity extends Activity implements WifiP2pManager.ChannelList
                 // the Activity.
                 int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
                 if (state == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {
-                    println("State Enabled");
+                    // do stuff
                 } else {
-                    println("State Disabled");
+                    // do stuff
                 }
             } else if (WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
 
@@ -298,67 +287,22 @@ public class MainActivity extends Activity implements WifiP2pManager.ChannelList
                 // that.
 
             } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
-
+//            DeviceListFragment fragment = (DeviceListFragment) activity.getFragmentManager()
+//                    .findFragmentById(R.id.frag_list);
+//            fragment.updateThisDevice((WifiP2pDevice) intent.getParcelableExtra(
+//                    WifiP2pManager.EXTRA_WIFI_P2P_DEVICE));
             }
         }
     }
 
-    public void connect(WifiP2pConfig config) {
-        mManager.connect(mChannel, config, new WifiP2pManager.ActionListener() {
-
-            @Override
-            public void onSuccess()
-            {}
-
-            @Override
-            public void onFailure(int reason)
-            {}
-        });
-    }
-
-    public void disconnect()
+    private class WiFiPeerListAdapter extends ArrayAdapter<WifiP2pDevice>
     {
-        mManager.removeGroup(mChannel, new WifiP2pManager.ActionListener() {
+        private List<WifiP2pDevice> items;
 
-            @Override
-            public void onFailure(int reasonCode) {}
-
-            @Override
-            public void onSuccess() {}
-
-        });
-    }
-
-    public void cancelDisconnect() {
-
-        /*
-         * A cancel abort request by user. Disconnect i.e. removeGroup if
-         * already connected. Else, request WifiP2pManager to abort the ongoing
-         * request
-         */
-        if (mManager != null) {
-            mManager.cancelConnect(mChannel, new WifiP2pManager.ActionListener() {
-
-            @Override
-            public void onSuccess() {}
-
-            @Override
-            public void onFailure(int reasonCode) {}
-        });
-        }
-    }
-
-    public void onChannelDisconnected() {
-        // we will try once more
-        if (mManager != null && !retryChannel) {
-            Toast.makeText(this, "Channel lost. Trying again", Toast.LENGTH_LONG).show();
-//            resetData();
-            retryChannel = true;
-            mManager.initialize(this, getMainLooper(), this);
-        } else {
-            Toast.makeText(this,
-                    "Severe! Channel is probably lost premanently. Try Disable/Re-Enable P2P.",
-                    Toast.LENGTH_LONG).show();
+        public WiFiPeerListAdapter(Context context, int textViewResourceId,
+                                   List<WifiP2pDevice> objects) {
+            super(context, textViewResourceId, objects);
+            items = objects;
         }
     }
 }
