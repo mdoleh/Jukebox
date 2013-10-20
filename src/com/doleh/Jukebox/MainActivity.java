@@ -3,7 +3,9 @@ package com.doleh.Jukebox;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +28,8 @@ public class MainActivity extends Activity
     private String sendingNode;
     private String sendingChannel;
     private List<Integer> interfaceList;
+    private PowerManager powerManager;
+    private PowerManager.WakeLock wakeLock;
 
     private static final String JUKEBOX_REQUEST_CHANNEL = "jukeboxRequestChannel";
 
@@ -45,6 +49,10 @@ public class MainActivity extends Activity
         mChordManager = ChordManager.getInstance(this);
         mChordManager.setTempDirectory(String.valueOf(getCacheDir()));
         mChordManager.setHandleEventLooper(getMainLooper());
+
+        powerManager = (PowerManager)getSystemService(Context.POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "LCD-on");
+        wakeLock.acquire();
 
         interfaceList = mChordManager.getAvailableInterfaceTypes();
         if (interfaceList.isEmpty())
@@ -91,6 +99,11 @@ public class MainActivity extends Activity
                 }
             }
         });
+    }
+
+    public void OnPause()
+    {
+        wakeLock.release();
     }
 
     private IChordChannelListener mChannelListener = new IChordChannelListener()
