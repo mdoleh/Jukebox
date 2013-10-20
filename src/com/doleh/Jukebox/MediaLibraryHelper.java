@@ -15,6 +15,7 @@ import java.util.List;
 
 public class MediaLibraryHelper
 {
+    MediaPlayer mMediaPlayer;
     public List<List> getSongList(ContentResolver contentResolver, String songTitle, String songArtist)
     {
         // Setup parameters for query
@@ -65,7 +66,7 @@ public class MediaLibraryHelper
             Uri contentUri = ContentUris.withAppendedId(
                     android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, songId);
 
-            MediaPlayer mMediaPlayer = new MediaPlayer();
+            mMediaPlayer = new MediaPlayer();
             mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mMediaPlayer.setDataSource(context, contentUri);
             mMediaPlayer.prepare();
@@ -75,5 +76,11 @@ public class MediaLibraryHelper
         {
             // shit's broke yo
         }
+    }
+
+    public void stopSong()
+    {
+        mMediaPlayer.stop();
+        mMediaPlayer = null;
     }
 }

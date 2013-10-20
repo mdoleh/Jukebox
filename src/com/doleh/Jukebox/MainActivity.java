@@ -3,6 +3,7 @@ package com.doleh.Jukebox;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import java.util.List;
 
 public class MainActivity extends Activity
 {
+    MediaLibraryHelper mediaLibraryHelper;
     /**
      * Called when the activity is first created.
      */
@@ -89,7 +91,9 @@ public class MainActivity extends Activity
         // UI Elements
         final TextView label = (TextView)findViewById(R.id.textView);
         final Button button = ((Button)findViewById(R.id.button));
+        final Button stopButton = (Button)findViewById(R.id.stopButton);
 
+        stopButton.setVisibility(View.VISIBLE);
         label.setText("Listen for Requests");
         button.setText("Start Listening");
     }
@@ -110,7 +114,9 @@ public class MainActivity extends Activity
 
     private void hideListenUI()
     {
-        // Will hide Listen UI when more functionality is implemented
+        final Button stopButton = (Button)findViewById(R.id.stopButton);
+
+        stopButton.setVisibility(View.INVISIBLE);
     }
 
     private void setupButtonEventListener()
@@ -128,6 +134,12 @@ public class MainActivity extends Activity
                 }
             }
         });
+
+        final Button stopButton = (Button)findViewById(R.id.stopButton);
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                mediaLibraryHelper.stopSong();
+        }});
     }
 
     private void populateAvailableDevices()
@@ -149,7 +161,7 @@ public class MainActivity extends Activity
         // Start listening for song requests
 
         // Check if requested song exists
-        MediaLibraryHelper mediaLibraryHelper = new MediaLibraryHelper();
+        mediaLibraryHelper = new MediaLibraryHelper();
         List<List> songInfo = mediaLibraryHelper.getSongList(getContentResolver(), songTitle.getText().toString(), songArtist.getText().toString());
         List songIds = songInfo.get(0);
         List songTitles = songInfo.get(1);
