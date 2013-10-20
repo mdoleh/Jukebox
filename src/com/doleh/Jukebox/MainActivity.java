@@ -16,7 +16,6 @@ import com.samsung.chord.IChordChannel;
 import com.samsung.chord.IChordChannelListener;
 import com.samsung.chord.IChordManagerListener;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import static java.sql.DriverManager.println;
@@ -25,8 +24,8 @@ public class MainActivity extends Activity
 {
     private MediaLibraryHelper mediaLibraryHelper;
     private ChordManager mChordManager;
-    private String sendingNode;
-    private String sendingChannel;
+    private String newNode;
+    private String newChannel;
     private List<Integer> interfaceList;
     private PowerManager powerManager;
     private PowerManager.WakeLock wakeLock;
@@ -60,7 +59,7 @@ public class MainActivity extends Activity
             // no connection
             return;
         }
-        mChordManager.start(interfaceList.get(0), new IChordManagerListener()
+        mChordManager.start(interfaceList.get(ChordManager.INTERFACE_TYPE_WIFIP2P), new IChordManagerListener()
         {
             @Override
             public void onStarted(String name, int reason)
@@ -69,7 +68,7 @@ public class MainActivity extends Activity
                 {
                     // Chord started successfully
                     IChordChannel channel = null;
-                    channel = mChordManager.joinChannel(JUKEBOX_REQUEST_CHANNEL, mChannelListener);
+                    channel = mChordManager.joinChannel(ChordManager.PUBLIC_CHANNEL, mChannelListener);
                     if (channel == null)
                     {
                         // Failed to join channel
@@ -111,8 +110,8 @@ public class MainActivity extends Activity
         @Override
         public void onNodeJoined(String fromNode, String fromChannel)
         {
-            sendingNode = fromNode;
-            sendingChannel = fromChannel;
+            newNode = fromNode;
+            newChannel = fromChannel;
         }
 
         @Override
@@ -124,20 +123,12 @@ public class MainActivity extends Activity
         @Override
         public void onDataReceived(String fromNode, String fromChannel, String payloadType, byte[][] payload)
         {
-            try
-            {
-                println("Data has been received!");
-                String songTitle = new String(payload[0], "UTF-8");
-                println("songTitle processed!");
-                String songArtist = new String(payload[1], "UTF-8");
-                println("songArtist processed!");
-                checkSongExists(songTitle, songArtist);
-            }
-            catch (UnsupportedEncodingException e)
-            {
-                // Failed to convert payload
-                e.printStackTrace();
-            }
+            println("Data has been received!");
+            String songTitle = new String(payload[0]);
+            println("songTitle processed!");
+            String songArtist = new String(payload[1]);
+            println("songArtist processed!");
+            checkSongExists(songTitle, songArtist);
         }
 
         @Override
@@ -337,12 +328,13 @@ public class MainActivity extends Activity
         final EditText songArtist = (EditText)findViewById(R.id.songArtist);
 
         // Send song request
-        byte[][] request = new byte[1][];
+        byte[][] request = new byte[2][];
         request[0] = songTitle.getText().toString().getBytes();
         request[1] = songArtist.getText().toString().getBytes();
 
-        IChordChannel channel = mChordManager.getJoinedChannel(sendingChannel);
-        channel.sendData(sendingNode, "songRequest", request);
+        IChordChannel channel = mChordManager.getJoinedChannel(ChordManager.PUBLIC_CHANNEL);
+        //channel.sendData(newNode, "songRequest", request);
+        channel.sendDataToAll("songRequest", request);
     }
 
     private void startListening()
