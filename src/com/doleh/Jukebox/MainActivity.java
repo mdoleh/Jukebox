@@ -9,7 +9,6 @@ import android.os.PowerManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import com.samsung.chord.ChordManager;
 import com.samsung.chord.IChordChannel;
@@ -244,7 +243,7 @@ public class MainActivity extends Activity
 
         // Add 2 tabs, specifying the tab's text and TabListener
         actionBar.addTab(actionBar.newTab().setText("Request a Song").setTabListener(tabListener));
-        actionBar.addTab(actionBar.newTab().setText("Listen for Requests").setTabListener(tabListener));
+        actionBar.addTab(actionBar.newTab().setText("Music Control Center").setTabListener(tabListener));
     }
 
     private void showRequestUI()
@@ -253,28 +252,22 @@ public class MainActivity extends Activity
         final TextView label = (TextView)findViewById(R.id.textView);
         final EditText songTitle = (EditText)findViewById(R.id.songTitle);
         final EditText songArtist = (EditText)findViewById(R.id.songArtist);
-        final Spinner availableDevices = (Spinner)findViewById(R.id.availableDevices);
         final Button button = ((Button)findViewById(R.id.button));
-        final TextView spinnerLabel = (TextView)findViewById(R.id.spinnerLabel);
 
         songTitle.setVisibility(View.VISIBLE);
         songArtist.setVisibility(View.VISIBLE);
-        availableDevices.setVisibility(View.VISIBLE);
-        spinnerLabel.setVisibility(View.VISIBLE);
+        button.setVisibility(View.VISIBLE);
         label.setText("Request a Song");
-        button.setText("Send Request");
     }
 
     private void showListenUI()
     {
         // UI Elements
         final TextView label = (TextView)findViewById(R.id.textView);
-        final Button button = ((Button)findViewById(R.id.button));
         final Button stopButton = (Button)findViewById(R.id.stopButton);
 
         stopButton.setVisibility(View.VISIBLE);
-        label.setText("Listen for Requests");
-        button.setText("Start Listening");
+        label.setText("Music Control Center");
     }
 
     private void hideRequestUI()
@@ -282,13 +275,11 @@ public class MainActivity extends Activity
         // UI Elements
         final EditText songTitle = (EditText)findViewById(R.id.songTitle);
         final EditText songArtist = (EditText)findViewById(R.id.songArtist);
-        final Spinner availableDevices = (Spinner)findViewById(R.id.availableDevices);
-        final TextView spinnerLabel = (TextView)findViewById(R.id.spinnerLabel);
+        final Button button = (Button)findViewById(R.id.button);
 
         songTitle.setVisibility(View.INVISIBLE);
         songArtist.setVisibility(View.INVISIBLE);
-        availableDevices.setVisibility(View.INVISIBLE);
-        spinnerLabel.setVisibility(View.INVISIBLE);
+        button.setVisibility((View.INVISIBLE));
     }
 
     private void hideListenUI()
