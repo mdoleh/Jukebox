@@ -74,7 +74,7 @@ public class MediaLibraryHelper
         }
         catch (IOException e)
         {
-            // shit's broke yo
+            // Unable to play song
         }
     }
 
