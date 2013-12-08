@@ -16,10 +16,10 @@ import java.util.List;
 public class MediaLibraryHelper
 {
     MediaPlayer mMediaPlayer;
-    public List<List> getSongList(ContentResolver contentResolver, String songTitle, String songArtist)
+    public List<Song> getSongList(ContentResolver contentResolver, String songTitle, String songArtist)
     {
         // Setup parameters for query
-        String[] projection = {MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE};
+        String[] projection = {MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.ARTIST};
         String selector;
         if (!songTitle.equals("") && !songArtist.equals(""))
         {
@@ -38,8 +38,7 @@ public class MediaLibraryHelper
             selector = "";
         }
 
-        List<Long> songIds = new ArrayList<Long>();
-        List<String> songTitles = new ArrayList<String>();
+        ArrayList<Song> allInfo = new ArrayList<Song>();
 
         Uri externalContentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
         Cursor cursor = contentResolver.query(externalContentUri, projection, selector, null, null);
@@ -49,13 +48,11 @@ public class MediaLibraryHelper
             // no media on the device
         } else {
             do {
-                songIds.add(cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID)));
-                songTitles.add(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));
+                allInfo.add(new Song(cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID)),
+                        cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)),
+                        cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))));
             } while (cursor.moveToNext());
         }
-        ArrayList<List> allInfo = new ArrayList<List>();
-        allInfo.add(songIds);
-        allInfo.add(songTitles);
         return allInfo;
     }
 

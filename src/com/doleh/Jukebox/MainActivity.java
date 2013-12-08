@@ -324,7 +324,7 @@ public class MainActivity extends Activity
         request[1] = songArtist.getText().toString().getBytes();
 
         IChordChannel channel = mChordManager.getJoinedChannel(ChordManager.PUBLIC_CHANNEL);
-        //channel.sendData(newNode, "songRequest", request);
+//        channel.sendData(newNode, "songRequest", request);
         channel.sendDataToAll("songRequest", request);
     }
 
@@ -338,13 +338,11 @@ public class MainActivity extends Activity
     {
         // Check if requested song exists
         mediaLibraryHelper = new MediaLibraryHelper();
-        List<List> songInfo = mediaLibraryHelper.getSongList(getContentResolver(), songTitle, songArtist);
-        List songIds = songInfo.get(0);
-        List songTitles = songInfo.get(1);
-        if (songIds.size() != 0)
+        List<Song> songInfo = mediaLibraryHelper.getSongList(getContentResolver(), songTitle, songArtist);
+        if (songInfo.size() != 0)
         {
             // Play song / reply with results
-            mediaLibraryHelper.playSong((Long) songIds.get(0), getApplicationContext());
+            mediaLibraryHelper.playSong((Long) songInfo.get(0).id, getApplicationContext());
         }
         else
         {
