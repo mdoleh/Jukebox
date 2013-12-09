@@ -301,10 +301,12 @@ public class MainActivity extends Activity
         final EditText songTitle = (EditText)findViewById(R.id.songTitle);
         final EditText songArtist = (EditText)findViewById(R.id.songArtist);
         final Button button = ((Button)findViewById(R.id.button));
+        final Spinner songListSpinner = (Spinner)findViewById(R.id.songListSpinner);
 
         songTitle.setVisibility(View.VISIBLE);
         songArtist.setVisibility(View.VISIBLE);
         button.setVisibility(View.VISIBLE);
+        songListSpinner.setVisibility(View.VISIBLE);
         button.setText(getString(R.string.sendRequest));
         label.setText(getString(R.string.requestSong));
     }
@@ -316,6 +318,7 @@ public class MainActivity extends Activity
         final Button button = ((Button)findViewById(R.id.button));
         final Button stopButton = (Button)findViewById(R.id.stopButton);
 
+        button.setVisibility(View.VISIBLE);
         stopButton.setVisibility(View.VISIBLE);
         button.setText(getString(R.string.becomeListener));
         label.setText(getString(R.string.musicControlCenter));
@@ -327,10 +330,12 @@ public class MainActivity extends Activity
         final EditText songTitle = (EditText)findViewById(R.id.songTitle);
         final EditText songArtist = (EditText)findViewById(R.id.songArtist);
         final Button button = (Button)findViewById(R.id.button);
+        final Spinner songListSpinner = (Spinner)findViewById(R.id.songListSpinner);
 
         songTitle.setVisibility(View.INVISIBLE);
         songArtist.setVisibility(View.INVISIBLE);
         button.setVisibility((View.INVISIBLE));
+        songListSpinner.setVisibility((View.INVISIBLE));
     }
 
     private void hideListenUI()
