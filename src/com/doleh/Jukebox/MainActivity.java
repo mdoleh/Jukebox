@@ -21,6 +21,9 @@ import static java.sql.DriverManager.println;
 
 public class MainActivity extends Activity
 {
+    private static final String SONG_REQUEST_TYPE = "songRequest";
+    private static final String SONG_LIST_TYPE = "songList";
+
     private MediaLibraryHelper mediaLibraryHelper;
     private ChordManager mChordManager;
     private List<Integer> interfaceList;
@@ -127,7 +130,7 @@ public class MainActivity extends Activity
         {
             println("Data has been received!");
 
-            if (payloadType.equals("songRequest"))
+            if (payloadType.equals(SONG_REQUEST_TYPE))
             {
                 List<Song> songList = checkSongExists(new String(payload[0]), new String(payload[1]));
 
@@ -143,7 +146,7 @@ public class MainActivity extends Activity
                     // TODO: display message to the user indicating no matches found
                 }
             }
-            else if (payloadType.equals("songList"))
+            else if (payloadType.equals(SONG_LIST_TYPE))
             {
                 List<Song> songList = new ArrayList<Song>();
                 try
@@ -265,7 +268,7 @@ public class MainActivity extends Activity
         ActionBar.TabListener tabListener = new ActionBar.TabListener() {
             public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
                 // show the given tab
-                if (tab.getText() == "Request a Song")
+                if (tab.getText() == getString(R.string.requestSong))
                 {
                     hideListenUI();
                     showRequestUI();
@@ -287,8 +290,8 @@ public class MainActivity extends Activity
         };
 
         // Add 2 tabs, specifying the tab's text and TabListener
-        actionBar.addTab(actionBar.newTab().setText("Request a Song").setTabListener(tabListener));
-        actionBar.addTab(actionBar.newTab().setText("Music Control Center").setTabListener(tabListener));
+        actionBar.addTab(actionBar.newTab().setText(getString(R.string.requestSong)).setTabListener(tabListener));
+        actionBar.addTab(actionBar.newTab().setText(getString(R.string.musicControlCenter)).setTabListener(tabListener));
     }
 
     private void showRequestUI()
@@ -302,8 +305,8 @@ public class MainActivity extends Activity
         songTitle.setVisibility(View.VISIBLE);
         songArtist.setVisibility(View.VISIBLE);
         button.setVisibility(View.VISIBLE);
-        button.setText("Send Request");
-        label.setText("Request a Song");
+        button.setText(getString(R.string.sendRequest));
+        label.setText(getString(R.string.requestSong));
     }
 
     private void showListenUI()
@@ -314,8 +317,8 @@ public class MainActivity extends Activity
         final Button stopButton = (Button)findViewById(R.id.stopButton);
 
         stopButton.setVisibility(View.VISIBLE);
-        button.setText("Become Listener");
-        label.setText("Music Control Center");
+        button.setText(getString(R.string.becomeListener));
+        label.setText(getString(R.string.musicControlCenter));
     }
 
     private void hideRequestUI()
@@ -342,11 +345,11 @@ public class MainActivity extends Activity
         final Button button = ((Button)findViewById(R.id.button));
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (button.getText() == "Send Request")
+                if (button.getText() == getString(R.string.requestSong))
                 {
                     sendRequest();
                 }
-                else if (button.getText() == "Become Listener")
+                else if (button.getText() == getString(R.string.becomeListener))
                 {
                     toggleListener();
                 }
@@ -377,9 +380,9 @@ public class MainActivity extends Activity
         request[1] = songArtist.getText().toString().getBytes();
 
         IChordChannel channel = mChordManager.getJoinedChannel(ChordManager.PUBLIC_CHANNEL);
-//        channel.sendData(newNode, "songRequest", request);
-        // TODO: send data only to the listener node
-        channel.sendDataToAll("songRequest", request);
+//        channel.sendData(newNode, SONG_REQUEST_TYPE, request);
+        // TODO: send data only to the listener node and add if statement as done in sendPossibleMatches
+        channel.sendDataToAll(SONG_REQUEST_TYPE, request);
     }
 
     private void sendPossibleMatches(String fromNode, List<Song> songList)
@@ -395,7 +398,7 @@ public class MainActivity extends Activity
 
             // Send byte array to requester
             IChordChannel channel = mChordManager.getJoinedChannel(ChordManager.PUBLIC_CHANNEL);
-            if (!channel.sendData(fromNode, "songList", possibleMatches))
+            if (!channel.sendData(fromNode, SONG_LIST_TYPE, possibleMatches))
             {
                 // Failed to send data
                 // TODO: display message to user that data failed to send

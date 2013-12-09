@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true" android:layout_below="@+id/songArtist"
-            android:prompt="Song List"
+            android:prompt="@string/songListPrompt"
             android:id="@+id/songListSpinner" android:layout_alignRight="@+id/songTitle"
             android:layout_alignLeft="@+id/songTitle"/>
     <Button

@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Jukebox</string>
+    <string name="songListPrompt">Songs Found</string>
+    <string name="becomeListener">Become Listener</string>
+    <string name="musicControlCenter">Music Control Center</string>
+    <string name="requestSong">Request a Song</string>
+    <string name="sendRequest">Send Request</string>
 </resources>
