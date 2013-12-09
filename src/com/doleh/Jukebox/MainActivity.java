@@ -7,14 +7,14 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.*;
 import com.samsung.chord.ChordManager;
 import com.samsung.chord.IChordChannel;
 import com.samsung.chord.IChordChannelListener;
 import com.samsung.chord.IChordManagerListener;
 
+import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.sql.DriverManager.println;
@@ -23,13 +23,10 @@ public class MainActivity extends Activity
 {
     private MediaLibraryHelper mediaLibraryHelper;
     private ChordManager mChordManager;
-    private String newNode;
-    private String newChannel;
     private List<Integer> interfaceList;
     private PowerManager powerManager;
     private PowerManager.WakeLock wakeLock;
-
-    private static final String JUKEBOX_REQUEST_CHANNEL = "jukeboxRequestChannel";
+    private boolean isRequestListener = false;
 
     /**
      * Called when the activity is first created.
@@ -48,16 +45,19 @@ public class MainActivity extends Activity
         mChordManager.setTempDirectory(String.valueOf(getCacheDir()));
         mChordManager.setHandleEventLooper(getMainLooper());
 
+        // Prevent LCD screen from turning off
         powerManager = (PowerManager)getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "LCD-on");
         wakeLock.acquire();
 
+        // Verify connection
         interfaceList = mChordManager.getAvailableInterfaceTypes();
         if (interfaceList.isEmpty())
         {
             // no connection
             return;
         }
+        // Start connection
         mChordManager.start(interfaceList.get(ChordManager.INTERFACE_TYPE_WIFIP2P), new IChordManagerListener()
         {
             @Override
@@ -101,6 +101,7 @@ public class MainActivity extends Activity
 
     public void OnPause()
     {
+        // Allow LCD screen to turn off
         wakeLock.release();
     }
 
@@ -109,12 +110,14 @@ public class MainActivity extends Activity
         @Override
         public void onNodeJoined(String fromNode, String fromChannel)
         {
-            newNode = fromNode;
-            newChannel = fromChannel;
+            if (isRequestListener)
+            {
+                // TODO: have request listener send message to new node joined to ID the listener
+            }
         }
 
         @Override
-        public void onNodeLeft(String s, String s2)
+        public void onNodeLeft(String fromNode, String fromChannel)
         {
             //To change body of implemented methods use File | Settings | File Templates.
         }
@@ -123,11 +126,53 @@ public class MainActivity extends Activity
         public void onDataReceived(String fromNode, String fromChannel, String payloadType, byte[][] payload)
         {
             println("Data has been received!");
-            String songTitle = new String(payload[0]);
-            println("songTitle processed!");
-            String songArtist = new String(payload[1]);
-            println("songArtist processed!");
-            checkSongExists(songTitle, songArtist);
+
+            if (payloadType.equals("songRequest"))
+            {
+                List<Song> songList = checkSongExists(new String(payload[0]), new String(payload[1]));
+
+                // Check if list is empty
+                if (!songList.isEmpty())
+                {
+                    // Send list to requester
+                    sendPossibleMatches(fromNode, songList);
+                }
+                else
+                {
+                    // No possible matches found
+                    // TODO: display message to the user indicating no matches found
+                }
+            }
+            else if (payloadType.equals("songList"))
+            {
+                List<Song> songList = new ArrayList<Song>();
+                try
+                {
+                    ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(payload[0]));
+                    songList = (List<Song>)ois.readObject();
+                    ois.close();
+                }
+                catch (ClassNotFoundException e)
+                {
+                    e.printStackTrace();
+                }
+                catch (OptionalDataException e)
+                {
+                    e.printStackTrace();
+                }
+                catch (StreamCorruptedException e)
+                {
+                    e.printStackTrace();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+                // Display list on UI
+                ArrayAdapter<Song> songArrayAdapter = new ArrayAdapter<Song>(getApplicationContext(), android.R.layout.simple_spinner_item, songList);
+                songArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                ((Spinner)findViewById(R.id.songListSpinner)).setAdapter(songArrayAdapter);
+            }
         }
 
         @Override
@@ -257,6 +302,7 @@ public class MainActivity extends Activity
         songTitle.setVisibility(View.VISIBLE);
         songArtist.setVisibility(View.VISIBLE);
         button.setVisibility(View.VISIBLE);
+        button.setText("Send Request");
         label.setText("Request a Song");
     }
 
@@ -264,9 +310,11 @@ public class MainActivity extends Activity
     {
         // UI Elements
         final TextView label = (TextView)findViewById(R.id.textView);
+        final Button button = ((Button)findViewById(R.id.button));
         final Button stopButton = (Button)findViewById(R.id.stopButton);
 
         stopButton.setVisibility(View.VISIBLE);
+        button.setText("Become Listener");
         label.setText("Music Control Center");
     }
 
@@ -298,9 +346,9 @@ public class MainActivity extends Activity
                 {
                     sendRequest();
                 }
-                else
+                else if (button.getText() == "Become Listener")
                 {
-                    startListening();
+                    toggleListener();
                 }
             }
         });
@@ -310,6 +358,11 @@ public class MainActivity extends Activity
             public void onClick(View v) {
                 mediaLibraryHelper.stopSong();
         }});
+    }
+
+    private void toggleListener()
+    {
+        isRequestListener = !isRequestListener;
     }
 
     private void sendRequest()
@@ -325,28 +378,39 @@ public class MainActivity extends Activity
 
         IChordChannel channel = mChordManager.getJoinedChannel(ChordManager.PUBLIC_CHANNEL);
 //        channel.sendData(newNode, "songRequest", request);
+        // TODO: send data only to the listener node
         channel.sendDataToAll("songRequest", request);
     }
 
-    private void startListening()
+    private void sendPossibleMatches(String fromNode, List<Song> songList)
     {
-        // Start listening for song requests
+        try
+        {
+            // Convert songList into a byte array
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(bos);
+            oos.writeObject(songList);
+            byte[][] possibleMatches = new byte[1][];
+            possibleMatches[0] = bos.toByteArray();
 
+            // Send byte array to requester
+            IChordChannel channel = mChordManager.getJoinedChannel(ChordManager.PUBLIC_CHANNEL);
+            if (!channel.sendData(fromNode, "songList", possibleMatches))
+            {
+                // Failed to send data
+                // TODO: display message to user that data failed to send
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
-    private void checkSongExists(String songTitle, String songArtist)
+    private List<Song> checkSongExists(String songTitle, String songArtist)
     {
         // Check if requested song exists
         mediaLibraryHelper = new MediaLibraryHelper();
-        List<Song> songInfo = mediaLibraryHelper.getSongList(getContentResolver(), songTitle, songArtist);
-        if (songInfo.size() != 0)
-        {
-            // Play song / reply with results
-            mediaLibraryHelper.playSong((Long) songInfo.get(0).id, getApplicationContext());
-        }
-        else
-        {
-            System.out.println(">>>No matching songs found.");
-        }
+        return mediaLibraryHelper.getSongList(getContentResolver(), songTitle, songArtist);
     }
 }
