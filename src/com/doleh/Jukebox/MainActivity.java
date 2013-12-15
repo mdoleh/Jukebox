@@ -2,6 +2,7 @@ package com.doleh.Jukebox;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
@@ -16,8 +17,6 @@ import com.samsung.chord.IChordManagerListener;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.sql.DriverManager.println;
 
 public class MainActivity extends Activity
 {
@@ -128,8 +127,6 @@ public class MainActivity extends Activity
         @Override
         public void onDataReceived(String fromNode, String fromChannel, String payloadType, byte[][] payload)
         {
-            println("Data has been received!");
-
             if (payloadType.equals(SONG_REQUEST_TYPE))
             {
                 List<Song> songList = checkSongExists(new String(payload[0]), new String(payload[1]));
@@ -157,19 +154,19 @@ public class MainActivity extends Activity
                 }
                 catch (ClassNotFoundException e)
                 {
-                    e.printStackTrace();
+                    messageBox(getString(R.string.errorTitle), e.getMessage());
                 }
                 catch (OptionalDataException e)
                 {
-                    e.printStackTrace();
+                    messageBox(getString(R.string.errorTitle), e.getMessage());
                 }
                 catch (StreamCorruptedException e)
                 {
-                    e.printStackTrace();
+                    messageBox(getString(R.string.errorTitle), e.getMessage());
                 }
                 catch (IOException e)
                 {
-                    e.printStackTrace();
+                    messageBox(getString(R.string.errorTitle), e.getMessage());
                 }
                 // Display list on UI
                 ArrayAdapter<Song> songArrayAdapter = new ArrayAdapter<Song>(getApplicationContext(), android.R.layout.simple_spinner_item, songList);
@@ -371,6 +368,14 @@ public class MainActivity extends Activity
     private void toggleListener()
     {
         isRequestListener = !isRequestListener;
+        if (isRequestListener)
+        {
+            messageBox(getString(R.string.toggleListenerTitle), getString(R.string.toggleListenerMessageOn));
+        }
+        else
+        {
+            messageBox(getString(R.string.toggleListenerTitle), getString(R.string.toggleListenerMessageOff));
+        }
     }
 
     private void sendRequest()
@@ -403,15 +408,16 @@ public class MainActivity extends Activity
 
             // Send byte array to requester
             IChordChannel channel = mChordManager.getJoinedChannel(ChordManager.PUBLIC_CHANNEL);
-            if (!channel.sendData(fromNode, SONG_LIST_TYPE, possibleMatches))
+//            if (!channel.sendData(fromNode, SONG_LIST_TYPE, possibleMatches))
+            if (!channel.sendDataToAll(SONG_LIST_TYPE, possibleMatches))
             {
                 // Failed to send data
-                // TODO: display message to user that data failed to send
+                messageBox(getString(R.string.sendFailureTitle), getString(R.string.sendMatchesFailureMessage));
             }
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            messageBox(getString(R.string.errorTitle), e.getMessage());
         }
     }
 
@@ -420,5 +426,15 @@ public class MainActivity extends Activity
         // Check if requested song exists
         mediaLibraryHelper = new MediaLibraryHelper();
         return mediaLibraryHelper.getSongList(getContentResolver(), songTitle, songArtist);
+    }
+
+    private void messageBox(String title, String message)
+    {
+        AlertDialog.Builder alert  = new AlertDialog.Builder(this);
+        alert.setMessage(message);
+        alert.setTitle(title);
+        alert.setPositiveButton("OK", null);
+        alert.setCancelable(true);
+        alert.create().show();
     }
 }
