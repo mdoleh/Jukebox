@@ -42,6 +42,7 @@ public class MainActivity extends Activity
 
         createTabs();
         setupButtonEventListener();
+        setupSpinnerChangeListener();
 
         // Start a chord
         mChordManager = ChordManager.getInstance(this);
@@ -368,6 +369,30 @@ public class MainActivity extends Activity
             public void onClick(View v) {
                 mediaLibraryHelper.stopSong();
         }});
+    }
+
+    private void setupSpinnerChangeListener()
+    {
+        final Spinner availableSongsSpinner = ((Spinner)findViewById(R.id.songListSpinner));
+        availableSongsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+            {
+                // Clear text fields
+                final EditText songTitle = (EditText)findViewById(R.id.songTitle);
+                final EditText songArtist = (EditText)findViewById(R.id.songArtist);
+
+                songTitle.setText("");
+                songArtist.setText("");
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+                // Do nothing
+            }
+        });
     }
 
     private void toggleListener()
