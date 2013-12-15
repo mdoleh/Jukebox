@@ -16,6 +16,7 @@ import com.samsung.chord.IChordManagerListener;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends Activity
@@ -154,22 +155,26 @@ public class MainActivity extends Activity
                 }
                 catch (ClassNotFoundException e)
                 {
-                    messageBox(getString(R.string.errorTitle), e.getMessage());
+                    messageBox(getString(R.string.errorTitle), Arrays.toString(e.getStackTrace()));
                 }
                 catch (OptionalDataException e)
                 {
-                    messageBox(getString(R.string.errorTitle), e.getMessage());
+                    messageBox(getString(R.string.errorTitle), Arrays.toString(e.getStackTrace()));
                 }
                 catch (StreamCorruptedException e)
                 {
-                    messageBox(getString(R.string.errorTitle), e.getMessage());
+                    messageBox(getString(R.string.errorTitle), Arrays.toString(e.getStackTrace()));
                 }
                 catch (IOException e)
                 {
-                    messageBox(getString(R.string.errorTitle), e.getMessage());
+                    messageBox(getString(R.string.errorTitle), Arrays.toString(e.getStackTrace()));
                 }
+
+                //Create a list of songs for displaying to the user
+                List<String> viewableList = createSongListForSpinner(songList);
+
                 // Display list on UI
-                ArrayAdapter<Song> songArrayAdapter = new ArrayAdapter<Song>(getApplicationContext(), android.R.layout.simple_spinner_item, songList);
+                ArrayAdapter<String> songArrayAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, viewableList);
                 songArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 ((Spinner)findViewById(R.id.songListSpinner)).setAdapter(songArrayAdapter);
             }
@@ -297,14 +302,13 @@ public class MainActivity extends Activity
         final TextView label = (TextView)findViewById(R.id.textView);
         final EditText songTitle = (EditText)findViewById(R.id.songTitle);
         final EditText songArtist = (EditText)findViewById(R.id.songArtist);
-        final Button button = ((Button)findViewById(R.id.button));
+        final Button requestButton = ((Button)findViewById(R.id.requestButton));
         final Spinner songListSpinner = (Spinner)findViewById(R.id.songListSpinner);
 
         songTitle.setVisibility(View.VISIBLE);
         songArtist.setVisibility(View.VISIBLE);
-        button.setVisibility(View.VISIBLE);
+        requestButton.setVisibility(View.VISIBLE);
         songListSpinner.setVisibility(View.VISIBLE);
-        button.setText(getString(R.string.sendRequest));
         label.setText(getString(R.string.requestSong));
     }
 
@@ -312,12 +316,11 @@ public class MainActivity extends Activity
     {
         // UI Elements
         final TextView label = (TextView)findViewById(R.id.textView);
-        final Button button = ((Button)findViewById(R.id.button));
+        final Button listenerButton = ((Button)findViewById(R.id.listenerToggle));
         final Button stopButton = (Button)findViewById(R.id.stopButton);
 
-        button.setVisibility(View.VISIBLE);
+        listenerButton.setVisibility(View.VISIBLE);
         stopButton.setVisibility(View.VISIBLE);
-        button.setText(getString(R.string.becomeListener));
         label.setText(getString(R.string.musicControlCenter));
     }
 
@@ -326,35 +329,37 @@ public class MainActivity extends Activity
         // UI Elements
         final EditText songTitle = (EditText)findViewById(R.id.songTitle);
         final EditText songArtist = (EditText)findViewById(R.id.songArtist);
-        final Button button = (Button)findViewById(R.id.button);
+        final Button requestButton = (Button)findViewById(R.id.requestButton);
         final Spinner songListSpinner = (Spinner)findViewById(R.id.songListSpinner);
 
         songTitle.setVisibility(View.INVISIBLE);
         songArtist.setVisibility(View.INVISIBLE);
-        button.setVisibility((View.INVISIBLE));
+        requestButton.setVisibility((View.INVISIBLE));
         songListSpinner.setVisibility((View.INVISIBLE));
     }
 
     private void hideListenUI()
     {
         final Button stopButton = (Button)findViewById(R.id.stopButton);
+        final Button listenButton = (Button)findViewById(R.id.listenerToggle);
 
         stopButton.setVisibility(View.INVISIBLE);
+        listenButton.setVisibility(View.INVISIBLE);
     }
 
     private void setupButtonEventListener()
     {
-        final Button button = ((Button)findViewById(R.id.button));
-        button.setOnClickListener(new View.OnClickListener() {
+        final Button requestButton = ((Button)findViewById(R.id.requestButton));
+        requestButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (button.getText() == getString(R.string.requestSong))
-                {
-                    sendRequest();
-                }
-                else if (button.getText() == getString(R.string.becomeListener))
-                {
-                    toggleListener();
-                }
+                sendRequest();
+            }
+        });
+
+        final Button listenButton = ((Button)findViewById(R.id.listenerToggle));
+        listenButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                toggleListener();
             }
         });
 
@@ -370,11 +375,11 @@ public class MainActivity extends Activity
         isRequestListener = !isRequestListener;
         if (isRequestListener)
         {
-            messageBox(getString(R.string.toggleListenerTitle), getString(R.string.toggleListenerMessageOn));
+            messageBox(getString(R.string.toggleListener), getString(R.string.toggleListenerMessageOn));
         }
         else
         {
-            messageBox(getString(R.string.toggleListenerTitle), getString(R.string.toggleListenerMessageOff));
+            messageBox(getString(R.string.toggleListener), getString(R.string.toggleListenerMessageOff));
         }
     }
 
@@ -397,27 +402,26 @@ public class MainActivity extends Activity
 
     private void sendPossibleMatches(String fromNode, List<Song> songList)
     {
+        byte[][] possibleMatches = new byte[1][];
         try
         {
             // Convert songList into a byte array
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(bos);
             oos.writeObject(songList);
-            byte[][] possibleMatches = new byte[1][];
             possibleMatches[0] = bos.toByteArray();
-
-            // Send byte array to requester
-            IChordChannel channel = mChordManager.getJoinedChannel(ChordManager.PUBLIC_CHANNEL);
-//            if (!channel.sendData(fromNode, SONG_LIST_TYPE, possibleMatches))
-            if (!channel.sendDataToAll(SONG_LIST_TYPE, possibleMatches))
-            {
-                // Failed to send data
-                messageBox(getString(R.string.sendFailureTitle), getString(R.string.sendMatchesFailureMessage));
-            }
         }
         catch (IOException e)
         {
-            messageBox(getString(R.string.errorTitle), e.getMessage());
+            messageBox(getString(R.string.errorTitle), getString(R.string.listToBytesError) + Arrays.toString(e.getStackTrace()));
+        }
+        // Send byte array to requester
+        IChordChannel channel = mChordManager.getJoinedChannel(ChordManager.PUBLIC_CHANNEL);
+        if (!channel.sendData(fromNode, SONG_LIST_TYPE, possibleMatches))
+//            if (!channel.sendDataToAll(SONG_LIST_TYPE, possibleMatches))
+        {
+            // Failed to send data
+            messageBox(getString(R.string.sendFailureTitle), getString(R.string.sendMatchesFailureMessage));
         }
     }
 
@@ -436,5 +440,15 @@ public class MainActivity extends Activity
         alert.setPositiveButton("OK", null);
         alert.setCancelable(true);
         alert.create().show();
+    }
+
+    private List<String> createSongListForSpinner(List<Song> songList)
+    {
+        List<String> temp = new ArrayList<String>();
+        for (Song aSongList : songList)
+        {
+            temp.add(aSongList.id + aSongList.title + aSongList.artist);
+        }
+        return temp;
     }
 }

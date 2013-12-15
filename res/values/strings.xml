@@ -2,14 +2,17 @@
 <resources>
     <string name="app_name">Jukebox</string>
     <string name="songListPrompt">Songs Found</string>
-    <string name="becomeListener">Listener Toggle</string>
     <string name="musicControlCenter">Music Control Center</string>
     <string name="requestSong">Request a Song</string>
     <string name="sendRequest">Send Request</string>
     <string name="sendFailureTitle">Send Failure</string>
     <string name="sendMatchesFailureMessage">Failed to send possible song matches.</string>
-    <string name="toggleListenerTitle">Listener Toggle</string>
+    <string name="toggleListener">Listener Toggle</string>
     <string name="toggleListenerMessageOn">You are now listening for requests.</string>
     <string name="toggleListenerMessageOff">You are not listening for requests.</string>
     <string name="errorTitle">Error</string>
+    <string name="songTitle">Song Title</string>
+    <string name="songArtist">Artist</string>
+    <string name="stopSong">Stop Song</string>
+    <string name="listToBytesError">Conversion from object list to bytes has failed.</string>
 </resources>

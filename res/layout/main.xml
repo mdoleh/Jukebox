@@ -6,7 +6,7 @@
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Request a Song"
+            android:text="@string/requestSong"
             android:id="@+id/textView"
             android:layout_centerHorizontal="true" android:layout_alignParentTop="true" android:textSize="30dp"
             android:layout_gravity="center_horizontal|top"/>
@@ -14,12 +14,12 @@
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:id="@+id/songTitle"
-            android:hint="Song Title"
+            android:hint="@string/songTitle"
             android:gravity="center_horizontal"
             android:layout_alignLeft="@+id/songArtist" android:layout_alignParentTop="true"
             android:layout_marginTop="98dp"/>
     <EditText android:layout_width="300dp" android:layout_height="wrap_content" android:id="@+id/songArtist"
-              android:hint="Artist"
+              android:hint="@string/songArtist"
               android:gravity="center_horizontal"
               android:layout_centerHorizontal="true" android:layout_alignParentTop="true"
               android:layout_marginTop="149dp"/>
@@ -33,12 +33,18 @@
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Send Request"
-            android:id="@+id/button"
+            android:text="@string/sendRequest"
+            android:id="@+id/requestButton"
             android:layout_centerHorizontal="true" android:layout_below="@+id/songListSpinner"/>
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Stop Song"
-            android:id="@+id/stopButton" android:layout_centerHorizontal="true" android:layout_below="@+id/button"/>
+            android:text="@string/toggleListener"
+            android:id="@+id/listenerToggle"
+            android:layout_centerHorizontal="true" android:layout_below="@+id/songListSpinner"/>
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/stopSong"
+            android:id="@+id/stopButton" android:layout_centerHorizontal="true" android:layout_below="@+id/listenerToggle"/>
 </RelativeLayout>

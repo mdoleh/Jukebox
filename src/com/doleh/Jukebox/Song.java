@@ -1,6 +1,8 @@
 package com.doleh.Jukebox;
 
-public class Song
+import java.io.Serializable;
+
+public class Song implements Serializable
 {
     public Long id;
     public String title;
