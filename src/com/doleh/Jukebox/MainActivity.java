@@ -23,6 +23,7 @@ public class MainActivity extends Activity
 {
     private static final String SONG_REQUEST_TYPE = "songRequest";
     private static final String SONG_LIST_TYPE = "songList";
+    private static final String SONG_ID_TYPE = "songId";
 
     private MediaLibraryHelper mediaLibraryHelper;
     private ChordManager mChordManager;
@@ -30,6 +31,7 @@ public class MainActivity extends Activity
     private PowerManager powerManager;
     private PowerManager.WakeLock wakeLock;
     private boolean isRequestListener = false;
+    private List<String> viewableList = new ArrayList<String>();
 
     /**
      * Called when the activity is first created.
@@ -172,12 +174,16 @@ public class MainActivity extends Activity
                 }
 
                 //Create a list of songs for displaying to the user
-                List<String> viewableList = createSongListForSpinner(songList);
+                viewableList = createSongListForSpinner(songList);
 
                 // Display list on UI
                 ArrayAdapter<String> songArrayAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, viewableList);
                 songArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 ((Spinner)findViewById(R.id.songListSpinner)).setAdapter(songArrayAdapter);
+            }
+            else if (payloadType.equals(SONG_ID_TYPE))
+            {
+                mediaLibraryHelper.playSong(Long.parseLong(new String(payload[0]), 10), getApplicationContext());
             }
         }
 
@@ -413,16 +419,35 @@ public class MainActivity extends Activity
         // UI Elements
         final EditText songTitle = (EditText)findViewById(R.id.songTitle);
         final EditText songArtist = (EditText)findViewById(R.id.songArtist);
+        final Spinner songIdSpinner = (Spinner)findViewById(R.id.songListSpinner);
 
-        // Send song request
+        // Variables for data type and data
+        String type;
         byte[][] request = new byte[2][];
-        request[0] = songTitle.getText().toString().getBytes();
-        request[1] = songArtist.getText().toString().getBytes();
 
+        // Check if request is an id or a search
+        if (songTitle.getText().toString().equals("") && songArtist.getText().toString().equals(""))
+        {
+            // Extract song id and convert to bytes
+            request = new byte[1][];
+            String songId = viewableList.get(songIdSpinner.getSelectedItemPosition());
+            songId = songId.substring(0, songId.indexOf("-"));
+            request[0] = songId.getBytes();
+            type = SONG_ID_TYPE;
+        }
+        else
+        {
+            // Convert string input to bytes
+            request[0] = songTitle.getText().toString().getBytes();
+            request[1] = songArtist.getText().toString().getBytes();
+            type = SONG_REQUEST_TYPE;
+        }
+
+        // Get channel and send the request
         IChordChannel channel = mChordManager.getJoinedChannel(ChordManager.PUBLIC_CHANNEL);
 //        channel.sendData(newNode, SONG_REQUEST_TYPE, request);
         // TODO: send data only to the listener node and add if statement as done in sendPossibleMatches
-        channel.sendDataToAll(SONG_REQUEST_TYPE, request);
+        channel.sendDataToAll(type, request);
     }
 
     private void sendPossibleMatches(String fromNode, List<Song> songList)
@@ -443,7 +468,6 @@ public class MainActivity extends Activity
         // Send byte array to requester
         IChordChannel channel = mChordManager.getJoinedChannel(ChordManager.PUBLIC_CHANNEL);
         if (!channel.sendData(fromNode, SONG_LIST_TYPE, possibleMatches))
-//            if (!channel.sendDataToAll(SONG_LIST_TYPE, possibleMatches))
         {
             // Failed to send data
             messageBox(getString(R.string.sendFailureTitle), getString(R.string.sendMatchesFailureMessage));
@@ -472,7 +496,7 @@ public class MainActivity extends Activity
         List<String> temp = new ArrayList<String>();
         for (Song aSongList : songList)
         {
-            temp.add(aSongList.id + aSongList.title + aSongList.artist);
+            temp.add(aSongList.id + "-" + aSongList.title + aSongList.artist);
         }
         return temp;
     }
