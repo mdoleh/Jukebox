@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.view.View;
@@ -21,14 +22,9 @@ import java.util.List;
 
 public class MainActivity extends Activity
 {
-    private static final String SONG_REQUEST_TYPE = "songRequest";
-    private static final String SONG_LIST_TYPE = "songList";
-    private static final String SONG_ID_TYPE = "songId";
-
-    private MediaLibraryHelper mediaLibraryHelper;
+    private MediaPlayer mediaPlayer = new MediaPlayer();
+    private MediaLibraryHelper mediaLibraryHelper = new MediaLibraryHelper();
     private ChordManager mChordManager;
-    private List<Integer> interfaceList;
-    private PowerManager powerManager;
     private PowerManager.WakeLock wakeLock;
     private boolean isRequestListener = false;
     private List<String> viewableList = new ArrayList<String>();
@@ -45,6 +41,7 @@ public class MainActivity extends Activity
         createTabs();
         setupButtonEventListener();
         setupSpinnerChangeListener();
+        setupOnCompletionListener();
 
         // Start a chord
         mChordManager = ChordManager.getInstance(this);
@@ -52,12 +49,12 @@ public class MainActivity extends Activity
         mChordManager.setHandleEventLooper(getMainLooper());
 
         // Prevent LCD screen from turning off
-        powerManager = (PowerManager)getSystemService(Context.POWER_SERVICE);
+        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "LCD-on");
         wakeLock.acquire();
 
         // Verify connection
-        interfaceList = mChordManager.getAvailableInterfaceTypes();
+        List<Integer> interfaceList = mChordManager.getAvailableInterfaceTypes();
         if (interfaceList.isEmpty())
         {
             // no connection
@@ -131,7 +128,7 @@ public class MainActivity extends Activity
         @Override
         public void onDataReceived(String fromNode, String fromChannel, String payloadType, byte[][] payload)
         {
-            if (payloadType.equals(SONG_REQUEST_TYPE))
+            if (payloadType.equals(Constants.SONG_REQUEST_TYPE))
             {
                 List<Song> songList = checkSongExists(new String(payload[0]), new String(payload[1]));
 
@@ -147,7 +144,7 @@ public class MainActivity extends Activity
                     // TODO: display message to the user indicating no matches found
                 }
             }
-            else if (payloadType.equals(SONG_LIST_TYPE))
+            else if (payloadType.equals(Constants.SONG_LIST_TYPE))
             {
                 List<Song> songList = new ArrayList<Song>();
                 try
@@ -158,19 +155,19 @@ public class MainActivity extends Activity
                 }
                 catch (ClassNotFoundException e)
                 {
-                    messageBox(getString(R.string.errorTitle), Arrays.toString(e.getStackTrace()));
+                    showMessageBox(getString(R.string.errorTitle), Arrays.toString(e.getStackTrace()));
                 }
                 catch (OptionalDataException e)
                 {
-                    messageBox(getString(R.string.errorTitle), Arrays.toString(e.getStackTrace()));
+                    showMessageBox(getString(R.string.errorTitle), Arrays.toString(e.getStackTrace()));
                 }
                 catch (StreamCorruptedException e)
                 {
-                    messageBox(getString(R.string.errorTitle), Arrays.toString(e.getStackTrace()));
+                    showMessageBox(getString(R.string.errorTitle), Arrays.toString(e.getStackTrace()));
                 }
                 catch (IOException e)
                 {
-                    messageBox(getString(R.string.errorTitle), Arrays.toString(e.getStackTrace()));
+                    showMessageBox(getString(R.string.errorTitle), Arrays.toString(e.getStackTrace()));
                 }
 
                 //Create a list of songs for displaying to the user
@@ -181,9 +178,9 @@ public class MainActivity extends Activity
                 songArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 ((Spinner)findViewById(R.id.songListSpinner)).setAdapter(songArrayAdapter);
             }
-            else if (payloadType.equals(SONG_ID_TYPE))
+            else if (payloadType.equals(Constants.SONG_ID_TYPE))
             {
-                mediaLibraryHelper.playSong(Long.parseLong(new String(payload[0]), 10), getApplicationContext());
+                mediaLibraryHelper.playSong(Long.parseLong(new String(payload[0]), 10), getApplicationContext(), mediaPlayer);
             }
         }
 
@@ -373,7 +370,7 @@ public class MainActivity extends Activity
         final Button stopButton = (Button)findViewById(R.id.stopButton);
         stopButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mediaLibraryHelper.stopSong();
+                mediaLibraryHelper.stopSong(mediaPlayer);
         }});
     }
 
@@ -401,16 +398,34 @@ public class MainActivity extends Activity
         });
     }
 
+    private void setupOnCompletionListener()
+    {
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener()
+        {
+            @Override
+            public void onCompletion(MediaPlayer mp)
+            {
+                mediaLibraryHelper.stopSong(mp);
+                // If songs are in the queue play them next
+                if (!mediaLibraryHelper.songQueue.isEmpty())
+                {
+                    mediaLibraryHelper.playSong(mediaLibraryHelper.songQueue.get(0), getApplicationContext(), mp);
+                    mediaLibraryHelper.songQueue.remove(0);
+                }
+            }
+        });
+    }
+
     private void toggleListener()
     {
         isRequestListener = !isRequestListener;
         if (isRequestListener)
         {
-            messageBox(getString(R.string.toggleListener), getString(R.string.toggleListenerMessageOn));
+            showMessageBox(getString(R.string.toggleListener), getString(R.string.toggleListenerMessageOn));
         }
         else
         {
-            messageBox(getString(R.string.toggleListener), getString(R.string.toggleListenerMessageOff));
+            showMessageBox(getString(R.string.toggleListener), getString(R.string.toggleListenerMessageOff));
         }
     }
 
@@ -433,14 +448,14 @@ public class MainActivity extends Activity
             String songId = viewableList.get(songIdSpinner.getSelectedItemPosition());
             songId = songId.substring(0, songId.indexOf("-"));
             request[0] = songId.getBytes();
-            type = SONG_ID_TYPE;
+            type = Constants.SONG_ID_TYPE;
         }
         else
         {
             // Convert string input to bytes
             request[0] = songTitle.getText().toString().getBytes();
             request[1] = songArtist.getText().toString().getBytes();
-            type = SONG_REQUEST_TYPE;
+            type = Constants.SONG_REQUEST_TYPE;
         }
 
         // Get channel and send the request
@@ -463,32 +478,21 @@ public class MainActivity extends Activity
         }
         catch (IOException e)
         {
-            messageBox(getString(R.string.errorTitle), getString(R.string.listToBytesError) + Arrays.toString(e.getStackTrace()));
+            showMessageBox(getString(R.string.errorTitle), getString(R.string.listToBytesError) + Arrays.toString(e.getStackTrace()));
         }
         // Send byte array to requester
         IChordChannel channel = mChordManager.getJoinedChannel(ChordManager.PUBLIC_CHANNEL);
-        if (!channel.sendData(fromNode, SONG_LIST_TYPE, possibleMatches))
+        if (!channel.sendData(fromNode, Constants.SONG_LIST_TYPE, possibleMatches))
         {
             // Failed to send data
-            messageBox(getString(R.string.sendFailureTitle), getString(R.string.sendMatchesFailureMessage));
+            showMessageBox(getString(R.string.sendFailureTitle), getString(R.string.sendMatchesFailureMessage));
         }
     }
 
     private List<Song> checkSongExists(String songTitle, String songArtist)
     {
         // Check if requested song exists
-        mediaLibraryHelper = new MediaLibraryHelper();
         return mediaLibraryHelper.getSongList(getContentResolver(), songTitle, songArtist);
-    }
-
-    private void messageBox(String title, String message)
-    {
-        AlertDialog.Builder alert  = new AlertDialog.Builder(this);
-        alert.setMessage(message);
-        alert.setTitle(title);
-        alert.setPositiveButton("OK", null);
-        alert.setCancelable(true);
-        alert.create().show();
     }
 
     private List<String> createSongListForSpinner(List<Song> songList)
@@ -499,5 +503,15 @@ public class MainActivity extends Activity
             temp.add(aSongList.id + "-" + aSongList.title + aSongList.artist);
         }
         return temp;
+    }
+
+    private void showMessageBox(String title, String message)
+    {
+        AlertDialog.Builder alert  = new AlertDialog.Builder(this);
+        alert.setMessage(message);
+        alert.setTitle(title);
+        alert.setPositiveButton("OK", null);
+        alert.setCancelable(true);
+        alert.create().show();
     }
 }

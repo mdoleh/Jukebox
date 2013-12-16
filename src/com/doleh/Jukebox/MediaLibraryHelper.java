@@ -15,7 +15,8 @@ import java.util.List;
 
 public class MediaLibraryHelper
 {
-    MediaPlayer mMediaPlayer;
+    List<Long> songQueue = new ArrayList<Long>();
+
     public List<Song> getSongList(ContentResolver contentResolver, String songTitle, String songArtist)
     {
         // Setup parameters for query
@@ -56,28 +57,32 @@ public class MediaLibraryHelper
         return allInfo;
     }
 
-    public void playSong(Long songId, Context context)
+    public void playSong(Long songId, Context context, MediaPlayer mediaPlayer)
     {
-        try
+        if (mediaPlayer.isPlaying())
         {
-            Uri contentUri = ContentUris.withAppendedId(
-                    android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, songId);
-
-            mMediaPlayer = new MediaPlayer();
-            mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mMediaPlayer.setDataSource(context, contentUri);
-            mMediaPlayer.prepare();
-            mMediaPlayer.start();
+            songQueue.add(songId);
         }
-        catch (IOException e)
+        else
         {
-            // Unable to play song
+            try
+            {
+                Uri contentUri = ContentUris.withAppendedId(
+                        android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, songId);
+                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                mediaPlayer.setDataSource(context, contentUri);
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+            }
+            catch (IOException e)
+            {
+                // Unable to play song
+            }
         }
     }
 
-    public void stopSong()
+    public void stopSong(MediaPlayer mediaPlayer)
     {
-        mMediaPlayer.stop();
-        mMediaPlayer = null;
+        mediaPlayer.stop();
     }
 }

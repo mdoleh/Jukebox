@@ -15,4 +15,5 @@
     <string name="songArtist">Artist</string>
     <string name="stopSong">Stop Song</string>
     <string name="listToBytesError">Conversion from object list to bytes has failed.</string>
+    <string name="playSongError">Unable to play the requested song.</string>
 </resources>
