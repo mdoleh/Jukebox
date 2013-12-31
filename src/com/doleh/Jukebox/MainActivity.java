@@ -1,33 +1,39 @@
 package com.doleh.Jukebox;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.*;
-import com.samsung.chord.ChordManager;
-import com.samsung.chord.IChordChannel;
-import com.samsung.chord.IChordChannelListener;
-import com.samsung.chord.IChordManagerListener;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.Spinner;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MainActivity extends Activity
+class MainActivity extends FragmentActivity implements ActionBar.TabListener
 {
+    public static final String TAG = "jukebox";
     private MediaPlayer mediaPlayer = new MediaPlayer();
     private MediaLibraryHelper mediaLibraryHelper = new MediaLibraryHelper();
-    private ChordManager mChordManager;
     private PowerManager.WakeLock wakeLock;
     private boolean isRequestListener = false;
     private List<String> viewableList = new ArrayList<String>();
+
+    private ViewPager viewPager;
+    private TabsPagerAdapter mAdapter;
+    private ActionBar actionBar;
+    // Tab titles
+    private String[] tabs = { "WiFi Direct", "Song Request", "Control Center" };
 
     /**
      * Called when the activity is first created.
@@ -38,341 +44,186 @@ public class MainActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        createTabs();
-        setupButtonEventListener();
-        setupSpinnerChangeListener();
-        setupOnCompletionListener();
-
-        // Start a chord
-        mChordManager = ChordManager.getInstance(this);
-        mChordManager.setTempDirectory(String.valueOf(getCacheDir()));
-        mChordManager.setHandleEventLooper(getMainLooper());
+//        createTabs();
+//        setupButtonEventListener();
+//        setupSpinnerChangeListener();
+//        setupOnCompletionListener();
 
         // Prevent LCD screen from turning off
-        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "LCD-on");
-        wakeLock.acquire();
+//        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+//        wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "LCD-on");
+//        wakeLock.acquire();
 
-        // Verify connection
-        List<Integer> interfaceList = mChordManager.getAvailableInterfaceTypes();
-        if (interfaceList.isEmpty())
-        {
-            // no connection
-            return;
-        }
-        // Start connection
-        mChordManager.start(interfaceList.get(ChordManager.INTERFACE_TYPE_WIFIP2P), new IChordManagerListener()
-        {
-            @Override
-            public void onStarted(String name, int reason)
-            {
-                if (STARTED_BY_USER == reason)
-                {
-                    // Chord started successfully
-                    IChordChannel channel = null;
-                    channel = mChordManager.joinChannel(ChordManager.PUBLIC_CHANNEL, mChannelListener);
-                    if (channel == null)
-                    {
-                        // Failed to join channel
-                        return;
-                    }
-                }
-            }
-
-            @Override
-            public void onNetworkDisconnected()
-            {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-
-            @Override
-            public void onError(int i)
-            {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-
-            @Override
-            public void onStopped(int reason)
-            {
-                if (STOPPED_BY_USER == reason)
-                {
-                    mChordManager.close();
-                }
-            }
-        });
+//        intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
+//        intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
+//        intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+//        intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+//
+//        manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
+//        channel = manager.initialize(this, getMainLooper(), null);
     }
 
-    public void OnPause()
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft)
     {
+        viewPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft)
+    {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft)
+    {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    /** register the BroadcastReceiver with the intent values to be matched */
+    @Override
+    public void onResume() {
+        super.onResume();
+//        wakeLock.acquire();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
         // Allow LCD screen to turn off
-        wakeLock.release();
+//        wakeLock.release();
     }
 
-    private IChordChannelListener mChannelListener = new IChordChannelListener()
-    {
-        @Override
-        public void onNodeJoined(String fromNode, String fromChannel)
-        {
-            if (isRequestListener)
-            {
-                // TODO: have request listener send message to new node joined to ID the listener
-            }
-        }
+    /**
+     * Remove all peers and clear all fields. This is called on
+     * BroadcastReceiver receiving a state change event.
+     */
+//    public void resetData() {
+//        DeviceListFragment fragmentList = (DeviceListFragment) getFragmentManager()
+//                .findFragmentById(R.id.frag_list);
+//        if (fragmentList != null) {
+//            fragmentList.clearPeers();
+//        }
+//    }
 
-        @Override
-        public void onNodeLeft(String fromNode, String fromChannel)
-        {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void onDataReceived(String fromNode, String fromChannel, String payloadType, byte[][] payload)
-        {
-            if (payloadType.equals(Constants.SONG_REQUEST_TYPE))
-            {
-                List<Song> songList = checkSongExists(new String(payload[0]), new String(payload[1]));
-
-                // Check if list is empty
-                if (!songList.isEmpty())
-                {
-                    // Send list to requester
-                    sendPossibleMatches(fromNode, songList);
-                }
-                else
-                {
-                    // No possible matches found
-                    // TODO: display message to the user indicating no matches found
-                }
-            }
-            else if (payloadType.equals(Constants.SONG_LIST_TYPE))
-            {
-                List<Song> songList = new ArrayList<Song>();
-                try
-                {
-                    ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(payload[0]));
-                    songList = (List<Song>)ois.readObject();
-                    ois.close();
-                }
-                catch (ClassNotFoundException e)
-                {
-                    showMessageBox(getString(R.string.errorTitle), Arrays.toString(e.getStackTrace()));
-                }
-                catch (OptionalDataException e)
-                {
-                    showMessageBox(getString(R.string.errorTitle), Arrays.toString(e.getStackTrace()));
-                }
-                catch (StreamCorruptedException e)
-                {
-                    showMessageBox(getString(R.string.errorTitle), Arrays.toString(e.getStackTrace()));
-                }
-                catch (IOException e)
-                {
-                    showMessageBox(getString(R.string.errorTitle), Arrays.toString(e.getStackTrace()));
-                }
-
-                //Create a list of songs for displaying to the user
-                viewableList = createSongListForSpinner(songList);
-
-                // Display list on UI
-                ArrayAdapter<String> songArrayAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, viewableList);
-                songArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                ((Spinner)findViewById(R.id.songListSpinner)).setAdapter(songArrayAdapter);
-            }
-            else if (payloadType.equals(Constants.SONG_ID_TYPE))
-            {
-                mediaLibraryHelper.playSong(Long.parseLong(new String(payload[0]), 10), getApplicationContext(), mediaPlayer);
-            }
-        }
-
-        @Override
-        public void onFileWillReceive(String s, String s2, String s3, String s4, String s5, String s6, long l)
-        {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void onFileChunkReceived(String s, String s2, String s3, String s4, String s5, String s6, long l, long l2)
-        {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void onFileReceived(String s, String s2, String s3, String s4, String s5, String s6, long l, String s7)
-        {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void onFileChunkSent(String s, String s2, String s3, String s4, String s5, String s6, long l, long l2, long l3)
-        {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void onFileSent(String s, String s2, String s3, String s4, String s5, String s6)
-        {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void onFileFailed(String s, String s2, String s3, String s4, String s5, int i)
-        {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void onMultiFilesWillReceive(String s, String s2, String s3, String s4, int i, String s5, long l)
-        {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void onMultiFilesChunkReceived(String s, String s2, String s3, String s4, int i, String s5, long l, long l2)
-        {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void onMultiFilesReceived(String s, String s2, String s3, String s4, int i, String s5, long l, String s6)
-        {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void onMultiFilesChunkSent(String s, String s2, String s3, String s4, int i, String s5, long l, long l2, long l3)
-        {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void onMultiFilesSent(String s, String s2, String s3, String s4, int i, String s5)
-        {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void onMultiFilesFailed(String s, String s2, String s3, String s4, int i, int i2)
-        {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void onMultiFilesFinished(String s, String s2, String s3, int i)
-        {
-            //To change body of implemented methods use File | Settings | File Templates.
-        }
-    };
+// TODO: find proper place for this
+//    if (payloadType.equals(Constants.SONG_REQUEST_TYPE))
+//    {
+//        List<Song> songList = checkSongExists(new String(payload[0]), new String(payload[1]));
+//
+//        // Check if list is empty
+//        if (!songList.isEmpty())
+//        {
+//            // Send list to requester
+//            sendPossibleMatches(fromNode, songList);
+//        }
+//        else
+//        {
+//            // No possible matches found
+//            // TODO: display message to the user indicating no matches found
+//        }
+//    }
+//    else if (payloadType.equals(Constants.SONG_LIST_TYPE))
+//    {
+//        List<Song> songList = new ArrayList<Song>();
+//        try
+//        {
+//            ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(payload[0]));
+//            songList = (List<Song>)ois.readObject();
+//            ois.close();
+//        }
+//        catch (ClassNotFoundException e)
+//        {
+//            showMessageBox(getString(R.string.errorTitle), Arrays.toString(e.getStackTrace()));
+//        }
+//        catch (OptionalDataException e)
+//        {
+//            showMessageBox(getString(R.string.errorTitle), Arrays.toString(e.getStackTrace()));
+//        }
+//        catch (StreamCorruptedException e)
+//        {
+//            showMessageBox(getString(R.string.errorTitle), Arrays.toString(e.getStackTrace()));
+//        }
+//        catch (IOException e)
+//        {
+//            showMessageBox(getString(R.string.errorTitle), Arrays.toString(e.getStackTrace()));
+//        }
+//
+//        //Create a list of songs for displaying to the user
+//        viewableList = createSongListForSpinner(songList);
+//
+//        // Display list on UI
+//        ArrayAdapter<String> songArrayAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, viewableList);
+//        songArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        ((Spinner)findViewById(R.id.songListSpinner)).setAdapter(songArrayAdapter);
+//    }
+//    else if (payloadType.equals(Constants.SONG_ID_TYPE))
+//    {
+//        mediaLibraryHelper.playSong(Long.parseLong(new String(payload[0]), 10), getApplicationContext(), mediaPlayer);
+//    }
 
     private void createTabs()
     {
-        final ActionBar actionBar = getActionBar();
+        // Initilization
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        actionBar = getActionBar();
+        mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
-        // Specify that tabs should be displayed in the action bar.
+        viewPager.setAdapter(mAdapter);
+        actionBar.setHomeButtonEnabled(false);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        // Create a tab listener that is called when the user changes tabs.
-        ActionBar.TabListener tabListener = new ActionBar.TabListener() {
-            public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-                // show the given tab
-                if (tab.getText() == getString(R.string.requestSong))
-                {
-                    hideListenUI();
-                    showRequestUI();
-                }
-                else
-                {
-                    hideRequestUI();
-                    showListenUI();
-                }
+        // Adding Tabs
+        for (String tab_name : tabs) {
+            actionBar.addTab(actionBar.newTab().setText(tab_name)
+                    .setTabListener(this));
+        }
+
+        /**
+         * on swiping the viewpager make respective tab selected
+         * */
+        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageSelected(int position) {
+                // on changing the page
+                // make respected tab selected
+                actionBar.setSelectedNavigationItem(position);
             }
 
-            public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-                // hide the given tab
+            @Override
+            public void onPageScrolled(int arg0, float arg1, int arg2) {
             }
 
-            public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-                // probably ignore this event
-            }
-        };
-
-        // Add 2 tabs, specifying the tab's text and TabListener
-        actionBar.addTab(actionBar.newTab().setText(getString(R.string.requestSong)).setTabListener(tabListener));
-        actionBar.addTab(actionBar.newTab().setText(getString(R.string.musicControlCenter)).setTabListener(tabListener));
-    }
-
-    private void showRequestUI()
-    {
-        // UI Elements
-        final TextView label = (TextView)findViewById(R.id.textView);
-        final EditText songTitle = (EditText)findViewById(R.id.songTitle);
-        final EditText songArtist = (EditText)findViewById(R.id.songArtist);
-        final Button requestButton = ((Button)findViewById(R.id.requestButton));
-        final Spinner songListSpinner = (Spinner)findViewById(R.id.songListSpinner);
-
-        songTitle.setVisibility(View.VISIBLE);
-        songArtist.setVisibility(View.VISIBLE);
-        requestButton.setVisibility(View.VISIBLE);
-        songListSpinner.setVisibility(View.VISIBLE);
-        label.setText(getString(R.string.requestSong));
-    }
-
-    private void showListenUI()
-    {
-        // UI Elements
-        final TextView label = (TextView)findViewById(R.id.textView);
-        final Button listenerButton = ((Button)findViewById(R.id.listenerToggle));
-        final Button stopButton = (Button)findViewById(R.id.stopButton);
-
-        listenerButton.setVisibility(View.VISIBLE);
-        stopButton.setVisibility(View.VISIBLE);
-        label.setText(getString(R.string.musicControlCenter));
-    }
-
-    private void hideRequestUI()
-    {
-        // UI Elements
-        final EditText songTitle = (EditText)findViewById(R.id.songTitle);
-        final EditText songArtist = (EditText)findViewById(R.id.songArtist);
-        final Button requestButton = (Button)findViewById(R.id.requestButton);
-        final Spinner songListSpinner = (Spinner)findViewById(R.id.songListSpinner);
-
-        songTitle.setVisibility(View.INVISIBLE);
-        songArtist.setVisibility(View.INVISIBLE);
-        requestButton.setVisibility((View.INVISIBLE));
-        songListSpinner.setVisibility((View.INVISIBLE));
-    }
-
-    private void hideListenUI()
-    {
-        final Button stopButton = (Button)findViewById(R.id.stopButton);
-        final Button listenButton = (Button)findViewById(R.id.listenerToggle);
-
-        stopButton.setVisibility(View.INVISIBLE);
-        listenButton.setVisibility(View.INVISIBLE);
-    }
-
-    private void setupButtonEventListener()
-    {
-        final Button requestButton = ((Button)findViewById(R.id.requestButton));
-        requestButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                sendRequest();
+            @Override
+            public void onPageScrollStateChanged(int arg0) {
             }
         });
-
-        final Button listenButton = ((Button)findViewById(R.id.listenerToggle));
-        listenButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                toggleListener();
-            }
-        });
-
-        final Button stopButton = (Button)findViewById(R.id.stopButton);
-        stopButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                mediaLibraryHelper.stopSong(mediaPlayer);
-        }});
     }
+
+//    private void setupButtonEventListener()
+//    {
+//        final Button requestButton = ((Button)findViewById(R.id.requestButton));
+//        requestButton.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                sendRequest();
+//            }
+//        });
+//
+//        final Button listenButton = ((Button)findViewById(R.id.listenerToggle));
+//        listenButton.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                toggleListener();
+//            }
+//        });
+//
+//        final Button stopButton = (Button)findViewById(R.id.stopButton);
+//        stopButton.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//                mediaLibraryHelper.stopSong(mediaPlayer);
+//        }});
+//    }
 
     private void setupSpinnerChangeListener()
     {
@@ -457,12 +308,7 @@ public class MainActivity extends Activity
             request[1] = songArtist.getText().toString().getBytes();
             type = Constants.SONG_REQUEST_TYPE;
         }
-
-        // Get channel and send the request
-        IChordChannel channel = mChordManager.getJoinedChannel(ChordManager.PUBLIC_CHANNEL);
-//        channel.sendData(newNode, SONG_REQUEST_TYPE, request);
-        // TODO: send data only to the listener node and add if statement as done in sendPossibleMatches
-        channel.sendDataToAll(type, request);
+        //TODO: Send request
     }
 
     private void sendPossibleMatches(String fromNode, List<Song> songList)
@@ -480,13 +326,7 @@ public class MainActivity extends Activity
         {
             showMessageBox(getString(R.string.errorTitle), getString(R.string.listToBytesError) + Arrays.toString(e.getStackTrace()));
         }
-        // Send byte array to requester
-        IChordChannel channel = mChordManager.getJoinedChannel(ChordManager.PUBLIC_CHANNEL);
-        if (!channel.sendData(fromNode, Constants.SONG_LIST_TYPE, possibleMatches))
-        {
-            // Failed to send data
-            showMessageBox(getString(R.string.sendFailureTitle), getString(R.string.sendMatchesFailureMessage));
-        }
+        //TODO: send possible matches
     }
 
     private List<Song> checkSongExists(String songTitle, String songArtist)
@@ -498,9 +338,9 @@ public class MainActivity extends Activity
     private List<String> createSongListForSpinner(List<Song> songList)
     {
         List<String> temp = new ArrayList<String>();
-        for (Song aSongList : songList)
+        for (Song song : songList)
         {
-            temp.add(aSongList.id + "-" + aSongList.title + aSongList.artist);
+            temp.add(song.id + "-" + song.title + song.artist);
         }
         return temp;
     }
