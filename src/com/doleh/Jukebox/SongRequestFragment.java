@@ -28,7 +28,7 @@ public class SongRequestFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        view =  inflater.inflate(R.layout.request_song, container, false);
+        view = inflater.inflate(R.layout.request_song, container, false);
         mainActivity = getActivity();
         setupButtonEventListener();
         setupSpinnerChangeListener();

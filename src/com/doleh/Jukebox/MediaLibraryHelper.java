@@ -15,9 +15,24 @@ import java.util.List;
 
 public class MediaLibraryHelper
 {
-    List<Long> songQueue = new ArrayList<Long>();
+    private static List<Long> songQueue = new ArrayList<Long>();
 
-    public List<Song> getSongList(ContentResolver contentResolver, String songTitle, String songArtist)
+    public static void removeSong(int index)
+    {
+        songQueue.remove(index);
+    }
+
+    public static Long getSongId(int index)
+    {
+        return songQueue.get(index);
+    }
+
+    public static boolean songQueueIsEmpty()
+    {
+        return songQueue.isEmpty();
+    }
+
+    public static List<Song> getSongList(ContentResolver contentResolver, String songTitle, String songArtist)
     {
         // Setup parameters for query
         String[] projection = {MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.ARTIST};
@@ -57,7 +72,7 @@ public class MediaLibraryHelper
         return allInfo;
     }
 
-    public void playSong(Long songId, Context context, MediaPlayer mediaPlayer)
+    public static void playSong(Long songId, Context context, MediaPlayer mediaPlayer)
     {
         if (mediaPlayer.isPlaying())
         {
@@ -81,7 +96,7 @@ public class MediaLibraryHelper
         }
     }
 
-    public void stopSong(MediaPlayer mediaPlayer)
+    public static void stopSong(MediaPlayer mediaPlayer)
     {
         mediaPlayer.stop();
     }

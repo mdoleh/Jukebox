@@ -1,6 +1,5 @@
 package com.doleh.Jukebox;
 
-import android.app.Activity;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,8 +13,7 @@ import java.util.List;
 public class ControlCenterFragment extends Fragment
 {
     private MediaPlayer mediaPlayer = new MediaPlayer();
-    private MediaLibraryHelper mediaLibraryHelper = new MediaLibraryHelper();
-    private Activity mainActivity;
+    private MainActivity mainActivity;
     private boolean isRequestListener = false;
     private View view;
 
@@ -24,7 +22,7 @@ public class ControlCenterFragment extends Fragment
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.control_center, container, false);
-        mainActivity = getActivity();
+        mainActivity = (MainActivity)getActivity();
         setupButtonEventListener();
         setupOnCompletionListener();
         return view;
@@ -42,7 +40,7 @@ public class ControlCenterFragment extends Fragment
         final Button stopButton = (Button)view.findViewById(R.id.stopButton);
         stopButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mediaLibraryHelper.stopSong(mediaPlayer);
+                MediaLibraryHelper.stopSong(mediaPlayer);
             }});
     }
 
@@ -53,12 +51,12 @@ public class ControlCenterFragment extends Fragment
             @Override
             public void onCompletion(MediaPlayer mp)
             {
-                mediaLibraryHelper.stopSong(mp);
+                MediaLibraryHelper.stopSong(mp);
                 // If songs are in the queue play them next
-                if (!mediaLibraryHelper.songQueue.isEmpty())
+                if (!MediaLibraryHelper.songQueueIsEmpty())
                 {
-                    mediaLibraryHelper.playSong(mediaLibraryHelper.songQueue.get(0), mainActivity.getApplicationContext(), mp);
-                    mediaLibraryHelper.songQueue.remove(0);
+                    MediaLibraryHelper.playSong(MediaLibraryHelper.getSongId(0), mainActivity.getApplicationContext(), mp);
+                    MediaLibraryHelper.removeSong(0);
                 }
             }
         });
@@ -69,17 +67,17 @@ public class ControlCenterFragment extends Fragment
         isRequestListener = !isRequestListener;
         if (isRequestListener)
         {
-            ((MainActivity)mainActivity).showMessageBox(getString(R.string.toggleListener), getString(R.string.toggleListenerMessageOn));
+            mainActivity.showMessageBox(getString(R.string.toggleListener), getString(R.string.toggleListenerMessageOn));
         }
         else
         {
-            ((MainActivity)mainActivity).showMessageBox(getString(R.string.toggleListener), getString(R.string.toggleListenerMessageOff));
+            mainActivity.showMessageBox(getString(R.string.toggleListener), getString(R.string.toggleListenerMessageOff));
         }
     }
 
     private List<Song> checkSongExists(String songTitle, String songArtist)
     {
         // Check if requested song exists
-        return mediaLibraryHelper.getSongList(mainActivity.getContentResolver(), songTitle, songArtist);
+        return MediaLibraryHelper.getSongList(mainActivity.getContentResolver(), songTitle, songArtist);
     }
 }
