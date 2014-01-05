@@ -105,6 +105,8 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
             DeviceListFragment fragment = (DeviceListFragment) activity.getSupportFragmentManager()
                     .findFragmentById(R.id.frag_list);
+//            DeviceListFragment fragment = ((WiFiDirectFragment)((TabsPagerAdapter)(activity.getViewPager().getAdapter()))
+//                    .getFragment(activity.getViewPager().getCurrentItem())).getDeviceListFragment();
             fragment.updateThisDevice((WifiP2pDevice) intent.getParcelableExtra(
                     WifiP2pManager.EXTRA_WIFI_P2P_DEVICE));
 
