@@ -2,6 +2,8 @@ package com.doleh.Jukebox;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -51,10 +53,18 @@ public class MainActivity extends Activity implements WifiP2pManager.ChannelList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
-        intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
-        intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
-        intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+        // Add this section of code wherever a fragment should appear (i.e. new screen)
+        Fragment fragment = new ControlCenterFragment();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.add(R.id.main, fragment, "first");
+        // addToBackStack allows android back button to return to previous screen
+//        transaction.addToBackStack(null);
+        transaction.commit();
+
+//        intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
+//        intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
+//        intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+//        intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
         // Prevent LCD screen from turning off
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -105,6 +115,7 @@ public class MainActivity extends Activity implements WifiP2pManager.ChannelList
     }
 
     @Override
+    // Run automatically on activity load
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.action_items, menu);
@@ -125,35 +136,10 @@ public class MainActivity extends Activity implements WifiP2pManager.ChannelList
                     // not going to send us a result. We will be notified by
                     // WiFiDeviceBroadcastReceiver instead.
 
-                    startActivity(new Intent(Settings.ACTION_WIRELESS_SETTINGS));
+                    startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
                 } else {
                     Log.e(TAG, "channel or manager is null");
                 }
-                return true;
-
-            case R.id.atn_direct_discover:
-                if (!isWifiP2pEnabled) {
-                    Toast.makeText(MainActivity.this, R.string.p2p_off_warning,
-                            Toast.LENGTH_SHORT).show();
-                    return true;
-                }
-                final DeviceListFragment fragment = (DeviceListFragment) getFragmentManager()
-                        .findFragmentById(R.id.frag_list);
-                fragment.onInitiateDiscovery();
-                manager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
-
-                    @Override
-                    public void onSuccess() {
-                        Toast.makeText(MainActivity.this, "Discovery Initiated",
-                                Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onFailure(int reasonCode) {
-                        Toast.makeText(MainActivity.this, "Discovery Failed : " + reasonCode,
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
