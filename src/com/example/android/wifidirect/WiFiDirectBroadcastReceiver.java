@@ -96,17 +96,15 @@ public class WiFiDirectBroadcastReceiver extends BroadcastReceiver {
                 // info to find group owner IP
 
                 DeviceDetailFragment fragment = (DeviceDetailFragment) activity
-                        .getSupportFragmentManager().findFragmentById(R.id.frag_detail);
+                        .getFragmentManager().findFragmentById(R.id.frag_detail);
                 manager.requestConnectionInfo(channel, fragment);
             } else {
                 // It's a disconnect
                 activity.resetData();
             }
         } else if (WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
-            DeviceListFragment fragment = (DeviceListFragment) activity.getSupportFragmentManager()
+            DeviceListFragment fragment = (DeviceListFragment) activity.getFragmentManager()
                     .findFragmentById(R.id.frag_list);
-//            DeviceListFragment fragment = ((WiFiDirectFragment)((TabsPagerAdapter)(activity.getViewPager().getAdapter()))
-//                    .getFragment(activity.getViewPager().getCurrentItem())).getDeviceListFragment();
             fragment.updateThisDevice((WifiP2pDevice) intent.getParcelableExtra(
                     WifiP2pManager.EXTRA_WIFI_P2P_DEVICE));
 

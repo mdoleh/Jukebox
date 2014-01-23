@@ -17,6 +17,8 @@
 package com.example.android.wifidirect;
 
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.ListFragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,8 +27,6 @@ import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pDeviceList;
 import android.net.wifi.p2p.WifiP2pManager.PeerListListener;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.ListFragment;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;

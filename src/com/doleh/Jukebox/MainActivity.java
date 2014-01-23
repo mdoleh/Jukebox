@@ -1,8 +1,7 @@
 package com.doleh.Jukebox;
 
-import android.app.ActionBar;
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,8 +12,6 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.provider.Settings;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,16 +22,10 @@ import com.example.android.wifidirect.DeviceDetailFragment;
 import com.example.android.wifidirect.DeviceListFragment;
 import com.example.android.wifidirect.WiFiDirectBroadcastReceiver;
 
-public class MainActivity extends FragmentActivity implements ActionBar.TabListener, WifiP2pManager.ChannelListener, DeviceListFragment.DeviceActionListener
+public class MainActivity extends Activity implements WifiP2pManager.ChannelListener, DeviceListFragment.DeviceActionListener
 {
     public static final String TAG = "jukebox";
     private PowerManager.WakeLock wakeLock;
-
-    private ViewPager viewPager;
-    private TabsPagerAdapter mAdapter;
-    private ActionBar actionBar;
-    // Tab titles
-    private String[] tabs = { "WiFi Direct", "Song Request", "Control Center" };
 
     private WifiP2pManager manager;
     private boolean isWifiP2pEnabled = false;
@@ -43,16 +34,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     private final IntentFilter intentFilter = new IntentFilter();
     private WifiP2pManager.Channel channel;
     private BroadcastReceiver receiver = null;
-
-    public MainActivity()
-    {
-        super();
-    }
-
-    public ViewPager getViewPager()
-    {
-        return viewPager;
-    }
 
     /**
      * @param isWifiP2pEnabled the isWifiP2pEnabled to set
@@ -70,12 +51,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        createTabs();
-
-//        intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
-//        intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
-//        intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
-//        intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+        intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
+        intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
+        intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+        intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
 
         // Prevent LCD screen from turning off
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -84,24 +63,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
         manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         channel = manager.initialize(this, getMainLooper(), null);
-    }
-
-    @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft)
-    {
-        viewPager.setCurrentItem(tab.getPosition());
-    }
-
-    @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft)
-    {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft)
-    {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     /** register the BroadcastReceiver with the intent values to be matched */
@@ -126,54 +87,11 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
      * BroadcastReceiver receiving a state change event.
      */
     public void resetData() {
-        DeviceListFragment fragmentList = (DeviceListFragment) getSupportFragmentManager()
+        DeviceListFragment fragmentList = (DeviceListFragment) getFragmentManager()
                 .findFragmentById(R.id.frag_list);
         if (fragmentList != null) {
             fragmentList.clearPeers();
         }
-    }
-
-    private void createTabs()
-    {
-        // Initilization
-        viewPager = (ViewPager) findViewById(R.id.pager);
-        actionBar = getActionBar();
-        mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
-
-        viewPager.setAdapter(mAdapter);
-        actionBar.setHomeButtonEnabled(false);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-        // Adding Tabs
-        for (String tab_name : tabs) {
-            actionBar.addTab(actionBar.newTab().setText(tab_name)
-                    .setTabListener(this));
-        }
-
-        /**
-         * on swiping the viewpager make respective tab selected
-         * */
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener()
-        {
-
-            @Override
-            public void onPageSelected(int position)
-            {
-                // on changing the page
-                // make respected tab selected
-                actionBar.setSelectedNavigationItem(position);
-            }
-
-            @Override
-            public void onPageScrolled(int arg0, float arg1, int arg2)
-            {
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int arg0)
-            {
-            }
-        });
     }
 
     public void showMessageBox(String title, String message)
@@ -219,7 +137,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                             Toast.LENGTH_SHORT).show();
                     return true;
                 }
-                final DeviceListFragment fragment = (DeviceListFragment) getSupportFragmentManager()
+                final DeviceListFragment fragment = (DeviceListFragment) getFragmentManager()
                         .findFragmentById(R.id.frag_list);
                 fragment.onInitiateDiscovery();
                 manager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
@@ -244,7 +162,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
     @Override
     public void showDetails(WifiP2pDevice device) {
-        DeviceDetailFragment fragment = (DeviceDetailFragment) getSupportFragmentManager()
+        DeviceDetailFragment fragment = (DeviceDetailFragment) getFragmentManager()
                 .findFragmentById(R.id.frag_detail);
         fragment.showDetails(device);
 
@@ -269,7 +187,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
     @Override
     public void disconnect() {
-        final DeviceDetailFragment fragment = (DeviceDetailFragment) getSupportFragmentManager()
+        final DeviceDetailFragment fragment = (DeviceDetailFragment) getFragmentManager()
                 .findFragmentById(R.id.frag_detail);
         fragment.resetViews();
         manager.removeGroup(channel, new WifiP2pManager.ActionListener() {
@@ -312,7 +230,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
          * request
          */
         if (manager != null) {
-            final DeviceListFragment fragment = (DeviceListFragment) getSupportFragmentManager()
+            final DeviceListFragment fragment = (DeviceListFragment) getFragmentManager()
                     .findFragmentById(R.id.frag_list);
             if (fragment.getDevice() == null
                     || fragment.getDevice().status == WifiP2pDevice.CONNECTED) {
