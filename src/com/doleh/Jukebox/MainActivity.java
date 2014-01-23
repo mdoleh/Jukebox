@@ -6,18 +6,13 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.p2p.WifiP2pConfig;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.os.PowerManager;
-import android.provider.Settings;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 import com.example.android.wifidirect.DeviceDetailFragment;
@@ -61,6 +56,7 @@ public class MainActivity extends Activity implements WifiP2pManager.ChannelList
 //        transaction.addToBackStack(null);
         transaction.commit();
 
+        // Probably should be in the appropriate fragment
 //        intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
 //        intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
 //        intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
@@ -112,38 +108,6 @@ public class MainActivity extends Activity implements WifiP2pManager.ChannelList
         alert.setPositiveButton("OK", null);
         alert.setCancelable(true);
         alert.create().show();
-    }
-
-    @Override
-    // Run automatically on activity load
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.action_items, menu);
-        return true;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.atn_direct_enable:
-                if (manager != null && channel != null) {
-
-                    // Since this is the system wireless settings activity, it's
-                    // not going to send us a result. We will be notified by
-                    // WiFiDeviceBroadcastReceiver instead.
-
-                    startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
-                } else {
-                    Log.e(TAG, "channel or manager is null");
-                }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
     }
 
     @Override
