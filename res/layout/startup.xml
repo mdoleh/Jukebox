@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        xmlns:android="http://schemas.android.com/apk/res/android">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
 
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/requestSong"
+            android:text="@string/what_to_do"
             android:id="@+id/textView"
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
             android:textSize="30dp"
             android:layout_gravity="center_horizontal|top"/>
 
-    <Spinner
+    <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/receive_requests"
+            android:id="@+id/receive_requests"
             android:layout_centerHorizontal="true"
-            android:prompt="@string/songListPrompt"
-            android:id="@+id/songListSpinner"
             android:layout_marginTop="98dp"/>
 
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/sendRequest"
-            android:id="@+id/requestButton"
+            android:text="@string/send_a_request"
+            android:id="@+id/send_a_request"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/songListSpinner"/>
+            android:layout_below="@+id/receive_requests"/>
+
 </RelativeLayout>

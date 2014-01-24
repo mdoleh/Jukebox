@@ -4,6 +4,7 @@
     <string name="songListPrompt">Songs Found</string>
     <string name="musicControlCenter">Music Control Center</string>
     <string name="requestSong">Request a Song</string>
+    <string name="search_for_songs">Search for Songs</string>
     <string name="sendRequest">Send Request</string>
     <string name="sendFailureTitle">Send Failure</string>
     <string name="sendMatchesFailureMessage">Failed to send possible song matches.</string>
@@ -30,4 +31,7 @@
     <string name="group_owner_text">"Am I the Group Owner? "</string>
     <string name="label_me">ME</string>
     <string name="label_peers">PEERS</string>
+    <string name="what_to_do">What would you like to do?</string>
+    <string name="receive_requests">Receive Song Requests</string>
+    <string name="send_a_request">Send a Song Request</string>
 </resources>

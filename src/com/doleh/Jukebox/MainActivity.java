@@ -49,9 +49,9 @@ public class MainActivity extends Activity implements WifiP2pManager.ChannelList
         setContentView(R.layout.main);
 
         // Add this section of code wherever a fragment should appear (i.e. new screen)
-        Fragment fragment = new ControlCenterFragment();
+        Fragment fragment = new StartupFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.add(R.id.main, fragment, "first");
+        transaction.add(R.id.main, fragment, "startup");
         // addToBackStack allows android back button to return to previous screen
 //        transaction.addToBackStack(null);
         transaction.commit();

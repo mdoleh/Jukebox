@@ -6,9 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 
 import java.io.ByteArrayOutputStream;
@@ -31,7 +29,7 @@ public class SongRequestFragment extends Fragment
         view = inflater.inflate(R.layout.request_song, container, false);
         mainActivity = getActivity();
         setupButtonEventListener();
-        setupSpinnerChangeListener();
+//        setupSpinnerChangeListener();
         return view;
     }
 
@@ -45,29 +43,29 @@ public class SongRequestFragment extends Fragment
         });
     }
 
-    private void setupSpinnerChangeListener()
-    {
-        final Spinner availableSongsSpinner = ((Spinner)view.findViewById(R.id.songListSpinner));
-        availableSongsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-            {
-                // Clear text fields
-                final EditText songTitle = (EditText)view.findViewById(R.id.songTitle);
-                final EditText songArtist = (EditText)view.findViewById(R.id.songArtist);
-
-                songTitle.setText("");
-                songArtist.setText("");
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent)
-            {
-                // Do nothing
-            }
-        });
-    }
+//    private void setupSpinnerChangeListener()
+//    {
+//        final Spinner availableSongsSpinner = ((Spinner)view.findViewById(R.id.songListSpinner));
+//        availableSongsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+//        {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+//            {
+//                // Clear text fields
+//                final EditText songTitle = (EditText)view.findViewById(R.id.songTitle);
+//                final EditText songArtist = (EditText)view.findViewById(R.id.songArtist);
+//
+//                songTitle.setText("");
+//                songArtist.setText("");
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parent)
+//            {
+//                // Do nothing
+//            }
+//        });
+//    }
 
     private List<String> createSongListForSpinner(List<Song> songList)
     {
@@ -82,31 +80,18 @@ public class SongRequestFragment extends Fragment
     private void sendRequest()
     {
         // UI Elements
-        final EditText songTitle = (EditText)view.findViewById(R.id.songTitle);
-        final EditText songArtist = (EditText)view.findViewById(R.id.songArtist);
         final Spinner songIdSpinner = (Spinner)view.findViewById(R.id.songListSpinner);
 
         // Variables for data type and data
         String type;
-        byte[][] request = new byte[2][];
+        byte[][] request = new byte[1][];
 
-        // Check if request is an id or a search
-        if (songTitle.getText().toString().equals("") && songArtist.getText().toString().equals(""))
-        {
-            // Extract song id and convert to bytes
-            request = new byte[1][];
-            String songId = viewableList.get(songIdSpinner.getSelectedItemPosition());
-            songId = songId.substring(0, songId.indexOf("-"));
-            request[0] = songId.getBytes();
-            type = Constants.SONG_ID_TYPE;
-        }
-        else
-        {
-            // Convert string input to bytes
-            request[0] = songTitle.getText().toString().getBytes();
-            request[1] = songArtist.getText().toString().getBytes();
-            type = Constants.SONG_REQUEST_TYPE;
-        }
+        // Extract song id and convert to bytes
+        String songId = viewableList.get(songIdSpinner.getSelectedItemPosition());
+        songId = songId.substring(0, songId.indexOf("-"));
+        request[0] = songId.getBytes();
+        type = Constants.SONG_ID_TYPE;
+
         //TODO: Send request
     }
 
@@ -145,6 +130,7 @@ public class SongRequestFragment extends Fragment
 //            // TODO: display message to the user indicating no matches found
 //        }
 //    }
+//    // TODO: probably belongs on song search, convert data and store in activity for song request
 //    else if (payloadType.equals(Constants.SONG_LIST_TYPE))
 //    {
 //        List<Song> songList = new ArrayList<Song>();
@@ -179,6 +165,7 @@ public class SongRequestFragment extends Fragment
 //        songArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 //        ((Spinner)findViewById(R.id.songListSpinner)).setAdapter(songArrayAdapter);
 //    }
+//    // TODO: probably belongs on control center
 //    else if (payloadType.equals(Constants.SONG_ID_TYPE))
 //    {
 //        mediaLibraryHelper.playSong(Long.parseLong(new String(payload[0]), 10), getApplicationContext(), mediaPlayer);
