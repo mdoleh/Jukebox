@@ -80,4 +80,28 @@ public class ControlCenterFragment extends Fragment
         // Check if requested song exists
         return MediaLibraryHelper.getSongList(mainActivity.getContentResolver(), songTitle, songArtist);
     }
+
+//    // TODO: probably belongs in the control center
+//    if (payloadType.equals(Constants.SONG_REQUEST_TYPE))
+//    {
+//        List<Song> songList = checkSongExists(new String(payload[0]), new String(payload[1]));
+//
+//        // Check if list is empty
+//        if (!songList.isEmpty())
+//        {
+//            // Send list to requester
+//            sendPossibleMatches(fromNode, songList);
+//        }
+//        else
+//        {
+//            // No possible matches found
+//            // TODO: display message to the user indicating no matches found
+//        }
+//    }
+
+//    // TODO: probably belongs on control center
+//    else if (payloadType.equals(Constants.SONG_ID_TYPE))
+//    {
+//        mediaLibraryHelper.playSong(Long.parseLong(new String(payload[0]), 10), getApplicationContext(), mediaPlayer);
+//    }
 }

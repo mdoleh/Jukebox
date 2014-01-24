@@ -1,13 +1,14 @@
 package com.doleh.Jukebox;
 
-import android.app.Activity;
 import android.app.Fragment;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -19,7 +20,7 @@ import java.util.List;
 public class SongRequestFragment extends Fragment
 {
     private List<String> viewableList = new ArrayList<String>();
-    private Activity mainActivity;
+    private MainActivity mainActivity;
     private View view;
 
     @Override
@@ -27,10 +28,19 @@ public class SongRequestFragment extends Fragment
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.request_song, container, false);
-        mainActivity = getActivity();
+        mainActivity = (MainActivity)getActivity();
+        showDeviceInformation();
         setupButtonEventListener();
 //        setupSpinnerChangeListener();
         return view;
+    }
+
+    private void showDeviceInformation()
+    {
+        TextView temp = (TextView)view.findViewById(R.id.device_name);
+        temp.setText(Build.DEVICE);
+        temp = (TextView)view.findViewById(R.id.device_address);
+
     }
 
     private void setupButtonEventListener()
@@ -108,66 +118,8 @@ public class SongRequestFragment extends Fragment
         }
         catch (IOException e)
         {
-            ((MainActivity)mainActivity).showMessageBox(getString(R.string.errorTitle), getString(R.string.listToBytesError) + Arrays.toString(e.getStackTrace()));
+            mainActivity.showMessageBox(getString(R.string.errorTitle), getString(R.string.listToBytesError) + Arrays.toString(e.getStackTrace()));
         }
         //TODO: send possible matches
     }
-
-    // TODO: find proper place for this
-//    if (payloadType.equals(Constants.SONG_REQUEST_TYPE))
-//    {
-//        List<Song> songList = checkSongExists(new String(payload[0]), new String(payload[1]));
-//
-//        // Check if list is empty
-//        if (!songList.isEmpty())
-//        {
-//            // Send list to requester
-//            sendPossibleMatches(fromNode, songList);
-//        }
-//        else
-//        {
-//            // No possible matches found
-//            // TODO: display message to the user indicating no matches found
-//        }
-//    }
-//    // TODO: probably belongs on song search, convert data and store in activity for song request
-//    else if (payloadType.equals(Constants.SONG_LIST_TYPE))
-//    {
-//        List<Song> songList = new ArrayList<Song>();
-//        try
-//        {
-//            ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(payload[0]));
-//            songList = (List<Song>)ois.readObject();
-//            ois.close();
-//        }
-//        catch (ClassNotFoundException e)
-//        {
-//            showMessageBox(getString(R.string.errorTitle), Arrays.toString(e.getStackTrace()));
-//        }
-//        catch (OptionalDataException e)
-//        {
-//            showMessageBox(getString(R.string.errorTitle), Arrays.toString(e.getStackTrace()));
-//        }
-//        catch (StreamCorruptedException e)
-//        {
-//            showMessageBox(getString(R.string.errorTitle), Arrays.toString(e.getStackTrace()));
-//        }
-//        catch (IOException e)
-//        {
-//            showMessageBox(getString(R.string.errorTitle), Arrays.toString(e.getStackTrace()));
-//        }
-//
-//        //Create a list of songs for displaying to the user
-//        viewableList = createSongListForSpinner(songList);
-//
-//        // Display list on UI
-//        ArrayAdapter<String> songArrayAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_item, viewableList);
-//        songArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        ((Spinner)findViewById(R.id.songListSpinner)).setAdapter(songArrayAdapter);
-//    }
-//    // TODO: probably belongs on control center
-//    else if (payloadType.equals(Constants.SONG_ID_TYPE))
-//    {
-//        mediaLibraryHelper.playSong(Long.parseLong(new String(payload[0]), 10), getApplicationContext(), mediaPlayer);
-//    }
 }
