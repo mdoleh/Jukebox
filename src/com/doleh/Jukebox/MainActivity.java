@@ -13,6 +13,8 @@ import android.net.wifi.p2p.WifiP2pManager;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 import com.example.android.wifidirect.DeviceDetailFragment;
@@ -56,19 +58,24 @@ public class MainActivity extends Activity implements WifiP2pManager.ChannelList
 //        transaction.addToBackStack(null);
         transaction.commit();
 
-        // Probably should be in the appropriate fragment
-//        intentFilter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
-//        intentFilter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
-//        intentFilter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
-//        intentFilter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
-
         // Prevent LCD screen from turning off
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "LCD-on");
         wakeLock.acquire();
+    }
 
+    public void setupConnectionVariables()
+    {
+        isWifiP2pEnabled = true;
         manager = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
         channel = manager.initialize(this, getMainLooper(), null);
+        receiver = new WiFiDirectBroadcastReceiver(manager, channel, this);
+        registerReceiver(receiver, intentFilter);
+    }
+
+    public void addIntentFilter(String intent)
+    {
+        intentFilter.addAction(intent);
     }
 
     /** register the BroadcastReceiver with the intent values to be matched */
@@ -76,8 +83,11 @@ public class MainActivity extends Activity implements WifiP2pManager.ChannelList
     public void onResume() {
         super.onResume();
         wakeLock.acquire();
-        receiver = new WiFiDirectBroadcastReceiver(manager, channel, this);
-        registerReceiver(receiver, intentFilter);
+        if (receiver != null)
+        {
+            receiver = new WiFiDirectBroadcastReceiver(manager, channel, this);
+            registerReceiver(receiver, intentFilter);
+        }
     }
 
     @Override
@@ -85,7 +95,10 @@ public class MainActivity extends Activity implements WifiP2pManager.ChannelList
         super.onPause();
         // Allow LCD screen to turn off
         wakeLock.release();
-        unregisterReceiver(receiver);
+        if (receiver != null)
+        {
+            unregisterReceiver(receiver);
+        }
     }
 
     /**
@@ -206,5 +219,43 @@ public class MainActivity extends Activity implements WifiP2pManager.ChannelList
             }
         }
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.action_items, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.atn_direct_discover:
+                if (!isWifiP2pEnabled) {
+                    Toast.makeText(MainActivity.this, R.string.p2p_off_warning,
+                            Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                final DeviceListFragment fragment = (DeviceListFragment) getFragmentManager()
+                        .findFragmentById(R.id.frag_list);
+                fragment.onInitiateDiscovery();
+                manager.discoverPeers(channel, new WifiP2pManager.ActionListener() {
+
+                    @Override
+                    public void onSuccess() {
+                        Toast.makeText(MainActivity.this, "Discovery Initiated",
+                                Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFailure(int reasonCode) {
+                        Toast.makeText(MainActivity.this, "Discovery Failed : " + reasonCode,
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

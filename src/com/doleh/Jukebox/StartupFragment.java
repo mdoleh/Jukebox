@@ -18,6 +18,7 @@ public class StartupFragment extends Fragment
 
         view = inflater.inflate(R.layout.startup, container, false);
         setupButtonEventListener();
+        hideActionBar();
         return view;
     }
 
@@ -33,8 +34,13 @@ public class StartupFragment extends Fragment
         final Button sendRequestButton = (Button)view.findViewById(R.id.send_a_request);
         sendRequestButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                showSongSearch();
+                showDeviceConnect();
             }});
+    }
+
+    private void hideActionBar()
+    {
+        getActivity().getActionBar().hide();
     }
 
     private void showControlCenter()
@@ -47,12 +53,12 @@ public class StartupFragment extends Fragment
         transaction.commit();
     }
 
-    private void showSongSearch()
+    private void showDeviceConnect()
     {
-        Fragment fragment = new SongSearchFragment();
+        Fragment fragment = new DeviceConnectFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.remove(this);
-        transaction.add(R.id.main, fragment, "song_search");
+        transaction.add(R.id.main, fragment, "device_connect");
         transaction.addToBackStack("startup");
         transaction.commit();
     }
