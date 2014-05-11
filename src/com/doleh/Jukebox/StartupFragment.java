@@ -55,10 +55,10 @@ public class StartupFragment extends Fragment
 
     private void showDeviceConnect()
     {
-        Fragment fragment = new SongSearchFragment();
+        Fragment fragment = new DeviceConnectFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.remove(this);
-        transaction.add(R.id.main, fragment, "song_search");
+        transaction.add(R.id.main, fragment, "device_connect");
         transaction.addToBackStack("startup");
         transaction.commit();
     }
