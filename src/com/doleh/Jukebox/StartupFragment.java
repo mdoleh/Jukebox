@@ -25,8 +25,10 @@ public class StartupFragment extends Fragment
     private void setupButtonEventListener()
     {
         final Button listenButton = ((Button)view.findViewById(R.id.receive_requests));
-        listenButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+        listenButton.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View v)
+            {
                 showControlCenter();
             }
         });
@@ -34,7 +36,7 @@ public class StartupFragment extends Fragment
         final Button sendRequestButton = (Button)view.findViewById(R.id.send_a_request);
         sendRequestButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                showDeviceConnect();
+                showSongSearch();
             }});
     }
 
@@ -53,12 +55,12 @@ public class StartupFragment extends Fragment
         transaction.commit();
     }
 
-    private void showDeviceConnect()
+    private void showSongSearch()
     {
-        Fragment fragment = new DeviceConnectFragment();
+        Fragment fragment = new SongSearchFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.remove(this);
-        transaction.add(R.id.main, fragment, "device_connect");
+        transaction.add(R.id.main, fragment, "song_search");
         transaction.addToBackStack("startup");
         transaction.commit();
     }
