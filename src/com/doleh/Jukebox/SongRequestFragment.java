@@ -1,14 +1,12 @@
 package com.doleh.Jukebox;
 
 import android.app.Fragment;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -29,18 +27,9 @@ public class SongRequestFragment extends Fragment
 
         view = inflater.inflate(R.layout.request_song, container, false);
         mainActivity = (MainActivity)getActivity();
-        showDeviceInformation();
         setupButtonEventListener();
 //        setupSpinnerChangeListener();
         return view;
-    }
-
-    private void showDeviceInformation()
-    {
-        TextView temp = (TextView)view.findViewById(R.id.device_name);
-        temp.setText(Build.DEVICE);
-        temp = (TextView)view.findViewById(R.id.device_address);
-
     }
 
     private void setupButtonEventListener()

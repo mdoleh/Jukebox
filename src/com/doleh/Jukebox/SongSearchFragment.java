@@ -19,6 +19,7 @@ public class SongSearchFragment extends Fragment
 
         view = inflater.inflate(R.layout.song_search, container, false);
         setupButtonEventListener();
+        hideActionBar();
         return view;
     }
 
@@ -30,6 +31,11 @@ public class SongSearchFragment extends Fragment
                 showSongRequest();
             }
         });
+    }
+
+    private void hideActionBar()
+    {
+        getActivity().getActionBar().hide();
     }
 
     private void showSongRequest()
