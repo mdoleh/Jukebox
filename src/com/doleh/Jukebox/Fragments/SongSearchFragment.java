@@ -1,4 +1,4 @@
-package com.doleh.Jukebox;
+package com.doleh.Jukebox.Fragments;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -8,16 +8,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import com.doleh.Jukebox.MainActivity;
+import com.doleh.Jukebox.MessageTypes.RequestSongList;
+import com.doleh.Jukebox.R;
 
 public class SongSearchFragment extends Fragment
 {
     private View view;
+    private MainActivity mainActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.song_search, container, false);
+        mainActivity = (MainActivity)getActivity();
         setupButtonEventListener();
         hideActionBar();
         return view;
@@ -28,7 +33,7 @@ public class SongSearchFragment extends Fragment
         final Button listenButton = ((Button)view.findViewById(R.id.searchButton));
         listenButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                showSongRequest();
+                sendSearch();
             }
         });
     }
@@ -38,7 +43,7 @@ public class SongSearchFragment extends Fragment
         getActivity().getActionBar().hide();
     }
 
-    private void showSongRequest()
+    public void showSongRequest()
     {
         Fragment fragment = new SongRequestFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -54,17 +59,11 @@ public class SongSearchFragment extends Fragment
         final EditText songTitle = (EditText)view.findViewById(R.id.songTitle);
         final EditText songArtist = (EditText)view.findViewById(R.id.songArtist);
 
-        // Variables for data type and data
-        String type;
-        byte[][] request = new byte[2][];
-
-        // Convert string input to bytes
-        request[0] = songTitle.getText().toString().getBytes();
-        request[1] = songArtist.getText().toString().getBytes();
-        type = Constants.SONG_REQUEST_TYPE;
-
-        // TODO: send search and show next screen if songList returned
+        RequestSongList requestSongList = new RequestSongList(songTitle.getText().toString(), songArtist.getText().toString());
+        mainActivity.netComm.write(requestSongList);
     }
+
+
 
 //    // TODO: probably belongs on song search, convert data and store in activity for song request
 //    else if (payloadType.equals(Constants.SONG_LIST_TYPE))

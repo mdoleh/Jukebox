@@ -15,6 +15,7 @@
     <string name="songTitle">Song Title</string>
     <string name="songArtist">Artist</string>
     <string name="stopSong">Stop Song</string>
+    <string name="ipAddress">IP Address</string>
     <string name="listToBytesError">Conversion from object list to bytes has failed.</string>
     <string name="playSongError">Unable to play the requested song.</string>
     <string name="enable_p2p_button">P2P On/Off</string>
@@ -34,4 +35,6 @@
     <string name="what_to_do">What would you like to do?</string>
     <string name="receive_requests">Receive Song Requests</string>
     <string name="send_a_request">Send a Song Request</string>
+    <string name="enter_ip">Enter IP Address</string>
+    <string name="connect">Connect</string>
 </resources>

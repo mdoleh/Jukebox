@@ -1,23 +1,23 @@
-package com.doleh.Jukebox;
+package com.doleh.Jukebox.Fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import com.doleh.Jukebox.MainActivity;
+import com.doleh.Jukebox.MessageTypes.RequestSongId;
+import com.doleh.Jukebox.R;
+import com.doleh.Jukebox.Song;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class SongRequestFragment extends Fragment
 {
-    private List<String> viewableList = new ArrayList<String>();
     private MainActivity mainActivity;
     private View view;
 
@@ -28,6 +28,7 @@ public class SongRequestFragment extends Fragment
         view = inflater.inflate(R.layout.request_song, container, false);
         mainActivity = (MainActivity)getActivity();
         setupButtonEventListener();
+        createSongListForSpinner(mainActivity.receivedSongs);
 //        setupSpinnerChangeListener();
         return view;
     }
@@ -66,14 +67,17 @@ public class SongRequestFragment extends Fragment
 //        });
 //    }
 
-    private List<String> createSongListForSpinner(List<Song> songList)
+    private void createSongListForSpinner(List<Song> songList)
     {
-        List<String> temp = new ArrayList<String>();
+        List<String> viewableList = new ArrayList<String>();
         for (Song song : songList)
         {
-            temp.add(song.id + "-" + song.title + song.artist);
+            viewableList.add(song.id + "-" + song.title + song.artist);
         }
-        return temp;
+        // Display list on UI
+        ArrayAdapter<String> songArrayAdapter = new ArrayAdapter<String>(mainActivity.getApplicationContext(), android.R.layout.simple_spinner_item, viewableList);
+        songArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ((Spinner)view.findViewById(R.id.songListSpinner)).setAdapter(songArrayAdapter);
     }
 
     private void sendRequest()
@@ -81,34 +85,9 @@ public class SongRequestFragment extends Fragment
         // UI Elements
         final Spinner songIdSpinner = (Spinner)view.findViewById(R.id.songListSpinner);
 
-        // Variables for data type and data
-        String type;
-        byte[][] request = new byte[1][];
-
-        // Extract song id and convert to bytes
-        String songId = viewableList.get(songIdSpinner.getSelectedItemPosition());
-        songId = songId.substring(0, songId.indexOf("-"));
-        request[0] = songId.getBytes();
-        type = Constants.SONG_ID_TYPE;
-
-        //TODO: Send request
-    }
-
-    private void sendPossibleMatches(String fromNode, List<Song> songList)
-    {
-        byte[][] possibleMatches = new byte[1][];
-        try
-        {
-            // Convert songList into a byte array
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            ObjectOutputStream oos = new ObjectOutputStream(bos);
-            oos.writeObject(songList);
-            possibleMatches[0] = bos.toByteArray();
-        }
-        catch (IOException e)
-        {
-            mainActivity.showMessageBox(getString(R.string.errorTitle), getString(R.string.listToBytesError) + Arrays.toString(e.getStackTrace()));
-        }
-        //TODO: send possible matches
+        String selectedItem = songIdSpinner.getSelectedItem().toString();
+        Long id = Long.parseLong(selectedItem.substring(0, selectedItem.indexOf("-")));
+        RequestSongId requestSongId = new RequestSongId(id);
+        mainActivity.netComm.write(requestSongId);
     }
 }

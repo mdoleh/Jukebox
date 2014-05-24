@@ -7,11 +7,22 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.PowerManager;
+import com.doleh.Jukebox.Fragments.ControlCenterFragment;
+import com.doleh.Jukebox.Fragments.SongSearchFragment;
+import com.doleh.Jukebox.Fragments.StartupFragment;
+import com.doleh.Jukebox.MessageTypes.SongList;
+import com.jackieloven.thebasics.NetComm;
+import com.jackieloven.thebasics.Networked;
 
-public class MainActivity extends Activity
+import java.net.Socket;
+import java.util.List;
+
+public class MainActivity extends Activity implements Networked
 {
-    public static final String TAG = "jukebox";
     private PowerManager.WakeLock wakeLock;
+    public List<Song> receivedSongs;
+    public String ip;
+    public NetComm netComm;
 
     /**
      * Called when the activity is first created.
@@ -43,13 +54,46 @@ public class MainActivity extends Activity
         wakeLock.release();
     }
 
-    public void showMessageBox(String title, String message)
+    public void showMessageBox(final String title, final String message)
     {
-        AlertDialog.Builder alert  = new AlertDialog.Builder(this);
-        alert.setMessage(message);
-        alert.setTitle(title);
-        alert.setPositiveButton("OK", null);
-        alert.setCancelable(true);
-        alert.create().show();
+        runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                AlertDialog.Builder alert  = new AlertDialog.Builder(MainActivity.this);
+                alert.setMessage(message);
+                alert.setTitle(title);
+                alert.setPositiveButton("OK", null);
+                alert.setCancelable(true);
+                alert.create().show();
+            }
+        });
+    }
+
+    @Override
+    public void msgReceived(Object msgObj, NetComm sender)
+    {
+        if (msgObj instanceof SongList)
+        {
+            receivedSongs = ((SongList)msgObj).songs;
+            ((SongSearchFragment)getFragmentManager().findFragmentByTag("song_search")).showSongRequest();
+        }
+    }
+
+    public void startNetworkThread()
+    {
+        new Thread(new NetworkThread()).start();
+    }
+    private class NetworkThread implements Runnable
+    {
+        public void run() {
+            try {
+                netComm = new NetComm(new Socket(ip, ControlCenterFragment.PORT), MainActivity.this);
+            } catch (Exception ex) {
+                netComm = null;
+                finish();
+            }
+        }
     }
 }

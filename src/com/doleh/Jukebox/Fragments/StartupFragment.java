@@ -1,4 +1,4 @@
-package com.doleh.Jukebox;
+package com.doleh.Jukebox.Fragments;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import com.doleh.Jukebox.R;
 
 public class StartupFragment extends Fragment
 {
@@ -36,7 +37,7 @@ public class StartupFragment extends Fragment
         final Button sendRequestButton = (Button)view.findViewById(R.id.send_a_request);
         sendRequestButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                showSongSearch();
+                showConnectDevices();
             }});
     }
 
@@ -55,12 +56,12 @@ public class StartupFragment extends Fragment
         transaction.commit();
     }
 
-    private void showSongSearch()
+    private void showConnectDevices()
     {
-        Fragment fragment = new SongSearchFragment();
+        Fragment fragment = new ConnectFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.remove(this);
-        transaction.add(R.id.main, fragment, "song_search");
+        transaction.add(R.id.main, fragment, "connect");
         transaction.addToBackStack("startup");
         transaction.commit();
     }
