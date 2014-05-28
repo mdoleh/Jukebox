@@ -37,4 +37,5 @@
     <string name="send_a_request">Send a Song Request</string>
     <string name="enter_ip">Enter IP Address</string>
     <string name="connect">Connect</string>
+    <string name="requestersLabel">Number of Requesters</string>
 </resources>

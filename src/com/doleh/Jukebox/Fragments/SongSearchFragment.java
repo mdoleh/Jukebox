@@ -28,6 +28,13 @@ public class SongSearchFragment extends Fragment
         return view;
     }
 
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        mainActivity.netComm.close();
+    }
+
     private void setupButtonEventListener()
     {
         final Button listenButton = ((Button)view.findViewById(R.id.searchButton));

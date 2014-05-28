@@ -91,4 +91,14 @@ public class MainActivity extends Activity implements Networked
             }
         }
     }
+
+    // TODO: will eventually replace all places where fragments are shown
+    public void showFragment(String currentFragmentTag, Fragment currentFragment, String newFragmentTag, Fragment newFragment)
+    {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.remove(currentFragment);
+        transaction.add(R.id.main, newFragment, newFragmentTag);
+        transaction.addToBackStack(currentFragmentTag);
+        transaction.commit();
+    }
 }

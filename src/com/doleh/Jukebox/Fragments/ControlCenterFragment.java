@@ -7,14 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import com.doleh.Jukebox.MainActivity;
-import com.doleh.Jukebox.MediaLibraryHelper;
+import android.widget.TextView;
+import com.doleh.Jukebox.*;
 import com.doleh.Jukebox.MessageTypes.Accepted;
 import com.doleh.Jukebox.MessageTypes.ClientMessage;
 import com.doleh.Jukebox.MessageTypes.Rejection;
 import com.doleh.Jukebox.MessageTypes.SongList;
-import com.doleh.Jukebox.R;
-import com.doleh.Jukebox.Song;
+import com.jackieloven.thebasics.CloseConnectionMsg;
 import com.jackieloven.thebasics.NetComm;
 import com.jackieloven.thebasics.Networked;
 
@@ -104,6 +103,8 @@ public class ControlCenterFragment extends Fragment implements Networked
                 running = !running;
                 // wait for clients to connect
                 new Thread(new AcceptClientsThread()).start();
+                final TextView ipAddress = (TextView)view.findViewById(R.id.ipAddress);
+                ipAddress.setText(Utils.getIPAddress(true));
             }
             mainActivity.showMessageBox(getString(R.string.toggleListener), getString(R.string.toggleListenerMessageOn));
         }
@@ -122,12 +123,20 @@ public class ControlCenterFragment extends Fragment implements Networked
     @Override
     public void msgReceived(Object msgObj, NetComm sender)
     {
-        //int senderIndex = findSender(msgObj, sender);
-
-        SongList listMessage = new SongList(((ClientMessage)msgObj).Execute(mainActivity, mediaPlayer));
-        if (listMessage.songs != null)
+        if (msgObj instanceof CloseConnectionMsg)
         {
-            sender.write(listMessage);
+            int senderIndex = findSender(msgObj, sender);
+            netComms.remove(senderIndex);
+            final TextView requesterCount = (TextView)view.findViewById(R.id.requesterCount);
+            requesterCount.setText(netComms.size());
+        }
+        else
+        {
+            SongList listMessage = new SongList(((ClientMessage)msgObj).Execute(mainActivity, mediaPlayer));
+            if (listMessage.songs != null)
+            {
+                sender.write(listMessage);
+            }
         }
     }
 
@@ -157,7 +166,8 @@ public class ControlCenterFragment extends Fragment implements Networked
                         NetComm requester = new NetComm(socket, ControlCenterFragment.this);
                         netComms.add(requester);
                         requester.write(new Accepted());
-                        mainActivity.showMessageBox("New Requester", "Requester has joined.");
+                        final TextView requesterCount = (TextView)view.findViewById(R.id.requesterCount);
+                        requesterCount.setText(Integer.toString(netComms.size()));
                     }
                     else
                     {
