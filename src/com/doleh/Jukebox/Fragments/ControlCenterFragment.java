@@ -103,7 +103,7 @@ public class ControlCenterFragment extends Fragment implements Networked
                 running = !running;
                 // wait for clients to connect
                 new Thread(new AcceptClientsThread()).start();
-                final TextView ipAddress = (TextView)view.findViewById(R.id.ipAddress);
+                final TextView ipAddress = (TextView)view.findViewById(R.id.deviceAddress);
                 ipAddress.setText(Utils.getIPAddress(true));
             }
             mainActivity.showMessageBox(getString(R.string.toggleListener), getString(R.string.toggleListenerMessageOn));
@@ -128,7 +128,7 @@ public class ControlCenterFragment extends Fragment implements Networked
             int senderIndex = findSender(msgObj, sender);
             netComms.remove(senderIndex);
             final TextView requesterCount = (TextView)view.findViewById(R.id.requesterCount);
-            requesterCount.setText(netComms.size());
+            requesterCount.setText(Integer.toString(netComms.size()));
         }
         else
         {

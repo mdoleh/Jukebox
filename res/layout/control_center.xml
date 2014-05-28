@@ -35,6 +35,8 @@
             android:id="@+id/deviceAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textSize="20dp"
             android:layout_below="@+id/stopButton"/>
 
     <TextView
@@ -43,7 +45,7 @@
             android:text="@string/requestersLabel"
             android:id="@+id/requestersLabel"
             android:layout_centerHorizontal="true"
-            android:textSize="15dp"
+            android:textSize="20dp"
             android:layout_below="@id/deviceAddress"/>
 
     <TextView
@@ -51,6 +53,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/requesterCount"
             android:layout_centerHorizontal="true"
-            android:textSize="15dp"
+            android:textSize="18dp"
             android:layout_below="@id/requestersLabel"/>
 </RelativeLayout>
