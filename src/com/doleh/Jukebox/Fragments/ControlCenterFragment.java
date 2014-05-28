@@ -127,8 +127,7 @@ public class ControlCenterFragment extends Fragment implements Networked
         {
             int senderIndex = findSender(msgObj, sender);
             netComms.remove(senderIndex);
-            final TextView requesterCount = (TextView)view.findViewById(R.id.requesterCount);
-            requesterCount.setText(Integer.toString(netComms.size()));
+            updateRequesterCount(netComms.size());
         }
         else
         {
@@ -166,8 +165,7 @@ public class ControlCenterFragment extends Fragment implements Networked
                         NetComm requester = new NetComm(socket, ControlCenterFragment.this);
                         netComms.add(requester);
                         requester.write(new Accepted());
-                        final TextView requesterCount = (TextView)view.findViewById(R.id.requesterCount);
-                        requesterCount.setText(Integer.toString(netComms.size()));
+                        updateRequesterCount(netComms.size());
                     }
                     else
                     {
@@ -190,9 +188,17 @@ public class ControlCenterFragment extends Fragment implements Networked
         }
     }
 
-    private void sendCloseMessage()
+    private void updateRequesterCount(final int newValue)
     {
-
+        mainActivity.runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                final TextView requesterCount = (TextView)view.findViewById(R.id.requesterCount);
+                requesterCount.setText(Integer.toString(newValue));
+            }
+        });
     }
 
 //    // TODO: probably belongs in the control center
