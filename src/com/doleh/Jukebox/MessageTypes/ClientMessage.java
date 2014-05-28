@@ -6,7 +6,7 @@ import com.doleh.Jukebox.Song;
 
 import java.util.List;
 
-public class Message
+public class ClientMessage
 {
     public List<Song> Execute(MainActivity mainActivity, MediaPlayer mediaPlayer){ return null; }
 }

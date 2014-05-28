@@ -9,7 +9,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import com.doleh.Jukebox.MainActivity;
 import com.doleh.Jukebox.MediaLibraryHelper;
-import com.doleh.Jukebox.MessageTypes.Message;
+import com.doleh.Jukebox.MessageTypes.Accepted;
+import com.doleh.Jukebox.MessageTypes.ClientMessage;
+import com.doleh.Jukebox.MessageTypes.Rejection;
 import com.doleh.Jukebox.MessageTypes.SongList;
 import com.doleh.Jukebox.R;
 import com.doleh.Jukebox.Song;
@@ -35,8 +37,8 @@ public class ControlCenterFragment extends Fragment implements Networked
     /** server socket used to set up connections with clients */
     private ServerSocket serverSocket;
     /** ArrayList of client connections */
-    private ArrayList<NetComm> netComms;
-    private boolean running;
+    private ArrayList<NetComm> netComms = new ArrayList<NetComm>();
+    private boolean running = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,8 +56,6 @@ public class ControlCenterFragment extends Fragment implements Networked
         catch (IOException ex) {
             mainActivity.finish();
         }
-        netComms = new ArrayList<NetComm>();
-        running = true;
 
         return view;
     }
@@ -99,9 +99,13 @@ public class ControlCenterFragment extends Fragment implements Networked
         listeningForRequests = !listeningForRequests;
         if (listeningForRequests)
         {
+            if (!running)
+            {
+                running = !running;
+                // wait for clients to connect
+                new Thread(new AcceptClientsThread()).start();
+            }
             mainActivity.showMessageBox(getString(R.string.toggleListener), getString(R.string.toggleListenerMessageOn));
-            // wait for clients to connect
-            new Thread(new AcceptClientsThread()).start();
         }
         else
         {
@@ -120,7 +124,7 @@ public class ControlCenterFragment extends Fragment implements Networked
     {
         //int senderIndex = findSender(msgObj, sender);
 
-        SongList listMessage = new SongList(((Message)msgObj).Execute(mainActivity, mediaPlayer));
+        SongList listMessage = new SongList(((ClientMessage)msgObj).Execute(mainActivity, mediaPlayer));
         if (listMessage.songs != null)
         {
             sender.write(listMessage);
@@ -148,8 +152,17 @@ public class ControlCenterFragment extends Fragment implements Networked
             while (running) {
                 try {
                     Socket socket = serverSocket.accept();
-                    netComms.add(new NetComm(socket, ControlCenterFragment.this));
-                    mainActivity.showMessageBox("New Requester", "Requester is online.");
+                    if (listeningForRequests)
+                    {
+                        NetComm requester = new NetComm(socket, ControlCenterFragment.this);
+                        netComms.add(requester);
+                        requester.write(new Accepted());
+                        mainActivity.showMessageBox("New Requester", "Requester has joined.");
+                    }
+                    else
+                    {
+                        new NetComm(socket, ControlCenterFragment.this).write(new Rejection());
+                    }
                 }
                 catch (Exception ex) {
                     ex.printStackTrace();
@@ -157,6 +170,7 @@ public class ControlCenterFragment extends Fragment implements Networked
                 }
             }
             try {
+
                 serverSocket.close();
             }
             catch (Exception ex) {
@@ -164,6 +178,11 @@ public class ControlCenterFragment extends Fragment implements Networked
             }
             mainActivity.finish();
         }
+    }
+
+    private void sendCloseMessage()
+    {
+
     }
 
 //    // TODO: probably belongs in the control center

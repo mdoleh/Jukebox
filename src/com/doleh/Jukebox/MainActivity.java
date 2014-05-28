@@ -8,9 +8,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.PowerManager;
 import com.doleh.Jukebox.Fragments.ControlCenterFragment;
-import com.doleh.Jukebox.Fragments.SongSearchFragment;
 import com.doleh.Jukebox.Fragments.StartupFragment;
-import com.doleh.Jukebox.MessageTypes.SongList;
+import com.doleh.Jukebox.MessageTypes.ServerMessage;
 import com.jackieloven.thebasics.NetComm;
 import com.jackieloven.thebasics.Networked;
 
@@ -65,7 +64,7 @@ public class MainActivity extends Activity implements Networked
                 alert.setMessage(message);
                 alert.setTitle(title);
                 alert.setPositiveButton("OK", null);
-                alert.setCancelable(true);
+                alert.setCancelable(false);
                 alert.create().show();
             }
         });
@@ -74,11 +73,7 @@ public class MainActivity extends Activity implements Networked
     @Override
     public void msgReceived(Object msgObj, NetComm sender)
     {
-        if (msgObj instanceof SongList)
-        {
-            receivedSongs = ((SongList)msgObj).songs;
-            ((SongSearchFragment)getFragmentManager().findFragmentByTag("song_search")).showSongRequest();
-        }
+        ((ServerMessage)msgObj).Execute(this);
     }
 
     public void startNetworkThread()

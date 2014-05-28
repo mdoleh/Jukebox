@@ -40,10 +40,9 @@ public class ConnectFragment extends Fragment
         final EditText ipAddress = (EditText)view.findViewById(R.id.ipAddress);
         mainActivity.ip = ipAddress.getText().toString();
         mainActivity.startNetworkThread();
-        showSongSearch();
     }
 
-    private void showSongSearch()
+    public void showSongSearch()
     {
         Fragment fragment = new SongSearchFragment();
         FragmentTransaction transaction = getFragmentManager().beginTransaction();

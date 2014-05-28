@@ -8,7 +8,7 @@ import com.doleh.Jukebox.Song;
 import java.io.Serializable;
 import java.util.List;
 
-public class RequestSongId extends Message implements Serializable
+public class RequestSongId extends ClientMessage implements Serializable
 {
     public Long id;
 
