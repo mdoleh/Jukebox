@@ -9,10 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import com.doleh.Jukebox.*;
-import com.doleh.Jukebox.MessageTypes.Accepted;
-import com.doleh.Jukebox.MessageTypes.ClientMessage;
-import com.doleh.Jukebox.MessageTypes.Rejection;
-import com.doleh.Jukebox.MessageTypes.SongList;
+import com.doleh.Jukebox.MessageTypes.*;
 import com.jackieloven.thebasics.CloseConnectionMsg;
 import com.jackieloven.thebasics.NetComm;
 import com.jackieloven.thebasics.Networked;
@@ -57,6 +54,24 @@ public class ControlCenterFragment extends Fragment implements Networked
         }
 
         return view;
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        for (NetComm netComm : netComms)
+        {
+            netComm.write(new ConnectionClosed());
+        }
+        try
+        {
+            serverSocket.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private void setupButtonEventListener()
@@ -147,7 +162,7 @@ public class ControlCenterFragment extends Fragment implements Networked
             if (sender == netComms.get(senderIndex)) break;
         }
         if (senderIndex == netComms.size()) {
-            mainActivity.showMessageBox("Warning", "Received message from unknown requester: " + msgObj);
+            mainActivity.showMessageBox(getString(R.string.warning), getString(R.string.unknownRequester) + msgObj);
         }
         return senderIndex;
     }
@@ -195,7 +210,7 @@ public class ControlCenterFragment extends Fragment implements Networked
             @Override
             public void run()
             {
-                final TextView requesterCount = (TextView)view.findViewById(R.id.requesterCount);
+                final TextView requesterCount = (TextView) view.findViewById(R.id.requesterCount);
                 requesterCount.setText(Integer.toString(newValue));
             }
         });

@@ -63,7 +63,7 @@ public class MainActivity extends Activity implements Networked
                 AlertDialog.Builder alert  = new AlertDialog.Builder(MainActivity.this);
                 alert.setMessage(message);
                 alert.setTitle(title);
-                alert.setPositiveButton("OK", null);
+                alert.setPositiveButton(getString(R.string.ok), null);
                 alert.setCancelable(false);
                 alert.create().show();
             }

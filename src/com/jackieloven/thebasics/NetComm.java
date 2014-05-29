@@ -71,10 +71,10 @@ public class NetComm {
 			while (true) { // poll for messages until the program exits
 				msgObj = read();
 				if (msgObj != null) {
-					node.msgReceived(msgObj, NetComm.this); // forward message to network node
 					if (msgObj instanceof CloseConnectionMsg) {
-						return; // stop polling for messages if disconnected
+                        return; // stop polling for messages if disconnected
 					}
+                    node.msgReceived(msgObj, NetComm.this); // forward message to network node
 				}
 			}
 		}
