@@ -10,6 +10,7 @@ import android.os.PowerManager;
 import com.doleh.Jukebox.Fragments.ControlCenterFragment;
 import com.doleh.Jukebox.Fragments.StartupFragment;
 import com.doleh.Jukebox.MessageTypes.ServerMessage;
+import com.jackieloven.thebasics.CloseConnectionMsg;
 import com.jackieloven.thebasics.NetComm;
 import com.jackieloven.thebasics.Networked;
 
@@ -73,7 +74,10 @@ public class MainActivity extends Activity implements Networked
     @Override
     public void msgReceived(Object msgObj, NetComm sender)
     {
-        ((ServerMessage)msgObj).Execute(this);
+        if (!(msgObj instanceof CloseConnectionMsg))
+        {
+            ((ServerMessage)msgObj).Execute(this);
+        }
     }
 
     public void startNetworkThread()
@@ -89,6 +93,15 @@ public class MainActivity extends Activity implements Networked
                 netComm = null;
                 finish();
             }
+        }
+    }
+
+    public void goBackToBeginning()
+    {
+        int size = getFragmentManager().getBackStackEntryCount();
+        for (int ii = 0; ii < size; ++ii)
+        {
+            getFragmentManager().popBackStack();
         }
     }
 

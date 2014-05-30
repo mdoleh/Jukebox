@@ -11,10 +11,6 @@ public class ConnectionClosed extends ServerMessage implements Serializable
     public void Execute(MainActivity mainActivity)
     {
         mainActivity.showMessageBox(mainActivity.getString(R.string.connectionLost), mainActivity.getString(R.string.connectionLostMsg));
-        int size = mainActivity.getFragmentManager().getBackStackEntryCount();
-        for(int ii = 0; ii < size; ++ii)
-        {
-            mainActivity.getFragmentManager().popBackStack();
-        }
+        mainActivity.goBackToBeginning();
     }
 }

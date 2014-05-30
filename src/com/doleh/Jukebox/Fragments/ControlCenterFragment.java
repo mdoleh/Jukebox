@@ -2,6 +2,7 @@ package com.doleh.Jukebox.Fragments;
 
 import android.app.Fragment;
 import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,14 +46,6 @@ public class ControlCenterFragment extends Fragment implements Networked
         setupButtonEventListener();
         setupOnCompletionListener();
 
-        // initialize server socket
-        try {
-            serverSocket = new ServerSocket(PORT);
-        }
-        catch (IOException ex) {
-            mainActivity.finish();
-        }
-
         return view;
     }
 
@@ -60,18 +53,7 @@ public class ControlCenterFragment extends Fragment implements Networked
     public void onDestroy()
     {
         super.onDestroy();
-        for (NetComm netComm : netComms)
-        {
-            netComm.write(new ConnectionClosed());
-        }
-        try
-        {
-            serverSocket.close();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        new closePort().execute();
     }
 
     private void setupButtonEventListener()
@@ -115,7 +97,14 @@ public class ControlCenterFragment extends Fragment implements Networked
         {
             if (!running)
             {
-                running = !running;
+                running = true;
+                // initialize server socket
+                try {
+                    serverSocket = new ServerSocket(PORT);
+                }
+                catch (IOException ex) {
+                    mainActivity.finish();
+                }
                 // wait for clients to connect
                 new Thread(new AcceptClientsThread()).start();
                 final TextView ipAddress = (TextView)view.findViewById(R.id.deviceAddress);
@@ -146,11 +135,14 @@ public class ControlCenterFragment extends Fragment implements Networked
         }
         else
         {
-            SongList listMessage = new SongList(((ClientMessage)msgObj).Execute(mainActivity, mediaPlayer));
-            if (listMessage.songs != null)
+            if (listeningForRequests)
             {
-                sender.write(listMessage);
-            }
+                SongList listMessage = new SongList(((ClientMessage)msgObj).Execute(mainActivity, mediaPlayer));
+                if (listMessage.songs != null)
+                {
+                    sender.write(listMessage);
+                }
+            } else { sender.write(new Rejection()); }
         }
     }
 
@@ -189,17 +181,11 @@ public class ControlCenterFragment extends Fragment implements Networked
                 }
                 catch (Exception ex) {
                     ex.printStackTrace();
+                    //new closePort().execute();
+                    //mainActivity.finish();
                     break;
                 }
             }
-            try {
-
-                serverSocket.close();
-            }
-            catch (Exception ex) {
-                ex.printStackTrace();
-            }
-            mainActivity.finish();
         }
     }
 
@@ -216,6 +202,25 @@ public class ControlCenterFragment extends Fragment implements Networked
         });
     }
 
+    private class closePort extends AsyncTask
+    {
+        @Override
+        protected Object doInBackground(Object... params)
+        {
+            try {
+                for (NetComm netcomm: netComms)
+                {
+                    netcomm.write(new ConnectionClosed());
+                }
+                serverSocket.close();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
 //    // TODO: probably belongs in the control center
 //    if (payloadType.equals(Constants.SONG_REQUEST_TYPE))
 //    {

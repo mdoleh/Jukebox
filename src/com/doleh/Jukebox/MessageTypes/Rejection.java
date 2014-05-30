@@ -11,6 +11,7 @@ public class Rejection extends ServerMessage implements Serializable
     public void Execute(MainActivity mainActivity)
     {
         mainActivity.showMessageBox(mainActivity.getString(R.string.connectionFailed), mainActivity.getString(R.string.connectionFailedMsg));
+        mainActivity.goBackToBeginning();
         mainActivity.netComm.close();
     }
 }
