@@ -9,8 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import com.doleh.Jukebox.*;
+import com.doleh.Jukebox.MainActivity;
+import com.doleh.Jukebox.MediaLibraryHelper;
 import com.doleh.Jukebox.MessageTypes.*;
+import com.doleh.Jukebox.R;
+import com.doleh.Jukebox.Utils;
 import com.jackieloven.thebasics.CloseConnectionMsg;
 import com.jackieloven.thebasics.NetComm;
 import com.jackieloven.thebasics.Networked;
@@ -19,7 +22,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ControlCenterFragment extends Fragment implements Networked
 {
@@ -116,12 +118,6 @@ public class ControlCenterFragment extends Fragment implements Networked
         {
             mainActivity.showMessageBox(getString(R.string.toggleListener), getString(R.string.toggleListenerMessageOff));
         }
-    }
-
-    private List<Song> checkSongExists(String songTitle, String songArtist)
-    {
-        // Check if requested song exists
-        return MediaLibraryHelper.getSongList(mainActivity.getContentResolver(), songTitle, songArtist);
     }
 
     @Override
