@@ -60,18 +60,19 @@ public class ControlCenterFragment extends Fragment implements Networked
 
     private void setupButtonEventListener()
     {
+        final Button pauseButton = (Button)view.findViewById(R.id.pauseButton);
+        pauseButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                pauseButton.setText(MediaLibraryHelper.togglePlay(mediaPlayer, getActivity()));
+            }});
+
         final Button listenButton = ((Button)view.findViewById(R.id.listenerToggle));
         listenButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 toggleListener();
+                pauseButton.setEnabled(true);
             }
         });
-
-        final Button stopButton = (Button)view.findViewById(R.id.stopButton);
-        stopButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                MediaLibraryHelper.stopSong(mediaPlayer);
-            }});
     }
 
     private void setupOnCompletionListener()
@@ -81,11 +82,11 @@ public class ControlCenterFragment extends Fragment implements Networked
             @Override
             public void onCompletion(MediaPlayer mp)
             {
-                MediaLibraryHelper.stopSong(mp);
+                mp.reset();
                 // If songs are in the queue play them next
                 if (!MediaLibraryHelper.songQueueIsEmpty())
                 {
-                    MediaLibraryHelper.playSong(MediaLibraryHelper.getSongId(0), mainActivity.getApplicationContext(), mp);
+                    MediaLibraryHelper.playSong(MediaLibraryHelper.getSongId(0), mainActivity.getApplicationContext(), mediaPlayer);
                     MediaLibraryHelper.removeSong(0);
                 }
             }
@@ -208,7 +209,7 @@ public class ControlCenterFragment extends Fragment implements Networked
                 {
                     netcomm.write(new ConnectionClosed());
                 }
-                serverSocket.close();
+                if (serverSocket != null) { serverSocket.close(); }
             }
             catch (IOException e)
             {
@@ -217,27 +218,4 @@ public class ControlCenterFragment extends Fragment implements Networked
             return null;
         }
     }
-//    // TODO: probably belongs in the control center
-//    if (payloadType.equals(Constants.SONG_REQUEST_TYPE))
-//    {
-//        List<Song> songList = checkSongExists(new String(payload[0]), new String(payload[1]));
-//
-//        // Check if list is empty
-//        if (!songList.isEmpty())
-//        {
-//            // Send list to requester
-//            sendPossibleMatches(fromNode, songList);
-//        }
-//        else
-//        {
-//            // No possible matches found
-//            // TODO: display message to the user indicating no matches found
-//        }
-//    }
-
-//    // TODO: probably belongs on control center
-//    else if (payloadType.equals(Constants.SONG_ID_TYPE))
-//    {
-//        mediaLibraryHelper.playSong(Long.parseLong(new String(payload[0]), 10), getApplicationContext(), mediaPlayer);
-//    }
 }

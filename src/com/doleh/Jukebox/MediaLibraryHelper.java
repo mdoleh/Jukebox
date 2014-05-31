@@ -1,5 +1,6 @@
 package com.doleh.Jukebox;
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -16,6 +17,7 @@ import java.util.List;
 public class MediaLibraryHelper
 {
     private static List<Long> songQueue = new ArrayList<Long>();
+    public static boolean isPaused = false;
 
     public static void removeSong(int index)
     {
@@ -74,9 +76,10 @@ public class MediaLibraryHelper
 
     public static void playSong(Long songId, Context context, MediaPlayer mediaPlayer)
     {
-        if (mediaPlayer.isPlaying())
+        if (mediaPlayer.isPlaying() || isPaused)
         {
-            songQueue.add(songId);
+            if (isSongInQueue(songId)) { moveSongUp(songId); }
+            else { songQueue.add(songId); }
         }
         else
         {
@@ -96,8 +99,36 @@ public class MediaLibraryHelper
         }
     }
 
-    public static void stopSong(MediaPlayer mediaPlayer)
+    public static String togglePlay(MediaPlayer mediaPlayer, Activity activity)
     {
-        mediaPlayer.stop();
+        String text;
+        if (!isPaused)
+        {
+            mediaPlayer.pause();
+            text = activity.getString(R.string.playSong);
+        }
+        else
+        {
+            mediaPlayer.start();
+            text = activity.getString(R.string.pauseSong);
+        }
+        isPaused = !isPaused;
+        return text;
+    }
+
+    public static boolean isSongInQueue(Long id)
+    {
+        return songQueue.contains(id);
+    }
+
+    public static void moveSongUp(Long id)
+    {
+        int index = songQueue.indexOf(id);
+        List<Long> temp = songQueue;
+        temp.remove(index);
+        if (index > 0) { --index; }
+        if (temp.size() != 0) { temp.set(index, id); }
+        else { temp.add(id); }
+        songQueue = new ArrayList<Long>(temp);
     }
 }

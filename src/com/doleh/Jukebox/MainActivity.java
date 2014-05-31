@@ -51,7 +51,7 @@ public class MainActivity extends Activity implements Networked
     public void onPause() {
         super.onPause();
         // Allow LCD screen to turn off
-        wakeLock.release();
+        if (wakeLock.isHeld()) { wakeLock.release(); }
     }
 
     public void showMessageBox(final String title, final String message)
@@ -91,7 +91,7 @@ public class MainActivity extends Activity implements Networked
                 netComm = new NetComm(new Socket(ip, ControlCenterFragment.PORT), MainActivity.this);
             } catch (Exception ex) {
                 netComm = null;
-                finish();
+                showMessageBox(getString(R.string.connectionFailed), getString(R.string.connectionFailedMsg2));
             }
         }
     }

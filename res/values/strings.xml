@@ -14,7 +14,7 @@
     <string name="errorTitle">Error</string>
     <string name="songTitle">Song Title</string>
     <string name="songArtist">Artist</string>
-    <string name="stopSong">Stop Song</string>
+    <string name="pauseSong">Pause Song</string>
     <string name="ipAddress">IP Address</string>
     <string name="listToBytesError">Conversion from object list to bytes has failed.</string>
     <string name="playSongError">Unable to play the requested song.</string>
@@ -31,11 +31,12 @@
     <string name="connectionSuccess">Connection Success</string>
     <string name="connectionFailed">Connection Failed</string>
     <string name="connectionFailedMsg">Control Center is not accepting requests at this time.</string>
+    <string name="connectionFailedMsg2">Control Center is not accepting requests at this time or the IP address is incorrect.</string>
     <string name="ok">OK</string>
     <string name="connectionLost">Connection Lost</string>
     <string name="connectionLostMsg">Control Center has disconnected.</string>
     <string name="requesterDefaultCount">0</string>
     <string name="deviceAddressLabel">IP Address</string>
     <string name="noSongsFound">No Songs Found</string>
-    <string name="noSongsFoundMsg">No songs were found that matched your search criteria.</string>
+    <string name="noSongsFoundMsg">No songs were found that matched your search criteria.</string><string name="playSong">Play Song</string>
 </resources>

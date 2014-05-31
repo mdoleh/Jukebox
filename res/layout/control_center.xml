@@ -26,8 +26,9 @@
     <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/stopSong"
-            android:id="@+id/stopButton"
+            android:text="@string/pauseSong"
+            android:id="@+id/pauseButton"
+            android:enabled="false"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/listenerToggle"/>
 
@@ -38,7 +39,7 @@
             android:id="@+id/deviceAddressLabel"
             android:layout_centerHorizontal="true"
             android:textSize="20dp"
-            android:layout_below="@id/stopButton"/>
+            android:layout_below="@id/pauseButton"/>
 
     <TextView
             android:id="@+id/deviceAddress"

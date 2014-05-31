@@ -43,30 +43,6 @@ public class SongRequestFragment extends Fragment
         });
     }
 
-//    private void setupSpinnerChangeListener()
-//    {
-//        final Spinner availableSongsSpinner = ((Spinner)view.findViewById(R.id.songListSpinner));
-//        availableSongsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-//        {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
-//            {
-//                // Clear text fields
-//                final EditText songTitle = (EditText)view.findViewById(R.id.songTitle);
-//                final EditText songArtist = (EditText)view.findViewById(R.id.songArtist);
-//
-//                songTitle.setText("");
-//                songArtist.setText("");
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent)
-//            {
-//                // Do nothing
-//            }
-//        });
-//    }
-
     private void createSongListForSpinner(List<Song> songList)
     {
         List<String> viewableList = new ArrayList<String>();

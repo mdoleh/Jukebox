@@ -28,8 +28,8 @@ public class ConnectFragment extends Fragment
 
     private void setupButtonEventListener()
     {
-        final Button sendRequestButton = (Button)view.findViewById(R.id.connect);
-        sendRequestButton.setOnClickListener(new View.OnClickListener() {
+        final Button connectButton = (Button)view.findViewById(R.id.connect);
+        connectButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 connectDevices();
             }});
