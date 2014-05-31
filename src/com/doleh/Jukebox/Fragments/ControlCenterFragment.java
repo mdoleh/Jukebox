@@ -70,7 +70,6 @@ public class ControlCenterFragment extends Fragment implements Networked
         listenButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 toggleListener();
-                pauseButton.setEnabled(true);
             }
         });
     }
@@ -173,7 +172,7 @@ public class ControlCenterFragment extends Fragment implements Networked
                     }
                     else
                     {
-                        new NetComm(socket, ControlCenterFragment.this).write(new Rejection());
+                        new NetComm(socket, ControlCenterFragment.this).write(new Rejection(false));
                     }
                 }
                 catch (Exception ex) {

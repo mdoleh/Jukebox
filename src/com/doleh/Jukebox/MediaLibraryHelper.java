@@ -124,11 +124,10 @@ public class MediaLibraryHelper
     public static void moveSongUp(Long id)
     {
         int index = songQueue.indexOf(id);
-        List<Long> temp = songQueue;
+        List<Long> temp = new ArrayList<Long>(songQueue);
         temp.remove(index);
         if (index > 0) { --index; }
-        if (temp.size() != 0) { temp.set(index, id); }
-        else { temp.add(id); }
+        temp.add(index, id);
         songQueue = new ArrayList<Long>(temp);
     }
 }

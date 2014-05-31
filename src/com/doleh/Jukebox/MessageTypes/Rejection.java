@@ -7,11 +7,23 @@ import java.io.Serializable;
 
 public class Rejection extends ServerMessage implements Serializable
 {
+    private boolean closeNetComm;
+
+    public Rejection()
+    {
+        closeNetComm = true;
+    }
+
+    public Rejection(boolean _closeNetComm)
+    {
+        closeNetComm = _closeNetComm;
+    }
+
     @Override
     public void Execute(MainActivity mainActivity)
     {
         mainActivity.showMessageBox(mainActivity.getString(R.string.connectionFailed), mainActivity.getString(R.string.connectionFailedMsg));
         mainActivity.goBackToBeginning();
-        mainActivity.netComm.close();
+        if (closeNetComm) { mainActivity.netComm.close(); }
     }
 }
