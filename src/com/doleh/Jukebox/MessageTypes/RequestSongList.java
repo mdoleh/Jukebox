@@ -1,7 +1,6 @@
 package com.doleh.Jukebox.MessageTypes;
 
-import android.media.MediaPlayer;
-import com.doleh.Jukebox.MainActivity;
+import com.doleh.Jukebox.Fragments.ControlCenterFragment;
 import com.doleh.Jukebox.MediaLibraryHelper;
 import com.doleh.Jukebox.Song;
 
@@ -20,8 +19,8 @@ public class RequestSongList extends ClientMessage implements Serializable
     }
 
     @Override
-    public List<Song> Execute(MainActivity mainActivity, MediaPlayer mediaPlayer)
+    public List<Song> Execute(ControlCenterFragment controlCenterFragment)
     {
-        return MediaLibraryHelper.getSongList(mainActivity.getContentResolver(), title, artist);
+        return MediaLibraryHelper.getSongList(controlCenterFragment.getActivity().getContentResolver(), title, artist);
     }
 }

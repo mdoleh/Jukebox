@@ -17,6 +17,8 @@ public class NetComm {
 	/** writes messages related to this client over the network */
 	private ObjectOutputStream out;
 
+    public String ipAddress;
+
 	/** constructor for network communication object; throws IOException if fails */
 	public NetComm(Socket newSocket, Networked networkNode) throws IOException
     {
@@ -25,6 +27,7 @@ public class NetComm {
 		}
 		socket = newSocket;
 		node = networkNode;
+        ipAddress = newSocket.getInetAddress().toString();
 		try {
 			out = new ObjectOutputStream(socket.getOutputStream()); // always add before input stream, see http://stackoverflow.com/questions/8088557/getinputstream-blocks
 			in = new ObjectInputStream(socket.getInputStream());

@@ -1,6 +1,6 @@
 package com.doleh.Jukebox.MessageTypes;
 
-import android.media.MediaPlayer;
+import com.doleh.Jukebox.Fragments.ControlCenterFragment;
 import com.doleh.Jukebox.MainActivity;
 import com.doleh.Jukebox.MediaLibraryHelper;
 import com.doleh.Jukebox.R;
@@ -19,16 +19,17 @@ public class RequestSongId extends ClientMessage implements Serializable
     }
 
     @Override
-    public List<Song> Execute(MainActivity mainActivity, MediaPlayer mediaPlayer)
+    public List<Song> Execute(ControlCenterFragment controlCenterFragment)
     {
-        final MainActivity activity = mainActivity;
-        MediaLibraryHelper.playSong(id, mainActivity.getApplicationContext(), mediaPlayer);
+        final ControlCenterFragment fragment = controlCenterFragment;
+        MainActivity mainActivity = (MainActivity)controlCenterFragment.getActivity();
+        MediaLibraryHelper.playSong(id, mainActivity.getApplicationContext(), controlCenterFragment.mediaPlayer);
         mainActivity.runOnUiThread(new Runnable()
         {
             @Override
             public void run()
             {
-                activity.getFragmentManager().findFragmentByTag("control_center").getView().findViewById(R.id.pauseButton).setEnabled(true);
+                fragment.enableElement(R.id.pauseButton);
             }
         });
         return null;

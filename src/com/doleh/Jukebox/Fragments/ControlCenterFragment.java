@@ -22,12 +22,18 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ControlCenterFragment extends Fragment implements Networked
 {
-    private MediaPlayer mediaPlayer = new MediaPlayer();
+    private final int MAX_MESSAGE_COUNT = 2;
+
+    public MediaPlayer mediaPlayer = new MediaPlayer();
     private MainActivity mainActivity;
     private boolean listeningForRequests = false;
+    private boolean mediaPlayerReady = false;
+    private Map<String, Integer> messageCount = new HashMap<String, Integer>();
     private View view;
 
     // Network globals
@@ -46,7 +52,7 @@ public class ControlCenterFragment extends Fragment implements Networked
         view = inflater.inflate(R.layout.control_center, container, false);
         mainActivity = (MainActivity)getActivity();
         setupButtonEventListener();
-        setupOnCompletionListener();
+        setupMediaPlayerListeners();
 
         return view;
     }
@@ -56,6 +62,9 @@ public class ControlCenterFragment extends Fragment implements Networked
     {
         super.onDestroy();
         new closePort().execute();
+        mediaPlayer.stop();
+        clearMessageCounts();
+        MediaLibraryHelper.clearSongQueue();
     }
 
     private void setupButtonEventListener()
@@ -63,7 +72,8 @@ public class ControlCenterFragment extends Fragment implements Networked
         final Button pauseButton = (Button)view.findViewById(R.id.pauseButton);
         pauseButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                pauseButton.setText(MediaLibraryHelper.togglePlay(mediaPlayer, getActivity()));
+                String text = MediaLibraryHelper.togglePlay(mediaPlayer, getActivity());
+                if (text != null) { pauseButton.setText(text); }
             }});
 
         final Button listenButton = ((Button)view.findViewById(R.id.listenerToggle));
@@ -74,16 +84,42 @@ public class ControlCenterFragment extends Fragment implements Networked
         });
     }
 
-    private void setupOnCompletionListener()
+    public void disableElement(int elementId)
+    {
+        final View element = view.findViewById(elementId);
+        element.setEnabled(false);
+    }
+
+    public void enableElement(int elementId)
+    {
+        final View element = view.findViewById(elementId);
+        element.setEnabled(true);
+    }
+
+    private void setupMediaPlayerListeners()
     {
         mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener()
         {
             @Override
             public void onCompletion(MediaPlayer mp)
             {
+                mediaPlayerReady = false;
+                mp.stop();
                 mp.reset();
                 // If songs are in the queue play them next
                 MediaLibraryHelper.playNextSongInQueue(mp, mainActivity.getApplicationContext());
+                if (!mediaPlayerReady) { disableElement(R.id.pauseButton); }
+                clearMessageCounts();
+            }
+        });
+
+        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener()
+        {
+            @Override
+            public void onPrepared(MediaPlayer mp)
+            {
+                mediaPlayerReady = true;
+                enableElement(R.id.pauseButton);
             }
         });
     }
@@ -119,9 +155,9 @@ public class ControlCenterFragment extends Fragment implements Networked
     @Override
     public void msgReceived(Object msgObj, NetComm sender)
     {
+        int senderIndex = findSender(msgObj, sender);
         if (msgObj instanceof CloseConnectionMsg)
         {
-            int senderIndex = findSender(msgObj, sender);
             netComms.remove(senderIndex);
             updateRequesterCount(netComms.size());
         }
@@ -129,11 +165,14 @@ public class ControlCenterFragment extends Fragment implements Networked
         {
             if (listeningForRequests)
             {
-                SongList listMessage = new SongList(((ClientMessage)msgObj).Execute(mainActivity, mediaPlayer));
-                if (listMessage.songs != null)
+                if (checkMessageCount(senderIndex, msgObj))
                 {
-                    sender.write(listMessage);
-                }
+                    SongList listMessage = new SongList(((ClientMessage)msgObj).Execute(this));
+                    if (listMessage.songs != null)
+                    {
+                        sender.write(listMessage);
+                    }
+                } else { sender.write(new LimitRejection()); }
             } else { sender.write(new Rejection()); }
         }
     }
@@ -173,8 +212,6 @@ public class ControlCenterFragment extends Fragment implements Networked
                 }
                 catch (Exception ex) {
                     ex.printStackTrace();
-                    //new closePort().execute();
-                    //mainActivity.finish();
                     break;
                 }
             }
@@ -212,5 +249,34 @@ public class ControlCenterFragment extends Fragment implements Networked
             }
             return null;
         }
+    }
+
+    private boolean checkMessageCount(int senderIndex, Object msgObj)
+    {
+        if (msgObj instanceof RequestSongId)
+        {
+            String key = netComms.get(senderIndex).ipAddress;
+            Integer count = messageCount.get(key);
+            if (count == null) { messageCount.put(key, 0); return true; }
+            else
+            {
+                ++count;
+                if (count >= MAX_MESSAGE_COUNT)
+                {
+                    return false;
+                }
+                else
+                {
+                    messageCount.put(key, count);
+                    return true;
+                }
+            }
+        }
+        else { return true; }
+    }
+
+    private void clearMessageCounts()
+    {
+        messageCount = new HashMap<String, Integer>();
     }
 }

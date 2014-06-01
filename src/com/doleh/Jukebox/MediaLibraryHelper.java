@@ -70,6 +70,7 @@ public class MediaLibraryHelper
         {
             try
             {
+                mediaPlayer.stop();
                 mediaPlayer.reset();
                 Uri contentUri = ContentUris.withAppendedId(
                         android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, songId);
@@ -109,7 +110,7 @@ public class MediaLibraryHelper
 
     public static String togglePlay(MediaPlayer mediaPlayer, Activity activity)
     {
-        String text;
+        String text = null;
         if (!isPaused)
         {
             mediaPlayer.pause();
@@ -132,5 +133,10 @@ public class MediaLibraryHelper
         if (index > 0) { --index; }
         temp.add(index, id);
         songQueue = new ArrayList<Long>(temp);
+    }
+
+    public static void clearSongQueue()
+    {
+        songQueue = new ArrayList<Long>();
     }
 }
