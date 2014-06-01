@@ -99,7 +99,7 @@ public class MainActivity extends Activity implements Networked
     public void goBackToBeginning()
     {
         int size = getFragmentManager().getBackStackEntryCount();
-        for (int ii = 0; ii < size; ++ii)
+        for (int ii = 0; ii < size - 1; ++ii)
         {
             getFragmentManager().popBackStack();
         }

@@ -19,21 +19,6 @@ public class MediaLibraryHelper
     private static List<Long> songQueue = new ArrayList<Long>();
     public static boolean isPaused = false;
 
-    public static void removeSong(int index)
-    {
-        songQueue.remove(index);
-    }
-
-    public static Long getSongId(int index)
-    {
-        return songQueue.get(index);
-    }
-
-    public static boolean songQueueIsEmpty()
-    {
-        return songQueue.isEmpty();
-    }
-
     public static List<Song> getSongList(ContentResolver contentResolver, String songTitle, String songArtist)
     {
         // Setup parameters for query
@@ -76,13 +61,36 @@ public class MediaLibraryHelper
 
     public static void playSong(Long songId, Context context, MediaPlayer mediaPlayer)
     {
-        if (mediaPlayer.isPlaying() || isPaused)
+        if (mediaPlayer.isPlaying() || isPaused || songQueue.size() > 0)
         {
-            if (isSongInQueue(songId)) { moveSongUp(songId); }
+            if (songQueue.contains(songId)) { moveSongUp(songId); }
             else { songQueue.add(songId); }
         }
         else
         {
+            try
+            {
+                mediaPlayer.reset();
+                Uri contentUri = ContentUris.withAppendedId(
+                        android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, songId);
+                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                mediaPlayer.setDataSource(context, contentUri);
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+            }
+            catch (IOException e)
+            {
+                // Unable to play song
+            }
+        }
+    }
+
+    public static void playNextSongInQueue(MediaPlayer mediaPlayer, Context context)
+    {
+        if (!songQueue.isEmpty())
+        {
+            Long songId = songQueue.get(0);
+            songQueue.remove(0);
             try
             {
                 Uri contentUri = ContentUris.withAppendedId(
@@ -114,11 +122,6 @@ public class MediaLibraryHelper
         }
         isPaused = !isPaused;
         return text;
-    }
-
-    public static boolean isSongInQueue(Long id)
-    {
-        return songQueue.contains(id);
     }
 
     public static void moveSongUp(Long id)

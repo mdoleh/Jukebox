@@ -83,11 +83,7 @@ public class ControlCenterFragment extends Fragment implements Networked
             {
                 mp.reset();
                 // If songs are in the queue play them next
-                if (!MediaLibraryHelper.songQueueIsEmpty())
-                {
-                    MediaLibraryHelper.playSong(MediaLibraryHelper.getSongId(0), mainActivity.getApplicationContext(), mediaPlayer);
-                    MediaLibraryHelper.removeSong(0);
-                }
+                MediaLibraryHelper.playNextSongInQueue(mp, mainActivity.getApplicationContext());
             }
         });
     }
