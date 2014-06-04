@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import com.doleh.Jukebox.Client;
 import com.doleh.Jukebox.MainActivity;
 import com.doleh.Jukebox.MessageTypes.RequestSongId;
 import com.doleh.Jukebox.R;
@@ -28,7 +29,7 @@ public class SongRequestFragment extends Fragment
         view = inflater.inflate(R.layout.request_song, container, false);
         mainActivity = (MainActivity)getActivity();
         setupButtonEventListener();
-        createSongListForSpinner(mainActivity.receivedSongs);
+        createSongListForSpinner(Client.receivedSongs);
         return view;
     }
 
@@ -73,6 +74,6 @@ public class SongRequestFragment extends Fragment
         String selectedItem = songIdSpinner.getSelectedItem().toString();
         Long id = Long.parseLong(selectedItem.substring(0, selectedItem.indexOf("-", 0)));
         RequestSongId requestSongId = new RequestSongId(id);
-        mainActivity.netComm.write(requestSongId);
+        Client.netComm.write(requestSongId);
     }
 }

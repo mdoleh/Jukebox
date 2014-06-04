@@ -1,5 +1,6 @@
 package com.doleh.Jukebox.MessageTypes;
 
+import com.doleh.Jukebox.Client;
 import com.doleh.Jukebox.Fragments.FragmentHelper;
 import com.doleh.Jukebox.MainActivity;
 import com.doleh.Jukebox.R;
@@ -25,6 +26,6 @@ public class Rejection extends ServerMessage implements Serializable
     {
         mainActivity.showMessageBox(mainActivity.getString(R.string.connectionFailed), mainActivity.getString(R.string.connectionFailedMsg));
         FragmentHelper.goBackToBeginning(mainActivity.getFragmentManager());
-        if (closeNetComm) { mainActivity.netComm.close(); }
+        if (closeNetComm) { Client.netComm.close(); }
     }
 }

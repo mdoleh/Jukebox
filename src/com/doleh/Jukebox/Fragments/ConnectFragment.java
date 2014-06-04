@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import com.doleh.Jukebox.Client;
 import com.doleh.Jukebox.MainActivity;
 import com.doleh.Jukebox.R;
 
@@ -14,6 +15,7 @@ public class ConnectFragment extends Fragment
 {
     private View view;
     private MainActivity mainActivity;
+    private Client client = new Client();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,8 +39,9 @@ public class ConnectFragment extends Fragment
     private void connectDevices()
     {
         final EditText ipAddress = (EditText)view.findViewById(R.id.ipAddress);
-        mainActivity.ip = ipAddress.getText().toString();
-        mainActivity.startNetworkThread();
+        Client.ip = ipAddress.getText().toString();
+        Client.mainActivity = mainActivity;
+        client.startNetworkThread();
     }
 
     public void showSongSearch()
