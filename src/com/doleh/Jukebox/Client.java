@@ -1,6 +1,5 @@
 package com.doleh.Jukebox;
 
-import com.doleh.Jukebox.Fragments.ControlCenterFragment;
 import com.doleh.Jukebox.MessageTypes.ServerMessage;
 import com.jackieloven.thebasics.CloseConnectionMsg;
 import com.jackieloven.thebasics.NetComm;
@@ -33,7 +32,7 @@ public class Client implements Networked
     {
         public void run() {
             try {
-                netComm = new NetComm(new Socket(ip, ControlCenterFragment.PORT), Client.this);
+                netComm = new NetComm(new Socket(ip, Server.PORT), Client.this);
             } catch (Exception ex) {
                 netComm = null;
                 mainActivity.showMessageBox(mainActivity.getString(R.string.connectionFailed), mainActivity.getString(R.string.connectionFailedMsg2));

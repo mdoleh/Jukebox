@@ -2,48 +2,21 @@ package com.doleh.Jukebox.Fragments;
 
 import android.app.Fragment;
 import android.media.MediaPlayer;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import com.doleh.Jukebox.MainActivity;
-import com.doleh.Jukebox.MediaLibraryHelper;
-import com.doleh.Jukebox.MessageTypes.*;
-import com.doleh.Jukebox.R;
-import com.doleh.Jukebox.Utils;
-import com.jackieloven.thebasics.CloseConnectionMsg;
-import com.jackieloven.thebasics.NetComm;
-import com.jackieloven.thebasics.Networked;
+import com.doleh.Jukebox.*;
 
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-public class ControlCenterFragment extends Fragment implements Networked
+public class ControlCenterFragment extends Fragment
 {
-    private final int MAX_MESSAGE_COUNT = 2;
-
     public MediaPlayer mediaPlayer = new MediaPlayer();
     private MainActivity mainActivity;
-    private boolean listeningForRequests = false;
     private boolean mediaPlayerReady = false;
-    private Map<String, Integer> messageCount = new HashMap<String, Integer>();
     private View view;
-
-    // Network globals
-    /** networking port that server listens on */
-    public static final int PORT = 44247;
-    /** server socket used to set up connections with clients */
-    private ServerSocket serverSocket;
-    /** ArrayList of client connections */
-    private ArrayList<NetComm> netComms = new ArrayList<NetComm>();
-    private boolean running = false;
+    private Server server;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,6 +24,7 @@ public class ControlCenterFragment extends Fragment implements Networked
 
         view = inflater.inflate(R.layout.control_center, container, false);
         mainActivity = (MainActivity)getActivity();
+        server = new Server(mainActivity, this);
         setupButtonEventListener();
         setupMediaPlayerListeners();
 
@@ -61,9 +35,9 @@ public class ControlCenterFragment extends Fragment implements Networked
     public void onDestroy()
     {
         super.onDestroy();
-        new closePort().execute();
+        server.closePort();
         mediaPlayer.stop();
-        clearMessageCounts();
+        server.clearMessageCounts();
         MediaLibraryHelper.clearSongQueue();
     }
 
@@ -109,7 +83,7 @@ public class ControlCenterFragment extends Fragment implements Networked
                 // If songs are in the queue play them next
                 MediaLibraryHelper.playNextSongInQueue(mp, mainActivity.getApplicationContext());
                 if (!mediaPlayerReady) { disableElement(R.id.pauseButton); }
-                clearMessageCounts();
+                server.clearMessageCounts();
             }
         });
 
@@ -126,99 +100,12 @@ public class ControlCenterFragment extends Fragment implements Networked
 
     private void toggleListener()
     {
-        listeningForRequests = !listeningForRequests;
-        if (listeningForRequests)
-        {
-            if (!running)
-            {
-                running = true;
-                // initialize server socket
-                try {
-                    serverSocket = new ServerSocket(PORT);
-                }
-                catch (IOException ex) {
-                    mainActivity.finish();
-                }
-                // wait for clients to connect
-                new Thread(new AcceptClientsThread()).start();
-                final TextView ipAddress = (TextView)view.findViewById(R.id.deviceAddress);
-                ipAddress.setText(Utils.getIPAddress(true));
-            }
-            mainActivity.showMessageBox(getString(R.string.toggleListener), getString(R.string.toggleListenerMessageOn));
-        }
-        else
-        {
-            mainActivity.showMessageBox(getString(R.string.toggleListener), getString(R.string.toggleListenerMessageOff));
-        }
+        server.toggleListener();
+        final TextView ipAddress = (TextView)view.findViewById(R.id.deviceAddress);
+        ipAddress.setText(Utils.getIPAddress(true));
     }
 
-    @Override
-    public void msgReceived(Object msgObj, NetComm sender)
-    {
-        int senderIndex = findSender(msgObj, sender);
-        if (msgObj instanceof CloseConnectionMsg)
-        {
-            netComms.remove(senderIndex);
-            updateRequesterCount(netComms.size());
-        }
-        else
-        {
-            if (listeningForRequests)
-            {
-                if (checkMessageCount(senderIndex, msgObj))
-                {
-                    SongList listMessage = new SongList(((ClientMessage)msgObj).Execute(this));
-                    if (listMessage.songs != null)
-                    {
-                        sender.write(listMessage);
-                    }
-                } else { sender.write(new LimitRejection()); }
-            } else { sender.write(new Rejection()); }
-        }
-    }
-
-    private int findSender(Object msgObj, NetComm sender)
-    {
-        int senderIndex;
-        // find who sent the message
-        for (senderIndex = 0; senderIndex < netComms.size(); senderIndex++) {
-            if (sender == netComms.get(senderIndex)) break;
-        }
-        if (senderIndex == netComms.size()) {
-            mainActivity.showMessageBox(getString(R.string.warning), getString(R.string.unknownRequester) + msgObj);
-        }
-        return senderIndex;
-    }
-
-    /** thread to accept new clients */
-    private class AcceptClientsThread implements Runnable
-    {
-        /** wait for clients to connect */
-        public void run() {
-            while (running) {
-                try {
-                    Socket socket = serverSocket.accept();
-                    if (listeningForRequests)
-                    {
-                        NetComm requester = new NetComm(socket, ControlCenterFragment.this);
-                        netComms.add(requester);
-                        requester.write(new Accepted());
-                        updateRequesterCount(netComms.size());
-                    }
-                    else
-                    {
-                        new NetComm(socket, ControlCenterFragment.this).write(new Rejection(false));
-                    }
-                }
-                catch (Exception ex) {
-                    ex.printStackTrace();
-                    break;
-                }
-            }
-        }
-    }
-
-    private void updateRequesterCount(final int newValue)
+    public void updateRequesterCount(final int newValue)
     {
         mainActivity.runOnUiThread(new Runnable()
         {
@@ -229,54 +116,5 @@ public class ControlCenterFragment extends Fragment implements Networked
                 requesterCount.setText(Integer.toString(newValue));
             }
         });
-    }
-
-    private class closePort extends AsyncTask
-    {
-        @Override
-        protected Object doInBackground(Object... params)
-        {
-            try {
-                for (NetComm netcomm: netComms)
-                {
-                    netcomm.write(new ConnectionClosed());
-                }
-                if (serverSocket != null) { serverSocket.close(); }
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-            return null;
-        }
-    }
-
-    private boolean checkMessageCount(int senderIndex, Object msgObj)
-    {
-        if (msgObj instanceof RequestSongId)
-        {
-            String key = netComms.get(senderIndex).ipAddress;
-            Integer count = messageCount.get(key);
-            if (count == null) { messageCount.put(key, 0); return true; }
-            else
-            {
-                ++count;
-                if (count >= MAX_MESSAGE_COUNT)
-                {
-                    return false;
-                }
-                else
-                {
-                    messageCount.put(key, count);
-                    return true;
-                }
-            }
-        }
-        else { return true; }
-    }
-
-    private void clearMessageCounts()
-    {
-        messageCount = new HashMap<String, Integer>();
     }
 }
