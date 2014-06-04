@@ -1,5 +1,6 @@
 package com.doleh.Jukebox.MessageTypes;
 
+import com.doleh.Jukebox.Fragments.FragmentHelper;
 import com.doleh.Jukebox.MainActivity;
 import com.doleh.Jukebox.R;
 
@@ -11,6 +12,6 @@ public class ConnectionClosed extends ServerMessage implements Serializable
     public void Execute(MainActivity mainActivity)
     {
         mainActivity.showMessageBox(mainActivity.getString(R.string.connectionLost), mainActivity.getString(R.string.connectionLostMsg));
-        mainActivity.goBackToBeginning();
+        FragmentHelper.goBackToBeginning(mainActivity.getFragmentManager());
     }
 }

@@ -2,12 +2,11 @@ package com.doleh.Jukebox;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.PowerManager;
 import com.doleh.Jukebox.Fragments.ControlCenterFragment;
+import com.doleh.Jukebox.Fragments.FragmentHelper;
 import com.doleh.Jukebox.Fragments.StartupFragment;
 import com.doleh.Jukebox.MessageTypes.ServerMessage;
 import com.jackieloven.thebasics.CloseConnectionMsg;
@@ -34,12 +33,7 @@ public class MainActivity extends Activity implements Networked
         setContentView(R.layout.main);
 
         // Add this section of code wherever a fragment should appear (i.e. new screen)
-        Fragment fragment = new StartupFragment();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.add(R.id.main, fragment, "startup");
-        // addToBackStack allows android back button to return to previous screen
-//        transaction.addToBackStack(null);
-        transaction.commit();
+        FragmentHelper.showFragment(null, null, "startup", new StartupFragment(), getFragmentManager());
 
         // Prevent LCD screen from turning off
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -93,15 +87,6 @@ public class MainActivity extends Activity implements Networked
                 netComm = null;
                 showMessageBox(getString(R.string.connectionFailed), getString(R.string.connectionFailedMsg2));
             }
-        }
-    }
-
-    public void goBackToBeginning()
-    {
-        int size = getFragmentManager().getBackStackEntryCount();
-        for (int ii = 0; ii < size - 1; ++ii)
-        {
-            getFragmentManager().popBackStack();
         }
     }
 }
