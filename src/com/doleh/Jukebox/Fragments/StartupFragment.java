@@ -1,7 +1,6 @@
 package com.doleh.Jukebox.Fragments;
 
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,21 +47,11 @@ public class StartupFragment extends Fragment
 
     private void showControlCenter()
     {
-        Fragment fragment = new ControlCenterFragment();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.remove(this);
-        transaction.add(R.id.main, fragment, "control_center");
-        transaction.addToBackStack("startup");
-        transaction.commit();
+        FragmentHelper.showFragment("startup", this, "control_center", new ControlCenterFragment(), getFragmentManager());
     }
 
     private void showConnectDevices()
     {
-        Fragment fragment = new ConnectFragment();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.remove(this);
-        transaction.add(R.id.main, fragment, "connect");
-        transaction.addToBackStack("startup");
-        transaction.commit();
+        FragmentHelper.showFragment("startup", this, "connect", new ConnectFragment(), getFragmentManager());
     }
 }

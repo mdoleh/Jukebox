@@ -1,7 +1,6 @@
 package com.doleh.Jukebox.Fragments;
 
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,11 +43,6 @@ public class ConnectFragment extends Fragment
 
     public void showSongSearch()
     {
-        Fragment fragment = new SongSearchFragment();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.remove(this);
-        transaction.add(R.id.main, fragment, "song_search");
-        transaction.addToBackStack("connect");
-        transaction.commit();
+        FragmentHelper.showFragment("connect", this, "song_search", new SongSearchFragment(), getFragmentManager());
     }
 }

@@ -1,7 +1,6 @@
 package com.doleh.Jukebox.Fragments;
 
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,12 +51,7 @@ public class SongSearchFragment extends Fragment
 
     public void showSongRequest()
     {
-        Fragment fragment = new SongRequestFragment();
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.remove(this);
-        transaction.add(R.id.main, fragment, "song_request");
-        transaction.addToBackStack("song_search");
-        transaction.commit();
+        FragmentHelper.showFragment("song_search", this, "song_request", new SongRequestFragment(), getFragmentManager());
     }
 
     private void sendSearch()
