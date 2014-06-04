@@ -59,7 +59,7 @@ public class MediaLibraryHelper
         return allInfo;
     }
 
-    public static void playSong(Long songId, Context context, MediaPlayer mediaPlayer)
+    public static void playRequest(Long songId, Context context, MediaPlayer mediaPlayer)
     {
         if (mediaPlayer.isPlaying() || isPaused || songQueue.size() > 0)
         {
@@ -68,21 +68,9 @@ public class MediaLibraryHelper
         }
         else
         {
-            try
-            {
-                mediaPlayer.stop();
-                mediaPlayer.reset();
-                Uri contentUri = ContentUris.withAppendedId(
-                        android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, songId);
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                mediaPlayer.setDataSource(context, contentUri);
-                mediaPlayer.prepare();
-                mediaPlayer.start();
-            }
-            catch (IOException e)
-            {
-                // Unable to play song
-            }
+            mediaPlayer.stop();
+            mediaPlayer.reset();
+            playSong(songId, context, mediaPlayer);
         }
     }
 
@@ -92,19 +80,24 @@ public class MediaLibraryHelper
         {
             Long songId = songQueue.get(0);
             songQueue.remove(0);
-            try
-            {
-                Uri contentUri = ContentUris.withAppendedId(
-                        android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, songId);
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                mediaPlayer.setDataSource(context, contentUri);
-                mediaPlayer.prepare();
-                mediaPlayer.start();
-            }
-            catch (IOException e)
-            {
-                // Unable to play song
-            }
+            playSong(songId, context, mediaPlayer);
+        }
+    }
+
+    private static void playSong(Long songId, Context context, MediaPlayer mediaPlayer)
+    {
+        try
+        {
+            Uri contentUri = ContentUris.withAppendedId(
+                    android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, songId);
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mediaPlayer.setDataSource(context, contentUri);
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+        }
+        catch (IOException ex)
+        {
+            // Unable to play song
         }
     }
 

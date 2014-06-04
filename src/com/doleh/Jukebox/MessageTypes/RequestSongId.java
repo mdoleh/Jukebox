@@ -23,7 +23,7 @@ public class RequestSongId extends ClientMessage implements Serializable
     {
         final ControlCenterFragment fragment = controlCenterFragment;
         MainActivity mainActivity = (MainActivity)controlCenterFragment.getActivity();
-        MediaLibraryHelper.playSong(id, mainActivity.getApplicationContext(), controlCenterFragment.mediaPlayer);
+        MediaLibraryHelper.playRequest(id, mainActivity.getApplicationContext(), controlCenterFragment.mediaPlayer);
         mainActivity.runOnUiThread(new Runnable()
         {
             @Override

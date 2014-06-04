@@ -29,7 +29,6 @@ public class SongRequestFragment extends Fragment
         mainActivity = (MainActivity)getActivity();
         setupButtonEventListener();
         createSongListForSpinner(mainActivity.receivedSongs);
-//        setupSpinnerChangeListener();
         return view;
     }
 
@@ -45,15 +44,25 @@ public class SongRequestFragment extends Fragment
 
     private void createSongListForSpinner(List<Song> songList)
     {
-        List<String> viewableList = new ArrayList<String>();
-        for (Song song : songList)
-        {
-            viewableList.add(song.id + "-" + song.title + song.artist);
-        }
-        // Display list on UI
+        List<String> viewableList = createHyphenatedList(songList);
+        displayListOnUI(viewableList);
+    }
+
+    private void displayListOnUI(List<String> viewableList)
+    {
         ArrayAdapter<String> songArrayAdapter = new ArrayAdapter<String>(mainActivity.getApplicationContext(), android.R.layout.simple_spinner_item, viewableList);
         songArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         ((Spinner)view.findViewById(R.id.songListSpinner)).setAdapter(songArrayAdapter);
+    }
+
+    private List<String> createHyphenatedList(List<Song> songList)
+    {
+        List<String> temp = new ArrayList<String>();
+        for (Song song : songList)
+        {
+            temp.add(song.id + "-" + song.title + "-" + song.artist);
+        }
+        return temp;
     }
 
     private void sendRequest()
@@ -62,7 +71,7 @@ public class SongRequestFragment extends Fragment
         final Spinner songIdSpinner = (Spinner)view.findViewById(R.id.songListSpinner);
 
         String selectedItem = songIdSpinner.getSelectedItem().toString();
-        Long id = Long.parseLong(selectedItem.substring(0, selectedItem.indexOf("-")));
+        Long id = Long.parseLong(selectedItem.substring(0, selectedItem.indexOf("-", 0)));
         RequestSongId requestSongId = new RequestSongId(id);
         mainActivity.netComm.write(requestSongId);
     }
