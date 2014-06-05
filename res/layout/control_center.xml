@@ -9,7 +9,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/musicControlCenter"
-            android:id="@+id/textView"
+            android:id="@+id/controlCenterTitle"
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
             android:textSize="30dp"
@@ -23,15 +23,6 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="98dp"/>
 
-    <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/pauseSong"
-            android:id="@+id/pauseButton"
-            android:enabled="false"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@+id/listenerToggle"/>
-
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,7 +30,7 @@
             android:id="@+id/deviceAddressLabel"
             android:layout_centerHorizontal="true"
             android:textSize="20dp"
-            android:layout_below="@id/pauseButton"/>
+            android:layout_below="@id/listenerToggle"/>
 
     <TextView
             android:id="@+id/deviceAddress"
@@ -66,4 +57,22 @@
             android:layout_centerHorizontal="true"
             android:textSize="18dp"
             android:layout_below="@id/requestersLabel"/>
+
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/goToPlayer"
+            android:id="@+id/viewPlayerButton"
+            android:layout_centerHorizontal="false"
+            android:layout_alignLeft="@id/controlCenterTitle"
+            android:layout_below="@id/requesterCount"/>
+
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/goToRequests"
+            android:id="@+id/viewRequestListButton"
+            android:layout_centerHorizontal="false"
+            android:layout_alignRight="@id/controlCenterTitle"
+            android:layout_below="@id/requesterCount"/>
 </RelativeLayout>

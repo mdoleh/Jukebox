@@ -1,10 +1,7 @@
 package com.doleh.Jukebox.MessageTypes;
 
-import com.doleh.Jukebox.Fragments.ControlCenterFragment;
-import com.doleh.Jukebox.MainActivity;
-import com.doleh.Jukebox.MediaLibraryHelper;
-import com.doleh.Jukebox.R;
-import com.doleh.Jukebox.Song;
+import com.doleh.Jukebox.Fragments.PlayerFragment;
+import com.doleh.Jukebox.*;
 
 import java.io.Serializable;
 import java.util.List;
@@ -19,11 +16,11 @@ public class RequestSongId extends ClientMessage implements Serializable
     }
 
     @Override
-    public List<Song> Execute(ControlCenterFragment controlCenterFragment)
+    public List<Song> Execute(Server server)
     {
-        final ControlCenterFragment fragment = controlCenterFragment;
-        MainActivity mainActivity = (MainActivity)controlCenterFragment.getActivity();
-        MediaLibraryHelper.playRequest(id, mainActivity.getApplicationContext(), controlCenterFragment.mediaPlayer);
+        final PlayerFragment fragment = server.playerFragment;
+        MainActivity mainActivity = server.mainActivity;
+        MediaLibraryHelper.playRequest(id, mainActivity.getApplicationContext(), fragment.mediaPlayer);
         mainActivity.runOnUiThread(new Runnable()
         {
             @Override

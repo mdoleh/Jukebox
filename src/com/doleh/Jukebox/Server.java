@@ -2,6 +2,7 @@ package com.doleh.Jukebox;
 
 import android.os.AsyncTask;
 import com.doleh.Jukebox.Fragments.ControlCenterFragment;
+import com.doleh.Jukebox.Fragments.PlayerFragment;
 import com.doleh.Jukebox.MessageTypes.*;
 import com.jackieloven.thebasics.CloseConnectionMsg;
 import com.jackieloven.thebasics.NetComm;
@@ -21,6 +22,7 @@ public class Server implements Networked
     private boolean listeningForRequests = false;
     private Map<String, Integer> messageCount = new HashMap<String, Integer>();
     public MainActivity mainActivity;
+    public PlayerFragment playerFragment;
     public ControlCenterFragment controlCenterFragment;
 
     // Network globals
@@ -32,9 +34,10 @@ public class Server implements Networked
     private ArrayList<NetComm> netComms = new ArrayList<NetComm>();
     private boolean running = false;
 
-    public Server(MainActivity _mainActivity, ControlCenterFragment _controlCenterFragment)
+    public Server(MainActivity _mainActivity, ControlCenterFragment _controlCenterFragment, PlayerFragment _playerFragment)
     {
         mainActivity = _mainActivity;
+        playerFragment = _playerFragment;
         controlCenterFragment = _controlCenterFragment;
     }
 
@@ -79,7 +82,7 @@ public class Server implements Networked
             {
                 if (checkMessageCount(senderIndex, msgObj))
                 {
-                    SongList listMessage = new SongList(((ClientMessage)msgObj).Execute(controlCenterFragment));
+                    SongList listMessage = new SongList(((ClientMessage)msgObj).Execute(this));
                     if (listMessage.songs != null)
                     {
                         sender.write(listMessage);

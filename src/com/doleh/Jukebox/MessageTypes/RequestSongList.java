@@ -1,7 +1,7 @@
 package com.doleh.Jukebox.MessageTypes;
 
-import com.doleh.Jukebox.Fragments.ControlCenterFragment;
 import com.doleh.Jukebox.MediaLibraryHelper;
+import com.doleh.Jukebox.Server;
 import com.doleh.Jukebox.Song;
 
 import java.io.Serializable;
@@ -19,8 +19,8 @@ public class RequestSongList extends ClientMessage implements Serializable
     }
 
     @Override
-    public List<Song> Execute(ControlCenterFragment controlCenterFragment)
+    public List<Song> Execute(Server server)
     {
-        return MediaLibraryHelper.getSongList(controlCenterFragment.getActivity().getContentResolver(), title, artist);
+        return MediaLibraryHelper.getSongList(server.mainActivity.getContentResolver(), title, artist);
     }
 }

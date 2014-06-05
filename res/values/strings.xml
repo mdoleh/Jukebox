@@ -43,4 +43,8 @@
     <string name="limitReachedMsg">You have reached your request limit. You must wait until the current song finishes
         playing before sending any more requests.
     </string>
+    <string name="player">Music Player</string>
+    <string name="requestList">Request List</string>
+    <string name="goToPlayer"><![CDATA[<- Music Player]]></string>
+    <string name="goToRequests"><![CDATA[Requests ->]]></string>
 </resources>
