@@ -13,6 +13,7 @@ public class FragmentHelper
         if (currentFragment != null) { transaction.remove(currentFragment); }
         transaction.add(R.id.main, newFragment, newFragmentTag);
         if (currentFragmentTag != null) { transaction.addToBackStack(currentFragmentTag); }
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         transaction.commit();
     }
 

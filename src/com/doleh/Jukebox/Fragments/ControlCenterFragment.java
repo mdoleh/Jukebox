@@ -37,6 +37,7 @@ public class ControlCenterFragment extends Fragment
         super.onDestroy();
         server.closePort();
         mediaPlayer.stop();
+        mediaPlayer.release();
         server.clearMessageCounts();
         MediaLibraryHelper.clearSongQueue();
     }

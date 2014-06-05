@@ -25,7 +25,7 @@ public class Server implements Networked
 
     // Network globals
     /** networking port that server listens on */
-    public static final int PORT = 44247;
+    public static final int PORT = 35768;
     /** server socket used to set up connections with clients */
     private ServerSocket serverSocket;
     /** ArrayList of client connections */
