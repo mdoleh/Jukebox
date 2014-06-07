@@ -78,29 +78,29 @@ public class ControlCenterFragment extends Fragment
         super.onHiddenChanged(hidden);
         if (!hidden)
         {
-            hideFragment(playerFragment, getFragmentManager());
-            hideFragment(requestListFragment, getFragmentManager());
+            hideFragment(playerFragment, getFragmentManager(), R.animator.slide_out_left);
+            hideFragment(requestListFragment, getFragmentManager(), R.animator.slide_out_right);
         }
     }
 
-    private void hideFragment(Fragment fragment, FragmentManager fragmentManager)
+    private void hideFragment(Fragment fragment, FragmentManager fragmentManager, int exit)
     {
         if (!fragment.isHidden())
         {
-            FragmentHelper.hideFragment(null, fragment, fragmentManager);
+            FragmentHelper.hideFragment(null, fragment, fragmentManager, 0, exit, 0, 0);
         }
     }
 
     private void showMusicPlayer()
     {
-        FragmentHelper.hideFragment("control_center", this, getFragmentManager());
-        FragmentHelper.unHideFragment(playerFragment, getFragmentManager());
+        FragmentHelper.hideFragment("control_center", this, getFragmentManager(), 0, R.animator.slide_out_right, R.animator.slide_in_left, 0);
+        FragmentHelper.unHideFragment(playerFragment, getFragmentManager(), R.animator.slide_in_right, 0, 0, 0);
     }
 
     private void showRequestList()
     {
-        FragmentHelper.hideFragment("control_center", this, getFragmentManager());
-        FragmentHelper.unHideFragment(requestListFragment, getFragmentManager());
+        FragmentHelper.hideFragment("control_center", this, getFragmentManager(), 0, R.animator.slide_out_left, R.animator.slide_in_right, 0);
+        FragmentHelper.unHideFragment(requestListFragment, getFragmentManager(), R.animator.slide_in_left, 0, 0, 0);
     }
 
     private void toggleListener()

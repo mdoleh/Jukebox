@@ -25,17 +25,19 @@ public class FragmentHelper
         transaction.commit();
     }
 
-    public static void unHideFragment(Fragment fragment, FragmentManager fragmentManager)
+    public static void unHideFragment(Fragment fragment, FragmentManager fragmentManager, int enter, int exit, int popEnter, int popExit)
     {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(enter, exit, popEnter, popExit);
         transaction.show(fragment);
         transaction.commit();
     }
 
-    public static void hideFragment(String fragmentTag, Fragment fragment, FragmentManager fragmentManager)
+    public static void hideFragment(String fragmentTag, Fragment fragment, FragmentManager fragmentManager, int enter, int exit, int popEnter, int popExit)
     {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         if (fragmentTag != null) { transaction.addToBackStack(fragmentTag); }
+        transaction.setCustomAnimations(enter, exit, popEnter, popExit);
         transaction.hide(fragment);
         transaction.commit();
     }
