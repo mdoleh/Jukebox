@@ -20,7 +20,7 @@ public class Server implements Networked
     private static final int MAX_MESSAGE_COUNT = 2;
 
     private boolean listeningForRequests = false;
-    private Map<String, Integer> messageCount = new HashMap<String, Integer>();
+    private Map<NetComm, Integer> messageCount = new HashMap<NetComm, Integer>();
     public MainActivity mainActivity;
     public PlayerFragment playerFragment;
     public ControlCenterFragment controlCenterFragment;
@@ -80,7 +80,7 @@ public class Server implements Networked
         {
             if (listeningForRequests)
             {
-                if (checkMessageCount(senderIndex, msgObj))
+                if (checkMessageCount(sender, msgObj))
                 {
                     SongList listMessage = new SongList(((ClientMessage)msgObj).Execute(this));
                     if (listMessage.songs != null)
@@ -157,13 +157,12 @@ public class Server implements Networked
         }
     }
 
-    private boolean checkMessageCount(int senderIndex, Object msgObj)
+    private boolean checkMessageCount(NetComm sender, Object msgObj)
     {
         if (msgObj instanceof RequestSongId)
         {
-            String key = netComms.get(senderIndex).ipAddress;
-            Integer count = messageCount.get(key);
-            if (count == null) { messageCount.put(key, 0); return true; }
+            Integer count = messageCount.get(sender);
+            if (count == null) { messageCount.put(sender, 0); return true; }
             else
             {
                 ++count;
@@ -173,7 +172,7 @@ public class Server implements Networked
                 }
                 else
                 {
-                    messageCount.put(key, count);
+                    messageCount.put(sender, count);
                     return true;
                 }
             }
@@ -183,7 +182,7 @@ public class Server implements Networked
 
     public void clearMessageCounts()
     {
-        messageCount = new HashMap<String, Integer>();
+        messageCount = new HashMap<NetComm, Integer>();
     }
 
     private void updateRequesterCount(int newValue)
