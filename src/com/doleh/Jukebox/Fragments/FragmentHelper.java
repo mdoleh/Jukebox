@@ -12,9 +12,17 @@ public class FragmentHelper
     {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setCustomAnimations(R.animator.slide_in_up, R.animator.slide_out_up, R.animator.slide_in_down, R.animator.slide_out_down);
-        if (currentFragment != null) { transaction.remove(currentFragment); }
+        transaction.remove(currentFragment);
         transaction.add(R.id.main, newFragment, newFragmentTag);
-        if (currentFragmentTag != null) { transaction.addToBackStack(currentFragmentTag); }
+        transaction.addToBackStack(currentFragmentTag);
+        transaction.commit();
+    }
+
+    public static void showFragment(String newFragmentTag, Fragment newFragment, FragmentManager fragmentManager)
+    {
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        transaction.add(R.id.main, newFragment, newFragmentTag);
         transaction.commit();
     }
 

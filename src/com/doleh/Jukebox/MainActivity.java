@@ -22,7 +22,7 @@ public class MainActivity extends Activity
         setContentView(R.layout.main);
 
         // Add this section of code wherever a fragment should appear (i.e. new screen)
-        FragmentHelper.showFragment(null, null, "startup", new StartupFragment(), getFragmentManager());
+        FragmentHelper.showFragment("startup", new StartupFragment(), getFragmentManager());
 
         // Prevent LCD screen from turning off
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
