@@ -10,9 +10,13 @@
             android:layout_height="wrap_content"
             android:text="@string/requestList"
             android:id="@+id/textView"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentTop="true"
             android:textSize="30dp"
             android:layout_gravity="center_horizontal|top"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/requestList">
+    </ListView>
 
 </RelativeLayout>
