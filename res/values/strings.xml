@@ -47,4 +47,5 @@
     <string name="requestList">Request List</string>
     <string name="goToPlayer"><![CDATA[<- Music Player]]></string>
     <string name="goToRequests"><![CDATA[Requests ->]]></string>
+    <string name="emptyList">No Requests</string>
 </resources>

@@ -3,6 +3,7 @@ package com.doleh.Jukebox;
 import android.os.AsyncTask;
 import com.doleh.Jukebox.Fragments.ControlCenterFragment;
 import com.doleh.Jukebox.Fragments.PlayerFragment;
+import com.doleh.Jukebox.Fragments.RequestListFragment;
 import com.doleh.Jukebox.MessageTypes.*;
 import com.jackieloven.thebasics.CloseConnectionMsg;
 import com.jackieloven.thebasics.NetComm;
@@ -24,6 +25,7 @@ public class Server implements Networked
     public MainActivity mainActivity;
     public PlayerFragment playerFragment;
     public ControlCenterFragment controlCenterFragment;
+    public RequestListFragment requestListFragment;
 
     // Network globals
     /** networking port that server listens on */
@@ -34,11 +36,12 @@ public class Server implements Networked
     private ArrayList<NetComm> netComms = new ArrayList<NetComm>();
     private boolean running = false;
 
-    public Server(MainActivity _mainActivity, ControlCenterFragment _controlCenterFragment, PlayerFragment _playerFragment)
+    public Server(MainActivity _mainActivity, ControlCenterFragment _controlCenterFragment, PlayerFragment _playerFragment, RequestListFragment _requestListFragment)
     {
         mainActivity = _mainActivity;
         playerFragment = _playerFragment;
         controlCenterFragment = _controlCenterFragment;
+        requestListFragment = _requestListFragment;
     }
 
     public void toggleListener()

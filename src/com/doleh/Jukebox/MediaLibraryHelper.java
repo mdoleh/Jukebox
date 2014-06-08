@@ -81,7 +81,7 @@ public class MediaLibraryHelper
         return song;
     }
 
-    public static void playRequest(Long songId, Context context, MediaPlayer mediaPlayer, ContentResolver contentResolver)
+    public static void playRequest(Long songId, Context context, MediaPlayer mediaPlayer, ContentResolver contentResolver, Server server)
     {
         if (mediaPlayer.isPlaying() || isPaused || songQueue.size() > 0)
         {
@@ -89,11 +89,17 @@ public class MediaLibraryHelper
             int index = songExistsInQueue(request);
             if (index != -1)
             {
-                if (request.id != null) { moveSongUp(request, index); }
+                if (request.id != null) {
+                    moveSongUp(request, index);
+                    notifyDataSetUpdate(server);
+                }
             }
             else
             {
-                if (request.id != null) { songQueue.add(request); }
+                if (request.id != null) {
+                    songQueue.add(request);
+                    notifyDataSetUpdate(server);
+                }
             }
         }
         else
@@ -176,5 +182,17 @@ public class MediaLibraryHelper
     public static List<Song> getSongQueue()
     {
         return songQueue;
+    }
+
+    private static void notifyDataSetUpdate(final Server server)
+    {
+        server.mainActivity.runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                server.requestListFragment.requestListAdapter.notifyDataSetChanged();
+            }
+        });
     }
 }
