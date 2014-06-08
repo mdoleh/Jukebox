@@ -3,6 +3,7 @@ package com.doleh.Jukebox.Fragments;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import com.doleh.Jukebox.AnimationSetting;
 import com.doleh.Jukebox.R;
 
 public class FragmentHelper
@@ -10,10 +11,10 @@ public class FragmentHelper
     public static void showFragment(String currentFragmentTag, Fragment currentFragment, String newFragmentTag, Fragment newFragment, FragmentManager fragmentManager)
     {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(R.animator.slide_in_up, R.animator.slide_out_up, R.animator.slide_in_down, R.animator.slide_out_down);
         if (currentFragment != null) { transaction.remove(currentFragment); }
         transaction.add(R.id.main, newFragment, newFragmentTag);
         if (currentFragmentTag != null) { transaction.addToBackStack(currentFragmentTag); }
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         transaction.commit();
     }
 
@@ -25,19 +26,19 @@ public class FragmentHelper
         transaction.commit();
     }
 
-    public static void unHideFragment(Fragment fragment, FragmentManager fragmentManager, int enter, int exit, int popEnter, int popExit)
+    public static void unHideFragment(Fragment fragment, FragmentManager fragmentManager, AnimationSetting animationSetting)
     {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.setCustomAnimations(enter, exit, popEnter, popExit);
+        transaction.setCustomAnimations(animationSetting.enter, animationSetting.exit, animationSetting.popEnter, animationSetting.popExit);
         transaction.show(fragment);
         transaction.commit();
     }
 
-    public static void hideFragment(String fragmentTag, Fragment fragment, FragmentManager fragmentManager, int enter, int exit, int popEnter, int popExit)
+    public static void hideFragment(String fragmentTag, Fragment fragment, FragmentManager fragmentManager, AnimationSetting animationSetting)
     {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         if (fragmentTag != null) { transaction.addToBackStack(fragmentTag); }
-        transaction.setCustomAnimations(enter, exit, popEnter, popExit);
+        transaction.setCustomAnimations(animationSetting.enter, animationSetting.exit, animationSetting.popEnter, animationSetting.popExit);
         transaction.hide(fragment);
         transaction.commit();
     }
