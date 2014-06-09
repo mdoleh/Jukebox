@@ -19,6 +19,7 @@ public class RequestListFragment extends ListFragment
     private View view;
     private MainActivity mainActivity;
     public ArrayAdapter<String> requestListAdapter;
+    private List<String> viewableList = new ArrayList<String>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,19 +39,34 @@ public class RequestListFragment extends ListFragment
 
     private void setupListAdapter()
     {
-        List<String> viewableList = createViewableList();
+        createViewableList(MediaLibraryHelper.getSongQueue());
         requestListAdapter = new ArrayAdapter<String>(mainActivity.getApplicationContext(), android.R.layout.simple_list_item_1, viewableList);
         setListAdapter(requestListAdapter);
     }
 
-    private List<String> createViewableList()
+    public void createViewableList(List<Song> songQueue)
     {
-        List<String> viewableList = new ArrayList<String>();
-        List<Song> songQueue = MediaLibraryHelper.getSongQueue();
+        viewableList.clear();
         for (Song song: songQueue)
         {
             viewableList.add(song.title + "-" + song.artist);
         }
-        return viewableList;
+    }
+
+    public void notifyDataSetChanged()
+    {
+        mainActivity.runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                updateAdapter();
+            }
+        });
+    }
+
+    private void updateAdapter()
+    {
+        requestListAdapter.notifyDataSetChanged();
     }
 }

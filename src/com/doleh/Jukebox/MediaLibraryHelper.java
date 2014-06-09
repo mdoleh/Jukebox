@@ -110,13 +110,14 @@ public class MediaLibraryHelper
         }
     }
 
-    public static void playNextSongInQueue(MediaPlayer mediaPlayer, Context context)
+    public static void playNextSongInQueue(MediaPlayer mediaPlayer, Context context, Server server)
     {
         if (!songQueue.isEmpty())
         {
             Song nextSong = songQueue.get(0);
             songQueue.remove(0);
             playSong(nextSong.id, context, mediaPlayer);
+            notifyDataSetUpdate(server);
         }
     }
 
@@ -176,7 +177,7 @@ public class MediaLibraryHelper
 
     public static void clearSongQueue()
     {
-        songQueue = new ArrayList<Song>();
+        songQueue.clear();
     }
 
     public static List<Song> getSongQueue()
@@ -186,13 +187,7 @@ public class MediaLibraryHelper
 
     private static void notifyDataSetUpdate(final Server server)
     {
-        server.mainActivity.runOnUiThread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                server.requestListFragment.requestListAdapter.notifyDataSetChanged();
-            }
-        });
+        server.requestListFragment.createViewableList(songQueue);
+        server.requestListFragment.notifyDataSetChanged();
     }
 }

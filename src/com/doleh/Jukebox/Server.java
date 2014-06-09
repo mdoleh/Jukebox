@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class Server implements Networked
 {
-    private static final int MAX_MESSAGE_COUNT = 2;
+    private static final int MAX_MESSAGE_COUNT = 3;
 
     private boolean listeningForRequests = false;
     private Map<String, Integer> messageCount = new HashMap<String, Integer>();

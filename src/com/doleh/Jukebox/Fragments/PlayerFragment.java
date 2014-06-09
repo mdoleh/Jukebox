@@ -64,7 +64,7 @@ public class PlayerFragment extends Fragment
                 mp.stop();
                 mp.reset();
                 // If songs are in the queue play them next
-                MediaLibraryHelper.playNextSongInQueue(mp, mainActivity.getApplicationContext());
+                MediaLibraryHelper.playNextSongInQueue(mp, mainActivity.getApplicationContext(), controlCenterFragment.server);
                 if (!mediaPlayerReady) { disableElement(R.id.pauseButton); }
                 controlCenterFragment.server.clearMessageCounts();
             }
