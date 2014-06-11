@@ -14,7 +14,7 @@
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal|top"/>
 
-    <ListView
+    <com.ericharlow.DragNDrop.DragNDropListView
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:id="@id/android:list"

@@ -185,6 +185,11 @@ public class MediaLibraryHelper
         return songQueue;
     }
 
+    public static void setSongQueue(List<Song> newQueue)
+    {
+        songQueue = new ArrayList<Song>(newQueue);
+    }
+
     private static void notifyDataSetUpdate(final Server server)
     {
         server.requestListFragment.createViewableList(songQueue);
