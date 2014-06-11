@@ -17,7 +17,8 @@
     <ListView
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:id="@id/android:list"/>
+        android:id="@id/android:list"
+        android:layout_below="@+id/textView"/>
 
     <TextView
         android:layout_width="match_parent"
