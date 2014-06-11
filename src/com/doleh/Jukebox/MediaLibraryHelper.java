@@ -16,7 +16,7 @@ import java.util.List;
 
 public class MediaLibraryHelper
 {
-    private static List<Long> songQueue = new ArrayList<Long>();
+    private static List<Song> songQueue = new ArrayList<Song>();
     public static boolean isPaused = false;
 
     public static List<Song> getSongList(ContentResolver contentResolver, String songTitle, String songArtist)
@@ -59,12 +59,48 @@ public class MediaLibraryHelper
         return allInfo;
     }
 
-    public static void playRequest(Long songId, Context context, MediaPlayer mediaPlayer)
+    private static Song getSongById(Long id, ContentResolver contentResolver)
+    {
+        // Setup parameters for query
+        String[] projection = {MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.ARTIST};
+        String selector = "_ID=" + id;
+
+        Song song = new Song();
+
+        Uri externalContentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        Cursor cursor = contentResolver.query(externalContentUri, projection, selector, null, null);
+        if (cursor == null) {
+            // query failed, handle error.
+        } else if (!cursor.moveToFirst()) {
+            // no media on the device
+        } else {
+            song.id = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
+            song.title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
+            song.artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
+        }
+        return song;
+    }
+
+    public static void playRequest(Long songId, Context context, MediaPlayer mediaPlayer, ContentResolver contentResolver, Server server)
     {
         if (mediaPlayer.isPlaying() || isPaused || songQueue.size() > 0)
         {
-            if (songQueue.contains(songId)) { moveSongUp(songId); }
-            else { songQueue.add(songId); }
+            Song request = getSongById(songId, contentResolver);
+            int index = songExistsInQueue(request);
+            if (index != -1)
+            {
+                if (request.id != null) {
+                    moveSongUp(request, index);
+                    notifyDataSetUpdate(server);
+                }
+            }
+            else
+            {
+                if (request.id != null) {
+                    songQueue.add(request);
+                    notifyDataSetUpdate(server);
+                }
+            }
         }
         else
         {
@@ -74,13 +110,14 @@ public class MediaLibraryHelper
         }
     }
 
-    public static void playNextSongInQueue(MediaPlayer mediaPlayer, Context context)
+    public static void playNextSongInQueue(MediaPlayer mediaPlayer, Context context, Server server)
     {
         if (!songQueue.isEmpty())
         {
-            Long songId = songQueue.get(0);
+            Song nextSong = songQueue.get(0);
             songQueue.remove(0);
-            playSong(songId, context, mediaPlayer);
+            playSong(nextSong.id, context, mediaPlayer);
+            notifyDataSetUpdate(server);
         }
     }
 
@@ -118,18 +155,44 @@ public class MediaLibraryHelper
         return text;
     }
 
-    public static void moveSongUp(Long id)
+    public static void moveSongUp(Song request, int index)
     {
-        int index = songQueue.indexOf(id);
-        List<Long> temp = new ArrayList<Long>(songQueue);
+        List<Song> temp = new ArrayList<Song>(songQueue);
         temp.remove(index);
         if (index > 0) { --index; }
-        temp.add(index, id);
-        songQueue = new ArrayList<Long>(temp);
+        temp.add(index, request);
+        songQueue = new ArrayList<Song>(temp);
+    }
+
+    private static int songExistsInQueue(Song request)
+    {
+        int index = 0;
+        for (Song song: songQueue)
+        {
+            if (song.id.equals(request.id)) { return index; }
+            ++index;
+        }
+        return -1;
     }
 
     public static void clearSongQueue()
     {
-        songQueue = new ArrayList<Long>();
+        songQueue.clear();
+    }
+
+    public static List<Song> getSongQueue()
+    {
+        return songQueue;
+    }
+
+    public static void setSongQueue(List<Song> newQueue)
+    {
+        songQueue = new ArrayList<Song>(newQueue);
+    }
+
+    private static void notifyDataSetUpdate(final Server server)
+    {
+        server.requestListFragment.createViewableList(songQueue);
+        server.requestListFragment.notifyDataSetChanged();
     }
 }

@@ -8,6 +8,8 @@ public class Song implements Serializable
     public String title;
     public String artist;
 
+    public Song() {}
+
     public Song(Long ID, String Title, String Artist)
     {
         id = ID;

@@ -27,7 +27,7 @@ public class ControlCenterFragment extends Fragment
         requestListFragment = new RequestListFragment();
         FragmentHelper.addFragment("music_player", playerFragment, getFragmentManager());
         FragmentHelper.addFragment("request_list", requestListFragment, getFragmentManager());
-        server = new Server(mainActivity, this, playerFragment);
+        server = new Server(mainActivity, this, playerFragment, requestListFragment);
 
         setupButtonEventListener();
 
