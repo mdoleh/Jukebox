@@ -81,6 +81,7 @@ public class MediaLibraryHelper
         return song;
     }
 
+<<<<<<< HEAD
     public static void playRequest(Long songId, Context context, MediaPlayer mediaPlayer, ContentResolver contentResolver, Server server)
     {
         if (mediaPlayer.isPlaying() || isPaused || songQueue.size() > 0)
@@ -91,13 +92,29 @@ public class MediaLibraryHelper
             {
                 if (request.id != null) {
                     moveSongUp(request, index);
+=======
+    public static void playRequest(Song requestedSong, Context context, MediaPlayer mediaPlayer, ContentResolver contentResolver, Server server)
+    {
+        if (mediaPlayer.isPlaying() || isPaused || songQueue.size() > 0)
+        {
+            int index = songExistsInQueue(requestedSong);
+            if (index != -1)
+            {
+                if (requestedSong.id != null) {
+                    moveSongUp(requestedSong, index);
+>>>>>>> origin/Development
                     notifyDataSetUpdate(server);
                 }
             }
             else
             {
+<<<<<<< HEAD
                 if (request.id != null) {
                     songQueue.add(request);
+=======
+                if (requestedSong.id != null) {
+                    songQueue.add(requestedSong);
+>>>>>>> origin/Development
                     notifyDataSetUpdate(server);
                 }
             }
@@ -106,7 +123,9 @@ public class MediaLibraryHelper
         {
             mediaPlayer.stop();
             mediaPlayer.reset();
-            playSong(songId, context, mediaPlayer);
+            playSong(requestedSong.id, context, mediaPlayer);
+            setCurrentSongPlaying(server, requestedSong);
+            startUpdatingPlayerUI(server);
         }
     }
 
@@ -117,8 +136,26 @@ public class MediaLibraryHelper
             Song nextSong = songQueue.get(0);
             songQueue.remove(0);
             playSong(nextSong.id, context, mediaPlayer);
+<<<<<<< HEAD
             notifyDataSetUpdate(server);
+=======
+            isPaused = false;
+            notifyDataSetUpdate(server);
+            setCurrentSongPlaying(server, nextSong);
+            startUpdatingPlayerUI(server);
+>>>>>>> origin/Development
         }
+    }
+
+    private static void startUpdatingPlayerUI(Server server)
+    {
+        server.playerFragment.stopUpdatingUI();
+        server.playerFragment.startUpdatingUI();
+    }
+
+    private static void setCurrentSongPlaying(Server server, Song song)
+    {
+        server.playerFragment.setCurrentSongPlaying(song.title + "-" + song.artist);
     }
 
     private static void playSong(Long songId, Context context, MediaPlayer mediaPlayer)

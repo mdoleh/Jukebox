@@ -8,25 +8,29 @@ import java.util.List;
 
 public class RequestSongId extends ClientMessage implements Serializable
 {
-    public Long id;
+    public Song requestedSong;
 
-    public RequestSongId(long _id)
+    public RequestSongId(Song _requestedSong)
     {
-        id = _id;
+        requestedSong = _requestedSong;
     }
 
     @Override
     public List<Song> Execute(Server server)
     {
-        final PlayerFragment fragment = server.playerFragment;
+        final PlayerFragment playerFragment = server.playerFragment;
         MainActivity mainActivity = server.mainActivity;
+<<<<<<< HEAD
         MediaLibraryHelper.playRequest(id, mainActivity.getApplicationContext(), fragment.mediaPlayer, mainActivity.getContentResolver(), server);
+=======
+        MediaLibraryHelper.playRequest(requestedSong, mainActivity.getApplicationContext(), playerFragment.mediaPlayer, mainActivity.getContentResolver(), server);
+>>>>>>> origin/Development
         mainActivity.runOnUiThread(new Runnable()
         {
             @Override
             public void run()
             {
-                fragment.enableElement(R.id.pauseButton);
+                playerFragment.enableAllElements();
             }
         });
         return null;

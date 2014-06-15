@@ -6,7 +6,7 @@ import com.doleh.Jukebox.R;
 
 import java.io.Serializable;
 
-public class Accepted extends ServerMessage implements Serializable
+public class ConnectionAccepted extends ServerMessage implements Serializable
 {
     @Override
     public void Execute(MainActivity mainActivity)

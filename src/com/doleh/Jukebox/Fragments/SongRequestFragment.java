@@ -15,6 +15,7 @@ import com.doleh.Jukebox.R;
 import com.doleh.Jukebox.Song;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SongRequestFragment extends Fragment
@@ -58,10 +59,11 @@ public class SongRequestFragment extends Fragment
 
     private List<String> createHyphenatedList(List<Song> songList)
     {
+        Collections.sort(songList);
         List<String> temp = new ArrayList<String>();
         for (Song song : songList)
         {
-            temp.add(song.id + "-" + song.title + "-" + song.artist);
+            temp.add(song.title + "-" + song.artist);
         }
         return temp;
     }
@@ -71,9 +73,8 @@ public class SongRequestFragment extends Fragment
         // UI Elements
         final Spinner songIdSpinner = (Spinner)view.findViewById(R.id.songListSpinner);
 
-        String selectedItem = songIdSpinner.getSelectedItem().toString();
-        Long id = Long.parseLong(selectedItem.substring(0, selectedItem.indexOf("-", 0)));
-        RequestSongId requestSongId = new RequestSongId(id);
+        int selectedIndex = songIdSpinner.getSelectedItemPosition();
+        RequestSongId requestSongId = new RequestSongId(Client.receivedSongs.get(selectedIndex));
         Client.netComm.write(requestSongId);
     }
 }

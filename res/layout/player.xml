@@ -15,13 +15,85 @@
             android:textSize="30dp"
             android:layout_gravity="center_horizontal|top"/>
 
-    <Button
+    <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/pauseSong"
-            android:id="@+id/pauseButton"
-            android:enabled="false"
+            android:layout_marginTop="98dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="98dp"/>
+            android:id="@+id/buttonsLayout">
+
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/stopSong"
+                android:id="@+id/stopButton"
+                android:enabled="false"/>
+
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pauseSong"
+                android:id="@+id/pauseButton"
+                android:enabled="false"/>
+
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/skipSong"
+                android:id="@+id/skipButton"
+                android:enabled="false"/>
+    </LinearLayout>
+
+    <RelativeLayout
+            android:layout_centerHorizontal="true"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/seekBarLayout"
+            android:layout_below="@+id/buttonsLayout"
+            android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:text="@string/zero"
+            android:id="@+id/currentTime"
+            android:layout_marginLeft="5dp"
+            android:textSize="20dp"/>
+        <SeekBar
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/currentTime"
+            android:layout_toLeftOf="@+id/totalTime"
+            android:enabled="false"
+            android:max="1"
+            android:id="@+id/songSeekBar"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="@string/zero"
+            android:id="@+id/totalTime"
+            android:layout_marginRight="5dp"
+            android:textSize="20dp"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/currentSong"
+                android:id="@+id/currentSongLabel"
+                android:textSize="20dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/songSeekBar"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/empty"
+                android:id="@+id/currentSong"
+                android:layout_centerHorizontal="true"
+                android:textSize="15dp"
+                android:layout_below="@+id/currentSongLabel"/>
+    </RelativeLayout>
 
 </RelativeLayout>
