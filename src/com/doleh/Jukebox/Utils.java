@@ -32,4 +32,14 @@ public class Utils
         } catch (Exception ex) { } // for now eat exceptions
         return "";
     }
+
+    public static String millisecondsToTime(long milliseconds)
+    {
+        long minutes = (int)((float)milliseconds / 1000 / 60);
+        long seconds = (int)((((float)milliseconds / 1000 / 60) - minutes) * 60);
+
+        String secondsString = Long.toString(seconds);
+        if (seconds < 10) { secondsString = "0" + secondsString; }
+        return Long.toString(minutes) + ":" + secondsString;
+    }
 }

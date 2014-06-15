@@ -90,6 +90,7 @@ public class Server implements Networked
                     {
                         sender.write(listMessage);
                     }
+                    sender.write(new RequestAccepted());
                 } else { sender.write(new LimitRejection()); }
             } else { sender.write(new Rejection()); }
         }
@@ -120,7 +121,7 @@ public class Server implements Networked
                     {
                         NetComm requester = new NetComm(socket, Server.this);
                         netComms.add(requester);
-                        requester.write(new Accepted());
+                        requester.write(new ConnectionAccepted());
                         updateRequesterCount(netComms.size());
                     }
                     else

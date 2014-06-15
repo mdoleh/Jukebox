@@ -14,7 +14,7 @@
     <string name="errorTitle">Error</string>
     <string name="songTitle">Song Title</string>
     <string name="songArtist">Artist</string>
-    <string name="pauseSong">Pause Song</string>
+    <string name="pauseSong">Pause</string>
     <string name="ipAddress">IP Address</string>
     <string name="listToBytesError">Conversion from object list to bytes has failed.</string>
     <string name="playSongError">Unable to play the requested song.</string>
@@ -39,7 +39,7 @@
     <string name="deviceAddressLabel">IP Address</string>
     <string name="noSongsFound">No Songs Found</string>
     <string name="noSongsFoundMsg">No songs were found that matched your search criteria.</string>
-    <string name="playSong">Play Song</string>
+    <string name="playSong">Play</string>
     <string name="limitReachedMsg">You have reached your request limit. You must wait until the current song finishes
         playing before sending any more requests.
     </string>
@@ -48,4 +48,12 @@
     <string name="goToPlayer"><![CDATA[<- Music Player]]></string>
     <string name="goToRequests"><![CDATA[Requests ->]]></string>
     <string name="emptyList">No Requests</string>
+    <string name="skipSong">Skip</string>
+    <string name="restartSong">Restart</string>
+    <string name="stopSong">Stop</string>
+    <string name="zero">0:00</string>
+    <string name="placeholderTime">4:25</string>
+    <string name="currentSong">Current Song Playing</string>
+    <string name="requestAccepted">Request Accepted</string>
+    <string name="requestAcceptedMsg">You have successfully sent the request!</string>
 </resources>
