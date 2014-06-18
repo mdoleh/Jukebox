@@ -20,11 +20,7 @@ public class RequestSongId extends ClientMessage implements Serializable
     {
         final PlayerFragment playerFragment = server.playerFragment;
         MainActivity mainActivity = server.mainActivity;
-<<<<<<< HEAD
-        MediaLibraryHelper.playRequest(id, mainActivity.getApplicationContext(), fragment.mediaPlayer, mainActivity.getContentResolver(), server);
-=======
         MediaLibraryHelper.playRequest(requestedSong, mainActivity.getApplicationContext(), playerFragment.mediaPlayer, mainActivity.getContentResolver(), server);
->>>>>>> origin/Development
         mainActivity.runOnUiThread(new Runnable()
         {
             @Override

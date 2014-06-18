@@ -81,18 +81,6 @@ public class MediaLibraryHelper
         return song;
     }
 
-<<<<<<< HEAD
-    public static void playRequest(Long songId, Context context, MediaPlayer mediaPlayer, ContentResolver contentResolver, Server server)
-    {
-        if (mediaPlayer.isPlaying() || isPaused || songQueue.size() > 0)
-        {
-            Song request = getSongById(songId, contentResolver);
-            int index = songExistsInQueue(request);
-            if (index != -1)
-            {
-                if (request.id != null) {
-                    moveSongUp(request, index);
-=======
     public static void playRequest(Song requestedSong, Context context, MediaPlayer mediaPlayer, ContentResolver contentResolver, Server server)
     {
         if (mediaPlayer.isPlaying() || isPaused || songQueue.size() > 0)
@@ -102,19 +90,13 @@ public class MediaLibraryHelper
             {
                 if (requestedSong.id != null) {
                     moveSongUp(requestedSong, index);
->>>>>>> origin/Development
                     notifyDataSetUpdate(server);
                 }
             }
             else
             {
-<<<<<<< HEAD
-                if (request.id != null) {
-                    songQueue.add(request);
-=======
                 if (requestedSong.id != null) {
                     songQueue.add(requestedSong);
->>>>>>> origin/Development
                     notifyDataSetUpdate(server);
                 }
             }
@@ -136,14 +118,10 @@ public class MediaLibraryHelper
             Song nextSong = songQueue.get(0);
             songQueue.remove(0);
             playSong(nextSong.id, context, mediaPlayer);
-<<<<<<< HEAD
-            notifyDataSetUpdate(server);
-=======
             isPaused = false;
             notifyDataSetUpdate(server);
             setCurrentSongPlaying(server, nextSong);
             startUpdatingPlayerUI(server);
->>>>>>> origin/Development
         }
     }
 

@@ -48,8 +48,6 @@
     <string name="goToPlayer"><![CDATA[<- Music Player]]></string>
     <string name="goToRequests"><![CDATA[Requests ->]]></string>
     <string name="emptyList">No Requests</string>
-<<<<<<< HEAD
-=======
     <string name="skipSong">Skip</string>
     <string name="restartSong">Restart</string>
     <string name="stopSong">Stop</string>
@@ -58,5 +56,4 @@
     <string name="currentSong">Current Song Playing</string>
     <string name="requestAccepted">Request Accepted</string>
     <string name="requestAcceptedMsg">You have successfully sent the request!</string>
->>>>>>> origin/Development
 </resources>
