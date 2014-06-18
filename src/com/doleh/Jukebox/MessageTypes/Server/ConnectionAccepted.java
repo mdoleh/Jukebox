@@ -1,4 +1,4 @@
-package com.doleh.Jukebox.MessageTypes;
+package com.doleh.Jukebox.MessageTypes.Server;
 
 import com.doleh.Jukebox.Fragments.ConnectFragment;
 import com.doleh.Jukebox.MainActivity;

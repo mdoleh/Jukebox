@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import com.doleh.Jukebox.Client;
 import com.doleh.Jukebox.MainActivity;
-import com.doleh.Jukebox.MessageTypes.RequestSongId;
+import com.doleh.Jukebox.MessageTypes.Client.RequestSongId;
 import com.doleh.Jukebox.R;
 import com.doleh.Jukebox.Song;
 

@@ -1,4 +1,4 @@
-package com.doleh.Jukebox.MessageTypes;
+package com.doleh.Jukebox.MessageTypes.Server;
 
 import com.doleh.Jukebox.MainActivity;
 import com.doleh.Jukebox.R;
