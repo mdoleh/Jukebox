@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import com.doleh.Jukebox.Client;
 import com.doleh.Jukebox.MainActivity;
-import com.doleh.Jukebox.MessageTypes.RequestSongList;
+import com.doleh.Jukebox.MessageTypes.Client.RequestSongList;
 import com.doleh.Jukebox.R;
 
 public class SongSearchFragment extends Fragment

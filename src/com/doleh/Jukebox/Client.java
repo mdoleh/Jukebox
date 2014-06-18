@@ -1,6 +1,6 @@
 package com.doleh.Jukebox;
 
-import com.doleh.Jukebox.MessageTypes.ServerMessage;
+import com.doleh.Jukebox.MessageTypes.Server.ServerMessage;
 import com.jackieloven.thebasics.CloseConnectionMsg;
 import com.jackieloven.thebasics.NetComm;
 import com.jackieloven.thebasics.Networked;

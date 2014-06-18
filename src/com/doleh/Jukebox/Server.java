@@ -4,7 +4,10 @@ import android.os.AsyncTask;
 import com.doleh.Jukebox.Fragments.ControlCenterFragment;
 import com.doleh.Jukebox.Fragments.PlayerFragment;
 import com.doleh.Jukebox.Fragments.RequestListFragment;
-import com.doleh.Jukebox.MessageTypes.*;
+import com.doleh.Jukebox.MessageTypes.Client.ClientMessage;
+import com.doleh.Jukebox.MessageTypes.Server.ConnectionAccepted;
+import com.doleh.Jukebox.MessageTypes.Server.ConnectionClosed;
+import com.doleh.Jukebox.MessageTypes.Server.Rejection;
 import com.jackieloven.thebasics.CloseConnectionMsg;
 import com.jackieloven.thebasics.NetComm;
 import com.jackieloven.thebasics.Networked;
@@ -83,15 +86,7 @@ public class Server implements Networked
         {
             if (listeningForRequests)
             {
-                if (checkMessageCount(senderIndex, msgObj))
-                {
-                    SongList listMessage = new SongList(((ClientMessage)msgObj).Execute(this));
-                    if (listMessage.songs != null)
-                    {
-                        sender.write(listMessage);
-                    }
-                    sender.write(new RequestAccepted());
-                } else { sender.write(new LimitRejection()); }
+                ((ClientMessage)msgObj).Execute(this, sender);
             } else { sender.write(new Rejection()); }
         }
     }
@@ -161,28 +156,23 @@ public class Server implements Networked
         }
     }
 
-    private boolean checkMessageCount(int senderIndex, Object msgObj)
+    public boolean checkMessageCount(String ipAddress)
     {
-        if (msgObj instanceof RequestSongId)
+        Integer count = messageCount.get(ipAddress);
+        if (count == null) { messageCount.put(ipAddress, 0); return true; }
+        else
         {
-            String key = netComms.get(senderIndex).ipAddress;
-            Integer count = messageCount.get(key);
-            if (count == null) { messageCount.put(key, 0); return true; }
+            ++count;
+            if (count >= MAX_MESSAGE_COUNT)
+            {
+                return false;
+            }
             else
             {
-                ++count;
-                if (count >= MAX_MESSAGE_COUNT)
-                {
-                    return false;
-                }
-                else
-                {
-                    messageCount.put(key, count);
-                    return true;
-                }
+                messageCount.put(ipAddress, count);
+                return true;
             }
         }
-        else { return true; }
     }
 
     public void clearMessageCounts()
