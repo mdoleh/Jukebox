@@ -26,20 +26,21 @@ public class MediaLibraryHelper
         String selector;
         if (!songTitle.equals("") && !songArtist.equals(""))
         {
-            selector = "TITLE LIKE \"%" + songTitle + "%\" AND ARTIST LIKE \"%" + songArtist + "%\"";
+            selector = "TITLE LIKE \"%" + songTitle + "%\" AND ARTIST LIKE \"%" + songArtist + "%\" AND ";
         }
         else if (!songTitle.equals("") && songArtist.equals(""))
         {
-            selector = "TITLE LIKE \"%" + songTitle + "%\"";
+            selector = "TITLE LIKE \"%" + songTitle + "%\" AND ";
         }
         else if (songTitle.equals("") && !songArtist.equals(""))
         {
-            selector = "ARTIST LIKE \"%" + songArtist + "%\"";
+            selector = "ARTIST LIKE \"%" + songArtist + "%\" AND ";
         }
         else
         {
             selector = "";
         }
+        selector += "NOT " + MediaStore.Audio.Media.IS_MUSIC + " == 0";
 
         ArrayList<Song> allInfo = new ArrayList<Song>();
 
