@@ -3,6 +3,10 @@ package com.doleh.Jukebox.Fragments;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.graphics.drawable.AnimationDrawable;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import com.doleh.Jukebox.AnimationSetting;
 import com.doleh.Jukebox.R;
 
@@ -58,5 +62,33 @@ public class FragmentHelper
         {
             fragmentManager.popBackStack();
         }
+    }
+
+    public static void blockUI(Button button, ImageView blocker)
+    {
+        button.setEnabled(false);
+        showLoadingImage(blocker);
+    }
+
+    private static void showLoadingImage(ImageView blocker)
+    {
+        blocker.setBackgroundResource(R.drawable.loading_animation);
+
+        AnimationDrawable frameAnimation = (AnimationDrawable) blocker.getBackground();
+        blocker.setVisibility(View.VISIBLE);
+        frameAnimation.start();
+    }
+
+    public static void unBlockUI(Button button, ImageView blocker)
+    {
+        button.setEnabled(true);
+        hideLoadingImage(blocker);
+    }
+
+    private static void hideLoadingImage(ImageView blocker)
+    {
+        blocker.setVisibility(View.INVISIBLE);
+        AnimationDrawable frameAnimation = (AnimationDrawable) blocker.getBackground();
+        frameAnimation.stop();
     }
 }

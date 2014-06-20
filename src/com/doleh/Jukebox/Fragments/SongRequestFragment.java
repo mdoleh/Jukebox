@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import com.doleh.Jukebox.Client;
 import com.doleh.Jukebox.MainActivity;
@@ -31,6 +32,7 @@ public class SongRequestFragment extends Fragment
         mainActivity = (MainActivity)getActivity();
         setupButtonEventListener();
         createSongListForSpinner(Client.receivedSongs);
+        Client.songRequestFragment = this;
         return view;
     }
 
@@ -40,6 +42,7 @@ public class SongRequestFragment extends Fragment
         requestButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 sendRequest();
+                blockUI(requestButton);
             }
         });
     }
@@ -76,5 +79,32 @@ public class SongRequestFragment extends Fragment
         int selectedIndex = songIdSpinner.getSelectedItemPosition();
         RequestSongId requestSongId = new RequestSongId(Client.receivedSongs.get(selectedIndex));
         Client.netComm.write(requestSongId);
+    }
+
+    private void blockUI(final Button requestButton)
+    {
+        mainActivity.runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                final ImageView blocker = (ImageView)view.findViewById(R.id.loadingImage);
+                FragmentHelper.blockUI(requestButton, blocker);
+            }
+        });
+    }
+
+    public void unBlockUI()
+    {
+        mainActivity.runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                final Button requestButton = (Button)view.findViewById(R.id.requestButton);
+                final ImageView blocker = (ImageView)view.findViewById(R.id.loadingImage);
+                FragmentHelper.unBlockUI(requestButton, blocker);
+            }
+        });
     }
 }

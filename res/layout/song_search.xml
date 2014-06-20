@@ -42,4 +42,6 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/songArtist"/>
 
+    <include layout="@layout/loading_image_container"/>
+
 </RelativeLayout>

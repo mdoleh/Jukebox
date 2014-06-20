@@ -30,4 +30,8 @@
             android:id="@+id/requestButton"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/songListSpinner"/>
+
+    <include layout="@layout/loading_image_container"/>
+
+
 </RelativeLayout>

@@ -60,28 +60,6 @@ public class MediaLibraryHelper
         return allInfo;
     }
 
-    private static Song getSongById(Long id, ContentResolver contentResolver)
-    {
-        // Setup parameters for query
-        String[] projection = {MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.ARTIST};
-        String selector = "_ID=" + id;
-
-        Song song = new Song();
-
-        Uri externalContentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        Cursor cursor = contentResolver.query(externalContentUri, projection, selector, null, null);
-        if (cursor == null) {
-            // query failed, handle error.
-        } else if (!cursor.moveToFirst()) {
-            // no media on the device
-        } else {
-            song.id = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
-            song.title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
-            song.artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-        }
-        return song;
-    }
-
     public static void playRequest(Song requestedSong, Context context, MediaPlayer mediaPlayer, ContentResolver contentResolver, Server server)
     {
         if (mediaPlayer.isPlaying() || isPaused || songQueue.size() > 0)
