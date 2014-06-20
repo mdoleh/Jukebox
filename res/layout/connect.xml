@@ -33,4 +33,6 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="149dp"/>
 
+    <include layout="@layout/loading_image_container"/>
+
 </RelativeLayout>

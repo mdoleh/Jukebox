@@ -2,7 +2,6 @@ package com.doleh.Jukebox.MessageTypes.Server;
 
 import com.doleh.Jukebox.Client;
 import com.doleh.Jukebox.Fragments.SongSearchFragment;
-import com.doleh.Jukebox.MainActivity;
 import com.doleh.Jukebox.R;
 import com.doleh.Jukebox.Song;
 
@@ -19,16 +18,17 @@ public class SongList extends ServerMessage implements Serializable
     }
 
     @Override
-    public void Execute(MainActivity mainActivity)
+    public void Execute()
     {
         Client.receivedSongs = songs;
         if (songs.size() > 0)
         {
-            ((SongSearchFragment)mainActivity.getFragmentManager().findFragmentByTag("song_search")).showSongRequest();
+            ((SongSearchFragment)Client.mainActivity.getFragmentManager().findFragmentByTag("song_search")).showSongRequest();
         }
         else
         {
-            mainActivity.showMessageBox(mainActivity.getString(R.string.noSongsFound), mainActivity.getString(R.string.noSongsFoundMsg));
+            Client.mainActivity.showMessageBox(Client.mainActivity.getString(R.string.noSongsFound), Client.mainActivity.getString(R.string.noSongsFoundMsg));
         }
+        Client.songSearchFragment.unBlockUI();
     }
 }

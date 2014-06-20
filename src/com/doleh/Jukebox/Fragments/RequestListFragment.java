@@ -6,13 +6,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import com.doleh.Jukebox.MainActivity;
-import com.doleh.Jukebox.MediaLibraryHelper;
-import com.doleh.Jukebox.R;
-import com.doleh.Jukebox.Song;
+import com.doleh.Jukebox.*;
 import com.ericharlow.DragNDrop.*;
 
 import java.util.ArrayList;
@@ -31,6 +29,7 @@ public class RequestListFragment extends ListFragment
         view = inflater.inflate(R.layout.request_list, container, false);
         mainActivity = (MainActivity)getActivity();
         setupListAdapter();
+        setupButtonListeners(container);
 
         return view;
     }
@@ -49,6 +48,61 @@ public class RequestListFragment extends ListFragment
     {
         super.onDestroy();
 
+    }
+
+    private void setupButtonListeners(final ViewGroup container)
+    {
+        final Button editButton = (Button)view.findViewById(R.id.editButton);
+        final Button saveButton = (Button)view.findViewById(R.id.saveButton);
+
+        saveButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                hideAllImages(container);
+                notifyDataSetChanged();
+                editButton.setEnabled(true);
+                editButton.setVisibility(View.VISIBLE);
+                v.setVisibility(View.INVISIBLE);
+                v.setEnabled(false);
+            }
+        });
+
+        editButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                showAllImages(container);
+                notifyDataSetChanged();
+                if (!MediaLibraryHelper.getSongQueue().isEmpty())
+                {
+                    saveButton.setEnabled(true);
+                    saveButton.setVisibility(View.VISIBLE);
+                    v.setVisibility(View.INVISIBLE);
+                    v.setEnabled(false);
+                }
+            }
+        });
+    }
+
+    private void showAllImages(ViewGroup container)
+    {
+        List<View> views = Utils.getViewsByTag(container, "moveImage");
+        for (View item: views)
+        {
+            item.findViewById(R.id.moveImage).setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void hideAllImages(ViewGroup container)
+    {
+        List<View> views = Utils.getViewsByTag(container, "moveImage");
+        for (View item: views)
+        {
+            item.findViewById(R.id.moveImage).setVisibility(View.INVISIBLE);
+        }
     }
 
     private void setupListAdapter()

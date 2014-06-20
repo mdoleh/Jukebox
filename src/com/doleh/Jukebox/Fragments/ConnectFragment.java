@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import com.doleh.Jukebox.Client;
 import com.doleh.Jukebox.MainActivity;
 import com.doleh.Jukebox.R;
@@ -23,6 +24,7 @@ public class ConnectFragment extends Fragment
 
         view = inflater.inflate(R.layout.connect, container, false);
         mainActivity = (MainActivity)getActivity();
+        Client.connectFragment = this;
         setupButtonEventListener();
         return view;
     }
@@ -33,6 +35,7 @@ public class ConnectFragment extends Fragment
         connectButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 connectDevices();
+                blockUI(connectButton);
             }});
     }
 
@@ -47,5 +50,32 @@ public class ConnectFragment extends Fragment
     public void showSongSearch()
     {
         FragmentHelper.showFragment("connect", this, "song_search", new SongSearchFragment(), getFragmentManager());
+    }
+
+    private void blockUI(final Button connectButton)
+    {
+        mainActivity.runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                final ImageView blocker = (ImageView)view.findViewById(R.id.loadingImage);
+                FragmentHelper.blockUI(connectButton, blocker);
+            }
+        });
+    }
+
+    public void unBlockUI()
+    {
+        mainActivity.runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                final Button connectButton = (Button)view.findViewById(R.id.connect);
+                final ImageView blocker = (ImageView)view.findViewById(R.id.loadingImage);
+                FragmentHelper.unBlockUI(connectButton, blocker);
+            }
+        });
     }
 }
