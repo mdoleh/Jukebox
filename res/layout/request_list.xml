@@ -33,6 +33,16 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"/>
 
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            android:id="@+id/cancelButton"
+            android:enabled="false"
+            android:visibility="invisible"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"/>
+
     <com.ericharlow.DragNDrop.DragNDropListView
         android:layout_height="match_parent"
         android:layout_width="match_parent"
