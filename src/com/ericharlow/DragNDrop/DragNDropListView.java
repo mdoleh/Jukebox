@@ -30,6 +30,7 @@ import android.widget.ListView;
 
 public class DragNDropListView extends ListView {
 
+    public boolean draggingEnabled = false;
 	boolean mDragMode;
 
 	int mStartPosition;
@@ -61,6 +62,7 @@ public class DragNDropListView extends ListView {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent ev) {
+        if (!draggingEnabled) { return false; }
 		final int action = ev.getAction();
 		final int x = (int) ev.getX();
 		final int y = (int) ev.getY();	
@@ -110,7 +112,7 @@ public class DragNDropListView extends ListView {
 			mWindowManager.updateViewLayout(mDragView, layoutParams);
 
 			if (mDragListener != null)
-				mDragListener.onDrag(x, y, null);// change null to "this" when ready to use
+				mDragListener.onDrag(x, y, this);// change null to "this" when ready to use
 		}
 	}
 

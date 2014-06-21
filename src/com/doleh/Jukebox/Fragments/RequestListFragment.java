@@ -23,13 +23,14 @@ public class RequestListFragment extends ListFragment
     private MainActivity mainActivity;
     public ListAdapter requestListAdapter;
     private ArrayList<String> viewableList = new ArrayList<String>();
+    private List<Song> songQueueOriginal = new ArrayList<Song>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.request_list, container, false);
         mainActivity = (MainActivity)getActivity();
         setupListAdapter();
-        setupButtonListeners(container);
+        setupButtonListeners();
 
         return view;
     }
@@ -50,22 +51,29 @@ public class RequestListFragment extends ListFragment
 
     }
 
-    private void setupButtonListeners(final ViewGroup container)
+    private void setupButtonListeners()
     {
         final Button editButton = (Button)view.findViewById(R.id.editButton);
         final Button saveButton = (Button)view.findViewById(R.id.saveButton);
+        final Button cancelButton = (Button)view.findViewById(R.id.cancelButton);
+
+        cancelButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                MediaLibraryHelper.setSongQueue(songQueueOriginal);
+                createViewableList(songQueueOriginal);
+                saveChanges(editButton, cancelButton, saveButton);
+            }
+        });
 
         saveButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                hideAllImages(container);
-                notifyDataSetChanged();
-                editButton.setEnabled(true);
-                editButton.setVisibility(View.VISIBLE);
-                v.setVisibility(View.INVISIBLE);
-                v.setEnabled(false);
+                saveChanges(editButton, cancelButton, saveButton);
             }
         });
 
@@ -74,34 +82,62 @@ public class RequestListFragment extends ListFragment
             @Override
             public void onClick(View v)
             {
-                showAllImages(container);
-                notifyDataSetChanged();
-                if (!MediaLibraryHelper.getSongQueue().isEmpty())
-                {
-                    saveButton.setEnabled(true);
-                    saveButton.setVisibility(View.VISIBLE);
-                    v.setVisibility(View.INVISIBLE);
-                    v.setEnabled(false);
-                }
+                makeEdits(editButton, cancelButton, saveButton);
             }
         });
     }
 
-    private void showAllImages(ViewGroup container)
+    private void makeEdits(Button editButton, Button cancelButton, Button saveButton)
     {
-        List<View> views = Utils.getViewsByTag(container, "moveImage");
-        for (View item: views)
+        if (!MediaLibraryHelper.getSongQueue().isEmpty())
         {
-            item.findViewById(R.id.moveImage).setVisibility(View.VISIBLE);
+            ((DragNDropListView)listView).draggingEnabled = true;
+            showAllImages();
+            notifyDataSetChanged();
+            enableAndShow(saveButton);
+            enableAndShow(cancelButton);
+            disableAndHide(editButton);
+            songQueueOriginal = new ArrayList<Song>(MediaLibraryHelper.getSongQueue());
         }
     }
 
-    private void hideAllImages(ViewGroup container)
+    private void saveChanges(Button editButton, Button cancelButton, Button saveButton)
     {
-        List<View> views = Utils.getViewsByTag(container, "moveImage");
-        for (View item: views)
+        ((DragNDropListView)listView).draggingEnabled = false;
+        hideAllImages();
+        notifyDataSetChanged();
+        enableAndShow(editButton);
+        disableAndHide(saveButton);
+        disableAndHide(cancelButton);
+    }
+
+    private void disableAndHide(View view)
+    {
+        view.setEnabled(false);
+        view.setVisibility(View.INVISIBLE);
+    }
+
+    private void enableAndShow(View view)
+    {
+        view.setEnabled(true);
+        view.setVisibility(View.VISIBLE);
+    }
+
+    private void showAllImages()
+    {
+        int size = listView.getChildCount();
+        for (int ii = 0; ii < size; ++ii)
         {
-            item.findViewById(R.id.moveImage).setVisibility(View.INVISIBLE);
+            listView.getChildAt(ii).findViewById(R.id.moveImage).setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void hideAllImages()
+    {
+        int size = listView.getChildCount();
+        for (int ii = 0; ii < size; ++ii)
+        {
+            listView.getChildAt(ii).findViewById(R.id.moveImage).setVisibility(View.INVISIBLE);
         }
     }
 
@@ -175,14 +211,21 @@ public class RequestListFragment extends ListFragment
             new DragListener() {
 
                 int backgroundColor = Color.BLUE;
+                int dropBackgroundColor = Color.RED;
                 int defaultBackgroundColor;
+                int previousPosition;
 
                 public void onDrag(int x, int y, ListView listView) {
-                    // TODO Auto-generated method stub
+                    resetBackgroundColor(defaultBackgroundColor, previousPosition);
+                    previousPosition = listView.pointToPosition(x,y);
+                    if (previousPosition != ListView.INVALID_POSITION)
+                    {
+                        listView.getChildAt(previousPosition).setBackgroundColor(dropBackgroundColor);
+                    }
                 }
 
                 public void onStartDrag(View itemView) {
-                    itemView.setVisibility(View.INVISIBLE);
+                    previousPosition = listView.getPositionForView(itemView);
                     defaultBackgroundColor = itemView.getDrawingCacheBackgroundColor();
                     itemView.setBackgroundColor(backgroundColor);
                     ImageView iv = (ImageView)itemView.findViewById(R.id.moveImage);
@@ -190,11 +233,17 @@ public class RequestListFragment extends ListFragment
                 }
 
                 public void onStopDrag(View itemView) {
-                    itemView.setVisibility(View.VISIBLE);
-                    itemView.setBackgroundColor(defaultBackgroundColor);
+                    resetBackgroundColor(defaultBackgroundColor, previousPosition);
                     ImageView iv = (ImageView)itemView.findViewById(R.id.moveImage);
                     if (iv != null) iv.setVisibility(View.VISIBLE);
                 }
-
             };
+
+    private void resetBackgroundColor(int defaultBackgroundColor, int position)
+    {
+        if (position != ListView.INVALID_POSITION)
+        {
+            listView.getChildAt(position).setBackgroundColor(defaultBackgroundColor);
+        }
+    }
 }
