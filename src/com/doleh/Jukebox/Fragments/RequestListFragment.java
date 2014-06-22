@@ -7,10 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import com.doleh.Jukebox.*;
+import com.doleh.Jukebox.MainActivity;
+import com.doleh.Jukebox.MediaLibraryHelper;
+import com.doleh.Jukebox.R;
+import com.doleh.Jukebox.Song;
 import com.ericharlow.DragNDrop.*;
 
 import java.util.ArrayList;
@@ -23,7 +25,8 @@ public class RequestListFragment extends ListFragment
     private MainActivity mainActivity;
     public ListAdapter requestListAdapter;
     private ArrayList<String> viewableList = new ArrayList<String>();
-    private List<Song> songQueueOriginal = new ArrayList<Song>();
+    private Integer listViewSize = 0;
+    private boolean keepListenerRunning = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,38 +45,27 @@ public class RequestListFragment extends ListFragment
         ((DragNDropListView)listView).setDragListener(mDragListener);
         ((DragNDropListView)listView).setDropListener(mDropListener);
         ((DragNDropListView)listView).setRemoveListener(mRemoveListener);
+        new Thread(new ListViewSizeListener()).start();
     }
 
     @Override
     public void onDestroy()
     {
         super.onDestroy();
-
+        keepListenerRunning = false;
     }
 
     private void setupButtonListeners()
     {
         final Button editButton = (Button)view.findViewById(R.id.editButton);
         final Button saveButton = (Button)view.findViewById(R.id.saveButton);
-        final Button cancelButton = (Button)view.findViewById(R.id.cancelButton);
-
-        cancelButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                MediaLibraryHelper.setSongQueue(songQueueOriginal);
-                createViewableList(songQueueOriginal);
-                saveChanges(editButton, cancelButton, saveButton);
-            }
-        });
 
         saveButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                saveChanges(editButton, cancelButton, saveButton);
+                saveChanges(editButton, saveButton);
             }
         });
 
@@ -82,33 +74,30 @@ public class RequestListFragment extends ListFragment
             @Override
             public void onClick(View v)
             {
-                makeEdits(editButton, cancelButton, saveButton);
+                makeEdits(editButton, saveButton);
             }
         });
     }
 
-    private void makeEdits(Button editButton, Button cancelButton, Button saveButton)
+    private void makeEdits(Button editButton, Button saveButton)
     {
         if (!MediaLibraryHelper.getSongQueue().isEmpty())
         {
-            ((DragNDropListView)listView).draggingEnabled = true;
+            ((DragNDropListView)listView).editingEnabled = true;
             showAllImages();
             notifyDataSetChanged();
             enableAndShow(saveButton);
-            enableAndShow(cancelButton);
             disableAndHide(editButton);
-            songQueueOriginal = new ArrayList<Song>(MediaLibraryHelper.getSongQueue());
         }
     }
 
-    private void saveChanges(Button editButton, Button cancelButton, Button saveButton)
+    private void saveChanges(Button editButton, Button saveButton)
     {
-        ((DragNDropListView)listView).draggingEnabled = false;
-        hideAllImages();
+        ((DragNDropListView)listView).editingEnabled = false;
         notifyDataSetChanged();
         enableAndShow(editButton);
         disableAndHide(saveButton);
-        disableAndHide(cancelButton);
+        hideAllImages();
     }
 
     private void disableAndHide(View view)
@@ -125,11 +114,19 @@ public class RequestListFragment extends ListFragment
 
     private void showAllImages()
     {
-        int size = listView.getChildCount();
-        for (int ii = 0; ii < size; ++ii)
+        mainActivity.runOnUiThread(new Runnable()
         {
-            listView.getChildAt(ii).findViewById(R.id.moveImage).setVisibility(View.VISIBLE);
-        }
+            @Override
+            public void run()
+            {
+                int size = listView.getChildCount();
+                for (int ii = 0; ii < size; ++ii)
+                {
+                    listView.getChildAt(ii).findViewById(R.id.moveImage).setVisibility(View.VISIBLE);
+                    listView.getChildAt(ii).findViewById(R.id.deleteImage).setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     private void hideAllImages()
@@ -137,7 +134,8 @@ public class RequestListFragment extends ListFragment
         int size = listView.getChildCount();
         for (int ii = 0; ii < size; ++ii)
         {
-            listView.getChildAt(ii).findViewById(R.id.moveImage).setVisibility(View.INVISIBLE);
+            listView.getChildAt(ii).findViewById(R.id.moveImage).setVisibility(View.GONE);
+            listView.getChildAt(ii).findViewById(R.id.deleteImage).setVisibility(View.GONE);
         }
     }
 
@@ -180,20 +178,25 @@ public class RequestListFragment extends ListFragment
                 public void onDrop(int from, int to) {
                     ListAdapter adapter = getListAdapter();
                     if (adapter instanceof DragNDropAdapter) {
-                        syncSongQueue(from, to);
+                        syncSongQueueMoved(from, to);
                         ((DragNDropAdapter)adapter).onDrop(from, to);
                         getListView().invalidateViews();
                     }
                 }
             };
 
-    private void syncSongQueue(int from, int to)
+    private void syncSongQueueMoved(int from, int to)
     {
         List<Song> songQueue = MediaLibraryHelper.getSongQueue();
         Song movedSong = songQueue.get(from);
         songQueue.remove(from);
         songQueue.add(to, movedSong);
-        MediaLibraryHelper.setSongQueue(songQueue);
+    }
+
+    private void syncSongQueueDeleted(int which)
+    {
+        List<Song> songQueue = MediaLibraryHelper.getSongQueue();
+        songQueue.remove(which);
     }
 
     private RemoveListener mRemoveListener =
@@ -201,6 +204,7 @@ public class RequestListFragment extends ListFragment
                 public void onRemove(int which) {
                     ListAdapter adapter = getListAdapter();
                     if (adapter instanceof DragNDropAdapter) {
+                        syncSongQueueDeleted(which);
                         ((DragNDropAdapter)adapter).onRemove(which);
                         getListView().invalidateViews();
                     }
@@ -228,14 +232,14 @@ public class RequestListFragment extends ListFragment
                     previousPosition = listView.getPositionForView(itemView);
                     defaultBackgroundColor = itemView.getDrawingCacheBackgroundColor();
                     itemView.setBackgroundColor(backgroundColor);
-                    ImageView iv = (ImageView)itemView.findViewById(R.id.moveImage);
-                    if (iv != null) iv.setVisibility(View.INVISIBLE);
+                    hideImage(itemView, R.id.moveImage);
+                    hideImage(itemView, R.id.deleteImage);
                 }
 
                 public void onStopDrag(View itemView) {
                     resetBackgroundColor(defaultBackgroundColor, previousPosition);
-                    ImageView iv = (ImageView)itemView.findViewById(R.id.moveImage);
-                    if (iv != null) iv.setVisibility(View.VISIBLE);
+                    showImage(itemView, R.id.moveImage);
+                    showImage(itemView, R.id.deleteImage);
                 }
             };
 
@@ -244,6 +248,37 @@ public class RequestListFragment extends ListFragment
         if (position != ListView.INVALID_POSITION)
         {
             listView.getChildAt(position).setBackgroundColor(defaultBackgroundColor);
+        }
+    }
+
+    private void showImage(View view, int id)
+    {
+        View element = view.findViewById(id);
+        if (element != null) { view.findViewById(id).setVisibility(View.VISIBLE); }
+    }
+
+    private void hideImage(View view, int id)
+    {
+        View element = view.findViewById(id);
+        if (element != null) { view.findViewById(id).setVisibility(View.GONE); }
+    }
+
+    private class ListViewSizeListener implements Runnable
+    {
+        @Override
+        public void run()
+        {
+            while (keepListenerRunning)
+            {
+                if (listView.getChildCount() != listViewSize)
+                {
+                    if (((DragNDropListView)listView).editingEnabled)
+                    {
+                        showAllImages();
+                    }
+                    listViewSize = listView.getChildCount();
+                }
+            }
         }
     }
 }

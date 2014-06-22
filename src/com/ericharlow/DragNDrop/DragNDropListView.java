@@ -30,7 +30,7 @@ import android.widget.ListView;
 
 public class DragNDropListView extends ListView {
 
-    public boolean draggingEnabled = false;
+    public boolean editingEnabled = false;
 	boolean mDragMode;
 
 	int mStartPosition;
@@ -62,7 +62,7 @@ public class DragNDropListView extends ListView {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent ev) {
-        if (!draggingEnabled) { return false; }
+        if (!editingEnabled) { return false; }
 		final int action = ev.getAction();
 		final int x = (int) ev.getX();
 		final int y = (int) ev.getY();	
@@ -70,6 +70,14 @@ public class DragNDropListView extends ListView {
 		if (action == MotionEvent.ACTION_DOWN && x < this.getWidth()/8) {
 			mDragMode = true;
 		}
+
+        if (action == MotionEvent.ACTION_UP && x > (this.getWidth()/8) * 7) {
+            mStartPosition = pointToPosition(x,y);
+            if (mStartPosition != INVALID_POSITION) {
+                mRemoveListener.onRemove(mStartPosition);
+            }
+            return true;
+        }
 
 		if (!mDragMode) 
 			return super.onTouchEvent(ev);
