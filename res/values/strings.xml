@@ -62,4 +62,8 @@
     <string name="cancel">Cancel</string>
     <string name="move_indicator">Move Indicator</string>
     <string name="delete">Delete Image</string>
+    <string name="exitMsg">Are you sure you want to exit?</string>
+    <string name="exit">Exit</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
 </resources>
