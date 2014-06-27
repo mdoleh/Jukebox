@@ -8,6 +8,7 @@ import com.jackieloven.thebasics.CloseConnectionMsg;
 import com.jackieloven.thebasics.NetComm;
 import com.jackieloven.thebasics.Networked;
 
+import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class Client implements Networked
     public static List<Song> receivedSongs;
     public static String ip;
     public static NetComm netComm;
+    public static Socket socket;
     public static MainActivity mainActivity;
     public static SongRequestFragment songRequestFragment;
     public static SongSearchFragment songSearchFragment;
@@ -38,12 +40,20 @@ public class Client implements Networked
     {
         public void run() {
             try {
-                netComm = new NetComm(new Socket(ip, Server.PORT), Client.this);
-            } catch (Exception ex) {
-                netComm = null;
-                mainActivity.showMessageBox(mainActivity.getString(R.string.connectionFailed), mainActivity.getString(R.string.connectionFailedMsg2));
-                connectFragment.unBlockUI();
+                socket = new Socket();
+                socket.connect(new InetSocketAddress(ip, Server.PORT), 30 * 1000);
+                netComm = new NetComm(socket, Client.this);
+            }
+            catch (Exception ex) {
+                cancelConnect();
             }
         }
+    }
+
+    private void cancelConnect()
+    {
+        netComm = null;
+        mainActivity.showMessageBox(mainActivity.getString(R.string.connectionFailed), mainActivity.getString(R.string.connectionFailedMsg2));
+        connectFragment.unBlockUI();
     }
 }

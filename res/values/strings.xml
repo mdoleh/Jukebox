@@ -31,7 +31,7 @@
     <string name="connectionSuccess">Connection Success</string>
     <string name="connectionFailed">Connection Failed</string>
     <string name="connectionFailedMsg">Control Center is not accepting requests at this time.</string>
-    <string name="connectionFailedMsg2">Control Center is not accepting requests at this time or the IP address is incorrect.</string>
+    <string name="connectionFailedMsg2">One of the following has occurred: \n1. Control Center is not accepting requests at this time \n2. The IP address is incorrect \n3. You cancelled the connection</string>
     <string name="ok">OK</string>
     <string name="connectionLost">Connection Lost</string>
     <string name="connectionLostMsg">Control Center has disconnected.</string>
