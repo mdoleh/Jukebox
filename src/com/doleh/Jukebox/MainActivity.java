@@ -68,6 +68,8 @@ public class MainActivity extends Activity
         });
     }
 
+    // Detects back button press and asks the user if they want to leave the control center
+    // Prevents accidental disconnecting of requesters and stopping music
     @Override
     public boolean onKeyDown(final int keyCode, final KeyEvent event) {
         final FragmentManager fragmentManager = getFragmentManager();
