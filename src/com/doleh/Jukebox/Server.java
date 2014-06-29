@@ -81,8 +81,7 @@ public class Server implements Networked
         Integer senderIndex = findSender(sender);
         if (msgObj instanceof CloseConnectionMsg)
         {
-//            if (senderIndex != null)
-            if (true)
+            if (senderIndex != null)
             {
                 netComms.remove(senderIndex.intValue());
                 updateRequesterCount(netComms.size());
