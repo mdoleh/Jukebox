@@ -11,11 +11,7 @@ import android.view.KeyEvent;
 import com.doleh.Jukebox.Fragments.ControlCenterFragment;
 import com.doleh.Jukebox.Fragments.FragmentHelper;
 import com.doleh.Jukebox.Fragments.StartupFragment;
-import com.jon.Mail.Mail;
-
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
+import com.hardiktrivedi.Exception.ExceptionHandler;
 
 public class MainActivity extends Activity
 {
@@ -28,6 +24,8 @@ public class MainActivity extends Activity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
+
         setContentView(R.layout.main);
 
         // For handling a bug when the user presses the home button then reopens the app
@@ -106,53 +104,33 @@ public class MainActivity extends Activity
         return fragmentManager.getBackStackEntryCount() <= 2 && controlCenterFragment != null && controlCenterFragment.isVisible();
     }
 
-    public static void sendErrorReport(Exception ex)
+    public void showErrorMessage()
     {
-        String errorMessage = "";
-        if (ex.getCause() != null) { errorMessage += ex.getCause().toString(); }
-        if (ex.getMessage() != null) { errorMessage += " - " + ex.getMessage(); }
-        Writer writer = new StringWriter();
-        PrintWriter printWriter = new PrintWriter(writer);
-        ex.printStackTrace(printWriter);
-        String stackTrace = "";
-        if (writer.toString() != null) { stackTrace += writer.toString(); }
-        if (!stackTrace.toLowerCase().contains("socket closed"))
+        runOnUiThread(new Runnable()
         {
-            new Thread(new EmailThread(errorMessage, stackTrace)).start();
-        }
+            @Override
+            public void run()
+            {
+                AlertDialog.Builder alert  = new AlertDialog.Builder(MainActivity.this);
+                alert.setMessage(getString(R.string.forceCloseMsg));
+                alert.setTitle(getString(R.string.forceClose));
+                alert.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        closeApplication();
+                    }
+                });
+                alert.setCancelable(false);
+                alert.create().show();
+            }
+        });
     }
 
-    private static class EmailThread implements Runnable
+    private void closeApplication()
     {
-        private String _errorMessage;
-        private String _stackTrace;
-
-        public EmailThread(String errorMessage, String stackTrace)
-        {
-            _errorMessage = errorMessage;
-            _stackTrace = stackTrace;
-        }
-
-        @Override
-        public void run()
-        {
-            sendEmail(_errorMessage, _stackTrace);
-        }
-    }
-    private static void sendEmail(String errorMessage, String stackTrace)
-    {
-        Mail m = new Mail("dammahom59@gmail.com", "probablydarkmonkeyglobe");
-
-        String[] toArr = {"dammahom59@gmail.com"};
-        m.setTo(toArr);
-        m.setFrom("noreply@jukebox.com");
-        m.setSubject("Error - " + errorMessage);
-        m.setBody("The following error has occurred:\n\n" + errorMessage + "\n\n" + stackTrace);
-
-        try {
-            m.send();
-        } catch(Exception e) {
-            // email failed to send
-        }
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(10);
     }
 }

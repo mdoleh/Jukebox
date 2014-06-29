@@ -36,7 +36,7 @@ public class Utils
         }
         catch (Exception ex)
         {
-            MainActivity.sendErrorReport(ex);
+            Email.sendErrorReport(ex);
         }
         return "";
     }

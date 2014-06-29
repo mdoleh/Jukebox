@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import com.doleh.Jukebox.Client;
+import com.doleh.Jukebox.Email;
 import com.doleh.Jukebox.MainActivity;
 import com.doleh.Jukebox.R;
 
@@ -49,7 +50,7 @@ public class ConnectFragment extends Fragment
         }
         catch (IOException ex)
         {
-            MainActivity.sendErrorReport(ex);
+            Email.sendErrorReport(ex);
         }
     }
 

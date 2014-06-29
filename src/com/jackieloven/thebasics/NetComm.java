@@ -1,6 +1,6 @@
 package com.jackieloven.thebasics;
 
-import com.doleh.Jukebox.MainActivity;
+import com.doleh.Jukebox.Email;
 
 import java.io.*;
 import java.net.Socket;
@@ -51,7 +51,7 @@ public class NetComm {
 		// print error message if unknown error
 		// (if I don't know what causes the error then I can't write code to handle it)
 		catch (IOException ex) {
-            MainActivity.sendErrorReport(ex);
+            Email.sendErrorReport(ex);
 		}
 	}
 
@@ -98,13 +98,13 @@ public class NetComm {
 				return new CloseConnectionMsg();
 			}
 			catch (StreamCorruptedException ex) {
-				MainActivity.sendErrorReport(ex);
+				Email.sendErrorReport(ex);
 				return new CloseConnectionMsg();
 			}
 			// print stack trace and return null if unknown error
 			// (if I don't know what causes the error then I can't write code to handle it)
 			catch (Exception ex) {
-				MainActivity.sendErrorReport(ex);
+				Email.sendErrorReport(ex);
 				return null;
 			}
 		}

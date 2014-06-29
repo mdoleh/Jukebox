@@ -15,6 +15,7 @@ import com.jackieloven.thebasics.Networked;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,7 +61,7 @@ public class Server implements Networked
                     serverSocket = new ServerSocket(PORT);
                 }
                 catch (IOException ex) {
-                    MainActivity.sendErrorReport(ex);
+                    Email.sendErrorReport(ex);
                     mainActivity.finish();
                 }
                 // wait for clients to connect
@@ -80,7 +81,8 @@ public class Server implements Networked
         Integer senderIndex = findSender(sender);
         if (msgObj instanceof CloseConnectionMsg)
         {
-            if (senderIndex != null)
+//            if (senderIndex != null)
+            if (true)
             {
                 netComms.remove(senderIndex.intValue());
                 updateRequesterCount(netComms.size());
@@ -125,8 +127,12 @@ public class Server implements Networked
                         new NetComm(socket, Server.this).write(new Rejection(false));
                     }
                 }
+                catch (SocketException ex)
+                {
+                    // ignore exceptions
+                }
                 catch (Exception ex) {
-                    MainActivity.sendErrorReport(ex);
+                    Email.sendErrorReport(ex);
                     break;
                 }
             }
@@ -151,7 +157,7 @@ public class Server implements Networked
             }
             catch (IOException ex)
             {
-                MainActivity.sendErrorReport(ex);
+                Email.sendErrorReport(ex);
             }
             return null;
         }
