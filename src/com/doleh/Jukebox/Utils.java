@@ -33,7 +33,11 @@ public class Utils
                     }
                 }
             }
-        } catch (Exception ex) { } // for now eat exceptions
+        }
+        catch (Exception ex)
+        {
+            MainActivity.sendErrorReport(ex);
+        }
         return "";
     }
 

@@ -11,6 +11,11 @@ import android.view.KeyEvent;
 import com.doleh.Jukebox.Fragments.ControlCenterFragment;
 import com.doleh.Jukebox.Fragments.FragmentHelper;
 import com.doleh.Jukebox.Fragments.StartupFragment;
+import com.jon.Mail.Mail;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 
 public class MainActivity extends Activity
 {
@@ -99,5 +104,55 @@ public class MainActivity extends Activity
     private boolean controlCenterVisibleAndOnBackStack(FragmentManager fragmentManager, ControlCenterFragment controlCenterFragment)
     {
         return fragmentManager.getBackStackEntryCount() <= 2 && controlCenterFragment != null && controlCenterFragment.isVisible();
+    }
+
+    public static void sendErrorReport(Exception ex)
+    {
+        String errorMessage = "";
+        if (ex.getCause() != null) { errorMessage += ex.getCause().toString(); }
+        if (ex.getMessage() != null) { errorMessage += " - " + ex.getMessage(); }
+        Writer writer = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(writer);
+        ex.printStackTrace(printWriter);
+        String stackTrace = "";
+        if (writer.toString() != null) { stackTrace += writer.toString(); }
+        if (!stackTrace.toLowerCase().contains("socket closed"))
+        {
+            new Thread(new EmailThread(errorMessage, stackTrace)).start();
+        }
+    }
+
+    private static class EmailThread implements Runnable
+    {
+        private String _errorMessage;
+        private String _stackTrace;
+
+        public EmailThread(String errorMessage, String stackTrace)
+        {
+            _errorMessage = errorMessage;
+            _stackTrace = stackTrace;
+        }
+
+        @Override
+        public void run()
+        {
+            sendEmail(_errorMessage, _stackTrace);
+        }
+    }
+    private static void sendEmail(String errorMessage, String stackTrace)
+    {
+        Mail m = new Mail("dammahom59@gmail.com", "probablydarkmonkeyglobe");
+
+        String[] toArr = {"dammahom59@gmail.com"};
+        m.setTo(toArr);
+        m.setFrom("noreply@jukebox.com");
+        m.setSubject("Error - " + errorMessage);
+        m.setBody("The following error has occurred:\n\n" + errorMessage + "\n\n" + stackTrace);
+
+        try {
+            m.send();
+        } catch(Exception e) {
+            // email failed to send
+        }
     }
 }

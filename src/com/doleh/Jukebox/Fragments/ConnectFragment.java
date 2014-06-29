@@ -47,9 +47,9 @@ public class ConnectFragment extends Fragment
                 Client.socket.close();
             }
         }
-        catch (IOException e)
+        catch (IOException ex)
         {
-            // do nothing
+            MainActivity.sendErrorReport(ex);
         }
     }
 

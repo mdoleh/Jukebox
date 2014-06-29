@@ -66,4 +66,6 @@
     <string name="exit">Exit</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
+    <string name="emailFailure">Error Report Failed</string>
+    <string name="emailFailureMsg">Failed to send error report. Please report issue to: dammahom59@gmail.com</string>
 </resources>
