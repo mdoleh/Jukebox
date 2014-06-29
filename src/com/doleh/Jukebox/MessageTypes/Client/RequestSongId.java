@@ -33,7 +33,7 @@ public class RequestSongId extends ClientMessage implements Serializable
                     playerFragment.enableAllElements();
                 }
             });
-            sender.write(new RequestAccepted());
+            sender.write(new RequestAccepted(server.getRemainingRequests(sender.ipAddress)));
         }
         else { sender.write(new LimitRejection()); }
     }

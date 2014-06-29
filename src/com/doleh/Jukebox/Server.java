@@ -184,4 +184,14 @@ public class Server implements Networked
     {
         controlCenterFragment.updateRequesterCount(newValue);
     }
+
+    public int getRemainingRequests(String ipAddress)
+    {
+        Integer count = messageCount.get(ipAddress);
+        if (count != null)
+        {
+            return MAX_MESSAGE_COUNT - count - 1;
+        }
+        return MAX_MESSAGE_COUNT;
+    }
 }
