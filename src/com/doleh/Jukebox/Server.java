@@ -15,6 +15,7 @@ import com.jackieloven.thebasics.Networked;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,6 +61,7 @@ public class Server implements Networked
                     serverSocket = new ServerSocket(PORT);
                 }
                 catch (IOException ex) {
+                    Email.sendErrorReport(ex);
                     mainActivity.finish();
                 }
                 // wait for clients to connect
@@ -76,11 +78,14 @@ public class Server implements Networked
     @Override
     public void msgReceived(Object msgObj, NetComm sender)
     {
-        int senderIndex = findSender(msgObj, sender);
+        Integer senderIndex = findSender(sender);
         if (msgObj instanceof CloseConnectionMsg)
         {
-            netComms.remove(senderIndex);
-            updateRequesterCount(netComms.size());
+            if (senderIndex != null)
+            {
+                netComms.remove(senderIndex.intValue());
+                updateRequesterCount(netComms.size());
+            }
         }
         else
         {
@@ -91,17 +96,14 @@ public class Server implements Networked
         }
     }
 
-    private int findSender(Object msgObj, NetComm sender)
+    private Integer findSender(NetComm sender)
     {
         int senderIndex;
         // find who sent the message
-        for (senderIndex = 0; senderIndex < netComms.size(); senderIndex++) {
-            if (sender == netComms.get(senderIndex)) break;
+        for (senderIndex = 0; senderIndex < netComms.size(); ++senderIndex) {
+            if (sender == netComms.get(senderIndex)) { return senderIndex; }
         }
-        if (senderIndex == netComms.size()) {
-            mainActivity.showMessageBox(mainActivity.getString(R.string.warning), mainActivity.getString(R.string.unknownRequester) + msgObj);
-        }
-        return senderIndex;
+        return null;
     }
 
     /** thread to accept new clients */
@@ -124,8 +126,12 @@ public class Server implements Networked
                         new NetComm(socket, Server.this).write(new Rejection(false));
                     }
                 }
+                catch (SocketException ex)
+                {
+                    // ignore exceptions
+                }
                 catch (Exception ex) {
-                    ex.printStackTrace();
+                    Email.sendErrorReport(ex);
                     break;
                 }
             }
@@ -148,9 +154,9 @@ public class Server implements Networked
                 }
                 if (serverSocket != null) { serverSocket.close(); }
             }
-            catch (IOException e)
+            catch (IOException ex)
             {
-                e.printStackTrace();
+                Email.sendErrorReport(ex);
             }
             return null;
         }
@@ -183,5 +189,15 @@ public class Server implements Networked
     private void updateRequesterCount(int newValue)
     {
         controlCenterFragment.updateRequesterCount(newValue);
+    }
+
+    public int getRemainingRequests(String ipAddress)
+    {
+        Integer count = messageCount.get(ipAddress);
+        if (count != null)
+        {
+            return MAX_MESSAGE_COUNT - count - 1;
+        }
+        return MAX_MESSAGE_COUNT;
     }
 }
