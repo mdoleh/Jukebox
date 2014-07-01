@@ -12,6 +12,7 @@ import com.doleh.Jukebox.Fragments.ControlCenterFragment;
 import com.doleh.Jukebox.Fragments.FragmentHelper;
 import com.doleh.Jukebox.Fragments.StartupFragment;
 import com.hardiktrivedi.Exception.ExceptionHandler;
+import com.snippets.RateApp.AppRater;
 
 public class MainActivity extends Activity
 {
@@ -45,6 +46,8 @@ public class MainActivity extends Activity
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "LCD-on");
         wakeLock.acquire();
+
+        AppRater.app_launched(this);
     }
 
     @Override
