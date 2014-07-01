@@ -12,7 +12,7 @@ import com.doleh.Jukebox.Fragments.ControlCenterFragment;
 import com.doleh.Jukebox.Fragments.FragmentHelper;
 import com.doleh.Jukebox.Fragments.StartupFragment;
 import com.hardiktrivedi.Exception.ExceptionHandler;
-import com.snippets.RateApp.AppRater;
+import com.snippets.Utils.AppRater;
 
 public class MainActivity extends Activity
 {

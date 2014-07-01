@@ -1,4 +1,4 @@
-package com.snippets.RateApp;
+package com.snippets.Utils;
 
 import android.app.Dialog;
 import android.content.Context;
