@@ -49,13 +49,13 @@ public class Email
 
     private static class EmailThread implements Runnable
     {
-        private String _errorMessage;
-        private String _stackTrace;
+        private String _subject;
+        private String _body;
 
-        public EmailThread(String errorMessage, String stackTrace)
+        public EmailThread(String subject, String body)
         {
-            _errorMessage = errorMessage;
-            _stackTrace = stackTrace;
+            _subject = subject;
+            _body = body;
         }
 
         @Override
@@ -63,7 +63,7 @@ public class Email
         {
             try
             {
-                sendEmail(_errorMessage, _stackTrace);
+                sendEmail(_subject, _body);
             }
             catch (Exception e)
             {
