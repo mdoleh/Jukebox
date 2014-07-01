@@ -129,6 +129,7 @@ public class MediaLibraryHelper
         catch (IOException ex)
         {
             // Unable to play song
+            Email.sendErrorReport(ex);
         }
     }
 

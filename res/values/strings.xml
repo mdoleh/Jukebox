@@ -31,7 +31,7 @@
     <string name="connectionSuccess">Connection Success</string>
     <string name="connectionFailed">Connection Failed</string>
     <string name="connectionFailedMsg">Control Center is not accepting requests at this time.</string>
-    <string name="connectionFailedMsg2">Control Center is not accepting requests at this time or the IP address is incorrect.</string>
+    <string name="connectionFailedMsg2">One of the following has occurred: \n1. Control Center is not accepting requests at this time \n2. The IP address is incorrect \n3. You cancelled the connection</string>
     <string name="ok">OK</string>
     <string name="connectionLost">Connection Lost</string>
     <string name="connectionLostMsg">Control Center has disconnected.</string>
@@ -55,8 +55,8 @@
     <string name="placeholderTime">4:25</string>
     <string name="currentSong">Current Song Playing</string>
     <string name="requestAccepted">Request Accepted</string>
-    <string name="requestAcceptedMsg">You have successfully sent the request!</string>
-    <string name="loading">Loading...</string>
+    <string name="requestAcceptedMsg">You have successfully sent the request! You have %d request(s) remaining.</string>
+    <string name="loading">Loading…</string>
     <string name="edit">Edit</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
@@ -66,4 +66,6 @@
     <string name="exit">Exit</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
+    <string name="forceClose">Application Crashed</string>
+    <string name="forceCloseMsg">The application has unexpectedly crashed. A report has already been sent to the administrator.</string>
 </resources>

@@ -11,6 +11,8 @@ import android.view.KeyEvent;
 import com.doleh.Jukebox.Fragments.ControlCenterFragment;
 import com.doleh.Jukebox.Fragments.FragmentHelper;
 import com.doleh.Jukebox.Fragments.StartupFragment;
+import com.hardiktrivedi.Exception.ExceptionHandler;
+import com.snippets.Utils.AppRater;
 
 public class MainActivity extends Activity
 {
@@ -23,6 +25,8 @@ public class MainActivity extends Activity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
+
         setContentView(R.layout.main);
 
         // For handling a bug when the user presses the home button then reopens the app
@@ -42,6 +46,8 @@ public class MainActivity extends Activity
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "LCD-on");
         wakeLock.acquire();
+
+        AppRater.app_launched(this);
     }
 
     @Override
@@ -68,6 +74,8 @@ public class MainActivity extends Activity
         });
     }
 
+    // Detects back button press and asks the user if they want to leave the control center
+    // Prevents accidental disconnecting of requesters and stopping music
     @Override
     public boolean onKeyDown(final int keyCode, final KeyEvent event) {
         final FragmentManager fragmentManager = getFragmentManager();
@@ -97,5 +105,35 @@ public class MainActivity extends Activity
     private boolean controlCenterVisibleAndOnBackStack(FragmentManager fragmentManager, ControlCenterFragment controlCenterFragment)
     {
         return fragmentManager.getBackStackEntryCount() <= 2 && controlCenterFragment != null && controlCenterFragment.isVisible();
+    }
+
+    public void showErrorMessage()
+    {
+        runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                AlertDialog.Builder alert  = new AlertDialog.Builder(MainActivity.this);
+                alert.setMessage(getString(R.string.forceCloseMsg));
+                alert.setTitle(getString(R.string.forceClose));
+                alert.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        closeApplication();
+                    }
+                });
+                alert.setCancelable(false);
+                alert.create().show();
+            }
+        });
+    }
+
+    private void closeApplication()
+    {
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(10);
     }
 }
