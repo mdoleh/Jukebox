@@ -7,7 +7,7 @@ import com.snippets.Utils.AES;
 public class Email
 {
     private final static String APPLICATION_PREFIX = "Jukebox - ";
-    private final static String SENDER_EMAIL = "jC+/N9ViMuHV/hhr5M2qJenGv6IX3u9Var3ANU8INyg=\n";
+    private final static String SENDER_EMAIL = "SJl7RSlk6mAZzw8HhgmF0FN7P4U60qrfUBjdkwM7wf8=\n";
     private final static String SENDER_PASS = "UXTxMqg1u08trcX7GOo1jmzdwtqUld51BcxSdKDaPpY=\n";
 
     public static void sendErrorReport(Throwable ex)
