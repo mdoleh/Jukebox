@@ -1,6 +1,5 @@
 package com.doleh.Jukebox;
 
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -133,21 +132,21 @@ public class MediaLibraryHelper
         }
     }
 
-    public static String togglePlay(MediaPlayer mediaPlayer, Activity activity)
+    public static Integer togglePlay(MediaPlayer mediaPlayer)
     {
-        String text = null;
+        Integer id = null;
         if (!isPaused)
         {
             mediaPlayer.pause();
-            text = activity.getString(R.string.playSong);
+            id = R.drawable.play_icon;
         }
         else
         {
             mediaPlayer.start();
-            text = activity.getString(R.string.pauseSong);
+            id = R.drawable.pause_icon;
         }
         isPaused = !isPaused;
-        return text;
+        return id;
     }
 
     public static void moveSongUp(Song request, int index)
