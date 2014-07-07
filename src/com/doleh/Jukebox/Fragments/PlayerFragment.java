@@ -59,7 +59,7 @@ public class PlayerFragment extends Fragment
         {
             public boolean onTouch(View v, MotionEvent event)
             {
-                handleTouchEvents(event, pauseButton, new handlePauseTouch());
+                FragmentHelper.handleTouchEvents(event, pauseButton, new handlePauseTouch());
                 return true;
             }
         });
@@ -69,7 +69,7 @@ public class PlayerFragment extends Fragment
         {
             public boolean onTouch(View v, MotionEvent event)
             {
-                handleTouchEvents(event, stopButton, new handleStopTouch());
+                FragmentHelper.handleTouchEvents(event, stopButton, new handleStopTouch());
                 return true;
             }
         });
@@ -79,7 +79,7 @@ public class PlayerFragment extends Fragment
         {
             public boolean onTouch(View v, MotionEvent event)
             {
-                handleTouchEvents(event, skipButton, new handleSkipTouch());
+                FragmentHelper.handleTouchEvents(event, skipButton, new handleSkipTouch());
                 return true;
             }
         });
@@ -294,23 +294,6 @@ public class PlayerFragment extends Fragment
             updateHandler.postDelayed(this, 1000);
         }
     };
-
-    private void handleTouchEvents(MotionEvent event, ImageView button, IFunction touchHandler)
-    {
-        switch (event.getAction())
-        {
-            case MotionEvent.ACTION_DOWN:{
-                button.setColorFilter(0x77000000,PorterDuff.Mode.SRC_ATOP);
-                break;
-            }
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL: {
-                touchHandler.execute(button);
-                button.clearColorFilter();
-                break;
-            }
-        }
-    }
 
     private class handlePauseTouch implements IFunction
     {
