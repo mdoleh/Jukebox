@@ -15,13 +15,14 @@
             android:textSize="30dp"
             android:layout_gravity="center_horizontal|top"/>
 
-    <Button
+    <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/toggleListener"
+            android:contentDescription="@string/toggleListener"
             android:id="@+id/listenerToggle"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="98dp"/>
+            android:layout_marginTop="98dp"
+            android:src="@drawable/stop_listening_icon"/>
 
     <TextView
             android:layout_width="wrap_content"
@@ -58,21 +59,23 @@
             android:textSize="18dp"
             android:layout_below="@id/requestersLabel"/>
 
-    <Button
+    <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/goToPlayer"
+            android:contentDescription="@string/goToPlayer"
             android:id="@+id/viewPlayerButton"
             android:layout_centerHorizontal="false"
-            android:layout_alignLeft="@id/controlCenterTitle"
-            android:layout_below="@id/requesterCount"/>
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/requesterCount"
+            android:src="@drawable/player_icon"/>
 
-    <Button
+    <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/goToRequests"
+            android:contentDescription="@string/goToRequests"
             android:id="@+id/viewRequestListButton"
             android:layout_centerHorizontal="false"
-            android:layout_alignRight="@id/controlCenterTitle"
-            android:layout_below="@id/requesterCount"/>
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/requesterCount"
+            android:src="@drawable/request_list_icon"/>
 </RelativeLayout>
