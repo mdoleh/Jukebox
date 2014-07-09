@@ -14,24 +14,26 @@
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal|top"/>
 
-    <Button
+    <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/edit"
+            android:contentDescription="@string/edit"
             android:id="@+id/editButton"
             android:enabled="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"/>
+            android:layout_alignParentTop="true"
+            android:src="@drawable/edit_icon"/>
 
-    <Button
+    <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/save"
+            android:contentDescription="@string/save"
             android:id="@+id/saveButton"
             android:enabled="false"
             android:visibility="invisible"
             android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"/>
+            android:layout_alignParentTop="true"
+            android:src="@drawable/save_icon"/>
 
     <com.ericharlow.DragNDrop.DragNDropListView
         android:layout_height="match_parent"
