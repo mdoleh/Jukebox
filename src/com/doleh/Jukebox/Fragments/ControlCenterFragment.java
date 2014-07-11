@@ -123,11 +123,18 @@ public class ControlCenterFragment extends Fragment
 
     private void toggleListener()
     {
-        server.toggleListener();
-        final TextView ipAddress = (TextView)view.findViewById(R.id.deviceAddress);
-        ipAddress.setText(Utils.getIPAddress(true));
+        if (Utils.isOnWifi(mainActivity))
+        {
+            server.toggleListener();
+            final TextView ipAddress = (TextView)view.findViewById(R.id.deviceAddress);
+            ipAddress.setText(Utils.getIPAddress(true));
 
-        swapImages();
+            swapImages();
+        }
+        else
+        {
+            mainActivity.showMessageBox(getString(R.string.notOnWifi), getString(R.string.notOnWifiMsgListen));
+        }
     }
 
     private void swapImages()

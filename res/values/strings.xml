@@ -68,4 +68,8 @@
     <string name="yes">Yes</string>
     <string name="forceClose">Application Crashed</string>
     <string name="forceCloseMsg">The application has unexpectedly crashed. A report has already been sent to the administrator.</string>
+    <string name="notOnWifi">Not Connected to Wi-Fi</string>
+    <string name="notOnWifiMsgListen">You must be connected to Wi-Fi to start listening for requests.</string>
+    <string name="notOnWifiMsgConnect">You must be connected to Wi-Fi before attempting to connect to another device.
+    </string>
 </resources>
