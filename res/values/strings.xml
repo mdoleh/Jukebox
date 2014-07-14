@@ -72,4 +72,5 @@
     <string name="notOnWifiMsgListen">You must be connected to Wi-Fi to start listening for requests.</string>
     <string name="notOnWifiMsgConnect">You must be connected to Wi-Fi before attempting to connect to another device.
     </string>
+    <string name="search_instructions">Leave blank to search all</string>
 </resources>
