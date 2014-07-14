@@ -27,37 +27,51 @@
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/deviceAddressLabel"
-            android:id="@+id/deviceAddressLabel"
+            android:text="@string/toggleListener"
+            android:id="@+id/listenerToggleLabel"
             android:layout_centerHorizontal="true"
             android:textSize="20dp"
             android:layout_below="@id/listenerToggle"/>
 
     <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="@string/deviceAddressLabel"
+            android:id="@+id/deviceAddressLabel"
+            android:layout_centerHorizontal="false"
+            android:layout_alignLeft="@id/controlCenterTitle"
+            android:textSize="20dp"
+            android:layout_below="@id/listenerToggleLabel"/>
+
+    <TextView
             android:id="@+id/deviceAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:textSize="25dp"
-            android:layout_below="@+id/deviceAddressLabel"/>
+            android:layout_marginLeft="3dp"
+            android:layout_toRightOf="@+id/deviceAddressLabel"
+            android:layout_alignBaseline="@+id/deviceAddressLabel"/>
 
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/requestersLabel"
             android:id="@+id/requestersLabel"
-            android:layout_centerHorizontal="true"
             android:textSize="20dp"
-            android:layout_below="@id/deviceAddress"/>
+            android:layout_alignLeft="@+id/controlCenterTitle"
+            android:layout_below="@+id/deviceAddressLabel"
+            android:layout_marginTop="5dp"/>
 
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/requesterDefaultCount"
             android:id="@+id/requesterCount"
-            android:layout_centerHorizontal="true"
             android:textSize="18dp"
-            android:layout_below="@id/requestersLabel"/>
+            android:layout_marginLeft="3dp"
+            android:layout_toRightOf="@+id/requestersLabel"
+            android:layout_alignBaseline="@+id/requestersLabel"/>
 
     <ImageView
             android:layout_width="wrap_content"
@@ -66,7 +80,7 @@
             android:id="@+id/viewPlayerButton"
             android:layout_centerHorizontal="false"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/requesterCount"
+            android:layout_below="@+id/requestersLabel"
             android:src="@drawable/player_icon"/>
 
     <ImageView
@@ -76,6 +90,6 @@
             android:id="@+id/viewRequestListButton"
             android:layout_centerHorizontal="false"
             android:layout_alignParentRight="true"
-            android:layout_below="@id/requesterCount"
+            android:layout_below="@+id/requestersLabel"
             android:src="@drawable/request_list_icon"/>
 </RelativeLayout>
