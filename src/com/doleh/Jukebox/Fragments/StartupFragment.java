@@ -3,9 +3,11 @@ package com.doleh.Jukebox.Fragments;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
+import com.doleh.Jukebox.IFunction;
 import com.doleh.Jukebox.R;
 
 public class StartupFragment extends Fragment
@@ -24,20 +26,27 @@ public class StartupFragment extends Fragment
 
     private void setupButtonEventListener()
     {
-        final Button listenButton = ((Button)view.findViewById(R.id.receive_requests));
-        listenButton.setOnClickListener(new View.OnClickListener()
+        final ImageView listenButton = ((ImageView)view.findViewById(R.id.receive_requests));
+        listenButton.setOnTouchListener(new View.OnTouchListener()
         {
-            public void onClick(View v)
+            @Override
+            public boolean onTouch(View v, MotionEvent event)
             {
-                showControlCenter();
+                FragmentHelper.handleTouchEvents(event, listenButton, new handleListenTouch());
+                return true;
             }
         });
 
-        final Button sendRequestButton = (Button)view.findViewById(R.id.send_a_request);
-        sendRequestButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                showConnectDevices();
-            }});
+        final ImageView sendRequestButton = (ImageView)view.findViewById(R.id.send_a_request);
+        sendRequestButton.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View v, MotionEvent event)
+            {
+                FragmentHelper.handleTouchEvents(event, sendRequestButton, new handleSendTouch());
+                return true;
+            }
+        });
     }
 
     private void hideActionBar()
@@ -45,9 +54,27 @@ public class StartupFragment extends Fragment
         getActivity().getActionBar().hide();
     }
 
+    private class handleListenTouch implements IFunction
+    {
+        @Override
+        public void execute(ImageView button)
+        {
+            showControlCenter();
+        }
+    }
+
     private void showControlCenter()
     {
         FragmentHelper.showFragment("startup", this, "control_center", new ControlCenterFragment(), getFragmentManager());
+    }
+
+    private class handleSendTouch implements IFunction
+    {
+        @Override
+        public void execute(ImageView button)
+        {
+            showConnectDevices();
+        }
     }
 
     private void showConnectDevices()

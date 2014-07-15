@@ -3,15 +3,35 @@ package com.doleh.Jukebox.Fragments;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.AnimationDrawable;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import com.doleh.Jukebox.AnimationSetting;
+import com.doleh.Jukebox.IFunction;
 import com.doleh.Jukebox.R;
 
 public class FragmentHelper
 {
+    public static void handleTouchEvents(MotionEvent event, ImageView button, IFunction touchHandler)
+    {
+        switch (event.getAction())
+        {
+            case MotionEvent.ACTION_DOWN:{
+                button.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+                break;
+            }
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL: {
+                touchHandler.execute(button);
+                button.clearColorFilter();
+                break;
+            }
+        }
+    }
+
     public static void showFragment(String currentFragmentTag, Fragment currentFragment, String newFragmentTag, Fragment newFragment, FragmentManager fragmentManager)
     {
         FragmentTransaction transaction = fragmentManager.beginTransaction();

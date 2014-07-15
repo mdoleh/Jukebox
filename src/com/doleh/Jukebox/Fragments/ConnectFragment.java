@@ -8,10 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import com.doleh.Jukebox.Client;
-import com.doleh.Jukebox.Email;
-import com.doleh.Jukebox.MainActivity;
-import com.doleh.Jukebox.R;
+import com.doleh.Jukebox.*;
 
 import java.io.IOException;
 
@@ -59,8 +56,15 @@ public class ConnectFragment extends Fragment
         final Button connectButton = (Button)view.findViewById(R.id.connect);
         connectButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                connectDevices();
-                blockUI(connectButton);
+                if (Utils.isOnWifi(mainActivity))
+                {
+                    connectDevices();
+                    blockUI(connectButton);
+                }
+                else
+                {
+                    mainActivity.showMessageBox(getString(R.string.notOnWifi), getString(R.string.notOnWifiMsgConnect));
+                }
             }});
     }
 

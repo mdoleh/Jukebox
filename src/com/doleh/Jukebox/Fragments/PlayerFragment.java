@@ -1,19 +1,18 @@
 package com.doleh.Jukebox.Fragments;
 
 import android.app.Fragment;
+import android.graphics.PorterDuff;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import com.doleh.Jukebox.MainActivity;
-import com.doleh.Jukebox.MediaLibraryHelper;
-import com.doleh.Jukebox.R;
-import com.doleh.Jukebox.Utils;
+import com.doleh.Jukebox.*;
 
 public class PlayerFragment extends Fragment
 {
@@ -55,36 +54,35 @@ public class PlayerFragment extends Fragment
 
     private void setupButtonEventListeners()
     {
-        final Button pauseButton = (Button)view.findViewById(R.id.pauseButton);
-        pauseButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                togglePlay(pauseButton);
-        }});
+        final ImageView pauseButton = (ImageView)view.findViewById(R.id.pauseButton);
+        pauseButton.setOnTouchListener(new View.OnTouchListener()
+        {
+            public boolean onTouch(View v, MotionEvent event)
+            {
+                FragmentHelper.handleTouchEvents(event, pauseButton, new handlePauseTouch());
+                return true;
+            }
+        });
 
-        final Button stopButton = (Button)view.findViewById(R.id.stopButton);
-        stopButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (mediaPlayer.isPlaying())
-                {
-                    togglePlay(pauseButton);
-                }
-                mediaPlayer.seekTo(0);
-                setTime((TextView)view.findViewById(R.id.currentTime), 0);
-                resetSeekBar();
-            }});
+        final ImageView stopButton = (ImageView)view.findViewById(R.id.stopButton);
+        stopButton.setOnTouchListener(new View.OnTouchListener()
+        {
+            public boolean onTouch(View v, MotionEvent event)
+            {
+                FragmentHelper.handleTouchEvents(event, stopButton, new handleStopTouch());
+                return true;
+            }
+        });
 
-        final Button skipButton = (Button)view.findViewById(R.id.skipButton);
-        skipButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                mediaPlayer.stop();
-                mediaPlayer.reset();
-                pauseButton.setText(getString(R.string.pauseSong));
-                MediaLibraryHelper.playNextSongInQueue(mediaPlayer, mainActivity.getApplicationContext(), controlCenterFragment.server);
-                controlCenterFragment.server.clearMessageCounts();
-                if (!mediaPlayer.isPlaying()) { resetMusicPlayer(); }
-                setTime((TextView)view.findViewById(R.id.currentTime), 0);
-                resetSeekBar();
-            }});
+        final ImageView skipButton = (ImageView)view.findViewById(R.id.skipButton);
+        skipButton.setOnTouchListener(new View.OnTouchListener()
+        {
+            public boolean onTouch(View v, MotionEvent event)
+            {
+                FragmentHelper.handleTouchEvents(event, skipButton, new handleSkipTouch());
+                return true;
+            }
+        });
     }
 
     private void setupMediaPlayerListeners()
@@ -123,28 +121,37 @@ public class PlayerFragment extends Fragment
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
             {
-                if (fromUser) { mediaPlayer.seekTo(progress); }
+                if (fromUser)
+                {
+                    mediaPlayer.seekTo(progress);
+                }
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar)
             {
-                if (mediaPlayer.isPlaying() && !MediaLibraryHelper.isPaused) { togglePlay(null); }
+                if (mediaPlayer.isPlaying() && !MediaLibraryHelper.isPaused)
+                {
+                    togglePlay(null);
+                }
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar)
             {
-                if (!pauseOnButtonPush) { togglePlay(null); }
+                if (!pauseOnButtonPush)
+                {
+                    togglePlay(null);
+                }
             }
         });
     }
 
-    private void togglePlay(Button pauseButton)
+    private void togglePlay(ImageView pauseButton)
     {
         pauseOnButtonPush = pauseButton != null;
-        String text = MediaLibraryHelper.togglePlay(mediaPlayer, mainActivity);
-        if (text != null && pauseOnButtonPush) { pauseButton.setText(text); }
+        Integer id = MediaLibraryHelper.togglePlay(mediaPlayer);
+        if (id != null && pauseOnButtonPush) { pauseButton.setImageResource(id); }
     }
 
     private void disableElement(int elementId)
@@ -165,6 +172,7 @@ public class PlayerFragment extends Fragment
         enableElement(R.id.stopButton);
         enableElement(R.id.skipButton);
         enableElement(R.id.songSeekBar);
+        unDimAllElements();
     }
 
     public void disableAllElements()
@@ -173,6 +181,33 @@ public class PlayerFragment extends Fragment
         disableElement(R.id.stopButton);
         disableElement(R.id.skipButton);
         disableElement(R.id.songSeekBar);
+        dimAllElements();
+    }
+
+    private void unDimElement(int elementId)
+    {
+        ImageView element = (ImageView)view.findViewById(elementId);
+        element.clearColorFilter();
+    }
+
+    private void unDimAllElements()
+    {
+        unDimElement(R.id.pauseButton);
+        unDimElement(R.id.stopButton);
+        unDimElement(R.id.skipButton);
+    }
+
+    private void dimElement(int elementId)
+    {
+        ImageView element = (ImageView)view.findViewById(elementId);
+        element.setColorFilter(0x77000000, PorterDuff.Mode.SRC_ATOP);
+    }
+
+    private void dimAllElements()
+    {
+        dimElement(R.id.pauseButton);
+        dimElement(R.id.stopButton);
+        dimElement(R.id.skipButton);
     }
 
     public void setCurrentSongPlaying(final String currentSongPlaying)
@@ -182,13 +217,13 @@ public class PlayerFragment extends Fragment
             @Override
             public void run()
             {
-                final TextView currentSong = (TextView)view.findViewById(R.id.currentSong);
+                final TextView currentSong = (TextView) view.findViewById(R.id.currentSong);
                 currentSong.setText(currentSongPlaying);
 
-                final TextView songDuration = (TextView)view.findViewById(R.id.totalTime);
+                final TextView songDuration = (TextView) view.findViewById(R.id.totalTime);
                 setTime(songDuration, mediaPlayer.getDuration());
 
-                final SeekBar songPosition = (SeekBar)view.findViewById(R.id.songSeekBar);
+                final SeekBar songPosition = (SeekBar) view.findViewById(R.id.songSeekBar);
                 songPosition.setMax(mediaPlayer.getDuration());
             }
         });
@@ -259,4 +294,45 @@ public class PlayerFragment extends Fragment
             updateHandler.postDelayed(this, 1000);
         }
     };
+
+    private class handlePauseTouch implements IFunction
+    {
+        @Override
+        public void execute(ImageView button)
+        {
+            togglePlay(button);
+        }
+    }
+
+    private class handleStopTouch implements IFunction
+    {
+        @Override
+        public void execute(ImageView button)
+        {
+            if (mediaPlayer.isPlaying())
+            {
+                togglePlay((ImageView)view.findViewById(R.id.pauseButton));
+            }
+            mediaPlayer.seekTo(0);
+            setTime((TextView)view.findViewById(R.id.currentTime), 0);
+            resetSeekBar();
+        }
+    }
+
+    private class handleSkipTouch implements IFunction
+    {
+        @Override
+        public void execute(ImageView button)
+        {
+            mediaPlayer.stop();
+            mediaPlayer.reset();
+            ((ImageView)view.findViewById(R.id.pauseButton)).setImageResource(R.drawable.pause_icon);
+            MediaLibraryHelper.playNextSongInQueue(mediaPlayer, mainActivity.getApplicationContext(), controlCenterFragment.server);
+            controlCenterFragment.server.clearMessageCounts();
+            if (!mediaPlayer.isPlaying()) { resetMusicPlayer(); }
+            setTime((TextView)view.findViewById(R.id.currentTime), 0);
+            resetSeekBar();
+        }
+    }
 }
+

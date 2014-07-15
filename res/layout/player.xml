@@ -23,26 +23,29 @@
             android:layout_centerHorizontal="true"
             android:id="@+id/buttonsLayout">
 
-        <Button
+        <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/stopSong"
                 android:id="@+id/stopButton"
-                android:enabled="false"/>
+                android:enabled="false"
+                android:src="@drawable/stop_icon"
+                android:contentDescription="@string/stopSong"/>
 
-        <Button
+        <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/pauseSong"
                 android:id="@+id/pauseButton"
-                android:enabled="false"/>
+                android:enabled="false"
+                android:src="@drawable/pause_icon"
+                android:contentDescription="@string/pauseSong"/>
 
-        <Button
+        <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/skipSong"
                 android:id="@+id/skipButton"
-                android:enabled="false"/>
+                android:enabled="false"
+                android:src="@drawable/skip_icon"
+                android:contentDescription="@string/skipSong"/>
     </LinearLayout>
 
     <RelativeLayout

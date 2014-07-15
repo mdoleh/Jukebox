@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Jukebox</string>
     <string name="songListPrompt">Songs Found</string>
@@ -24,7 +24,7 @@
     <string name="send_a_request">Send a Song Request</string>
     <string name="enter_ip">Enter IP Address</string>
     <string name="connect">Connect</string>
-    <string name="requestersLabel">Number of Requesters</string>
+    <string name="requestersLabel">Number of Requesters:</string>
     <string name="warning">Warning</string>
     <string name="unknownRequester">Received message from unknown requester: </string>
     <string name="connectionSuccessMsg">You have successfully connected to the Control Center!</string>
@@ -36,7 +36,7 @@
     <string name="connectionLost">Connection Lost</string>
     <string name="connectionLostMsg">Control Center has disconnected.</string>
     <string name="requesterDefaultCount">0</string>
-    <string name="deviceAddressLabel">IP Address</string>
+    <string name="deviceAddressLabel">IP Address:</string>
     <string name="noSongsFound">No Songs Found</string>
     <string name="noSongsFoundMsg">No songs were found that matched your search criteria.</string>
     <string name="playSong">Play</string>
@@ -68,4 +68,9 @@
     <string name="yes">Yes</string>
     <string name="forceClose">Application Crashed</string>
     <string name="forceCloseMsg">The application has unexpectedly crashed. A report has already been sent to the administrator.</string>
+    <string name="notOnWifi">Not Connected to Wi-Fi</string>
+    <string name="notOnWifiMsgListen">You must be connected to Wi-Fi to start listening for requests.</string>
+    <string name="notOnWifiMsgConnect">You must be connected to Wi-Fi before attempting to connect to another device.
+    </string>
+    <string name="search_instructions">Leave blank to search all</string>
 </resources>

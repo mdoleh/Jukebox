@@ -4,15 +4,13 @@ import android.app.ListFragment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import com.doleh.Jukebox.MainActivity;
-import com.doleh.Jukebox.MediaLibraryHelper;
-import com.doleh.Jukebox.R;
-import com.doleh.Jukebox.Song;
+import com.doleh.Jukebox.*;
 import com.ericharlow.DragNDrop.*;
 
 import java.util.ArrayList;
@@ -57,29 +55,31 @@ public class RequestListFragment extends ListFragment
 
     private void setupButtonListeners()
     {
-        final Button editButton = (Button)view.findViewById(R.id.editButton);
-        final Button saveButton = (Button)view.findViewById(R.id.saveButton);
+        final ImageView editButton = (ImageView)view.findViewById(R.id.editButton);
+        final ImageView saveButton = (ImageView)view.findViewById(R.id.saveButton);
 
-        saveButton.setOnClickListener(new View.OnClickListener()
+        saveButton.setOnTouchListener(new View.OnTouchListener()
         {
             @Override
-            public void onClick(View v)
+            public boolean onTouch(View v, MotionEvent event)
             {
-                saveChanges(editButton, saveButton);
+                FragmentHelper.handleTouchEvents(event, saveButton, new handleSaveTouch());
+                return true;
             }
         });
 
-        editButton.setOnClickListener(new View.OnClickListener()
+        editButton.setOnTouchListener(new View.OnTouchListener()
         {
             @Override
-            public void onClick(View v)
+            public boolean onTouch(View v, MotionEvent event)
             {
-                makeEdits(editButton, saveButton);
+                FragmentHelper.handleTouchEvents(event, editButton, new handleEditTouch());
+                return true;
             }
         });
     }
 
-    private void makeEdits(Button editButton, Button saveButton)
+    private void makeEdits(ImageView editButton, ImageView saveButton)
     {
         if (!MediaLibraryHelper.getSongQueue().isEmpty())
         {
@@ -91,7 +91,7 @@ public class RequestListFragment extends ListFragment
         }
     }
 
-    private void saveChanges(Button editButton, Button saveButton)
+    private void saveChanges(ImageView editButton, ImageView saveButton)
     {
         ((DragNDropListView)listView).editingEnabled = false;
         notifyDataSetChanged();
@@ -279,6 +279,28 @@ public class RequestListFragment extends ListFragment
                     listViewSize = listView.getChildCount();
                 }
             }
+        }
+    }
+
+    private class handleEditTouch implements IFunction
+    {
+        @Override
+        public void execute(ImageView button)
+        {
+            final ImageView editButton = (ImageView)view.findViewById(R.id.editButton);
+            final ImageView saveButton = (ImageView)view.findViewById(R.id.saveButton);
+            makeEdits(editButton, saveButton);
+        }
+    }
+
+    private class handleSaveTouch implements IFunction
+    {
+        @Override
+        public void execute(ImageView button)
+        {
+            final ImageView editButton = (ImageView)view.findViewById(R.id.editButton);
+            final ImageView saveButton = (ImageView)view.findViewById(R.id.saveButton);
+            saveChanges(editButton, saveButton);
         }
     }
 }
