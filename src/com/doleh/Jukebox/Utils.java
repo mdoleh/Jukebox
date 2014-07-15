@@ -1,5 +1,8 @@
 package com.doleh.Jukebox;
 
+import android.app.Activity;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import org.apache.http.conn.util.InetAddressUtils;
 
 import java.net.InetAddress;
@@ -46,5 +49,26 @@ public class Utils
         String secondsString = Long.toString(seconds);
         if (seconds < 10) { secondsString = "0" + secondsString; }
         return Long.toString(minutes) + ":" + secondsString;
+    }
+
+    public static boolean isOnWifi(Activity activity)
+    {
+        ConnectivityManager connManager = (ConnectivityManager) activity.getSystemService(Activity.CONNECTIVITY_SERVICE);
+        NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        return mWifi != null && mWifi.isConnected();
+    }
+
+    public static boolean isOnEthernet(Activity activity)
+    {
+        ConnectivityManager connManager = (ConnectivityManager) activity.getSystemService(Activity.CONNECTIVITY_SERVICE);
+        NetworkInfo mEthernet = connManager.getNetworkInfo(ConnectivityManager.TYPE_ETHERNET);
+        return mEthernet != null && mEthernet.isConnected();
+    }
+
+    public static boolean is3G(Activity activity)
+    {
+        ConnectivityManager connManager = (ConnectivityManager) activity.getSystemService(Activity.CONNECTIVITY_SERVICE);
+        NetworkInfo m3G = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        return m3G != null && m3G.isConnected();
     }
 }

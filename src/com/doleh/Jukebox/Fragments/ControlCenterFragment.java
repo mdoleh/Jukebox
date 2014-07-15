@@ -4,9 +4,10 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import com.doleh.Jukebox.*;
 
@@ -17,6 +18,7 @@ public class ControlCenterFragment extends Fragment
     public Server server;
     private PlayerFragment playerFragment;
     private RequestListFragment requestListFragment;
+    private boolean listenImageToggle = false;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -48,26 +50,35 @@ public class ControlCenterFragment extends Fragment
 
     private void setupButtonEventListener()
     {
-        final Button listenButton = ((Button)view.findViewById(R.id.listenerToggle));
-        listenButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                toggleListener();
+        final ImageView listenButton = ((ImageView)view.findViewById(R.id.listenerToggle));
+        listenButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event)
+            {
+                FragmentHelper.handleTouchEvents(event, listenButton, new handleListenerToggleTouch());
+                return true;
             }
         });
 
-        final Button playerButton = ((Button)view.findViewById(R.id.viewPlayerButton));
-        playerButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v)
+        final ImageView playerButton = ((ImageView)view.findViewById(R.id.viewPlayerButton));
+        playerButton.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View v, MotionEvent event)
             {
-                showMusicPlayer();
+                FragmentHelper.handleTouchEvents(event, playerButton, new handlePlayerTouch());
+                return true;
             }
         });
 
-        final Button requestsButton = ((Button)view.findViewById(R.id.viewRequestListButton));
-        requestsButton.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v)
+        final ImageView requestsButton = ((ImageView)view.findViewById(R.id.viewRequestListButton));
+        requestsButton.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View v, MotionEvent event)
             {
-                showRequestList();
+                FragmentHelper.handleTouchEvents(event, requestsButton, new handleRequestsTouch());
+                return true;
             }
         });
     }
@@ -112,9 +123,33 @@ public class ControlCenterFragment extends Fragment
 
     private void toggleListener()
     {
-        server.toggleListener();
-        final TextView ipAddress = (TextView)view.findViewById(R.id.deviceAddress);
-        ipAddress.setText(Utils.getIPAddress(true));
+        if (Utils.isOnWifi(mainActivity))
+        {
+            server.toggleListener();
+            final TextView ipAddress = (TextView)view.findViewById(R.id.deviceAddress);
+            ipAddress.setText(Utils.getIPAddress(true));
+
+            swapImages();
+        }
+        else
+        {
+            mainActivity.showMessageBox(getString(R.string.notOnWifi), getString(R.string.notOnWifiMsgListen));
+        }
+    }
+
+    private void swapImages()
+    {
+        ImageView button = (ImageView)view.findViewById(R.id.listenerToggle);
+        if (listenImageToggle)
+        {
+            button.setImageResource(R.drawable.stop_listening_icon);
+            listenImageToggle = false;
+        }
+        else
+        {
+            button.setImageResource(R.drawable.listen_icon);
+            listenImageToggle = true;
+        }
     }
 
     public void updateRequesterCount(final int newValue)
@@ -128,5 +163,32 @@ public class ControlCenterFragment extends Fragment
                 requesterCount.setText(Integer.toString(newValue));
             }
         });
+    }
+
+    public class handleListenerToggleTouch implements IFunction
+    {
+        @Override
+        public void execute(ImageView button)
+        {
+            toggleListener();
+        }
+    }
+
+    public class handlePlayerTouch implements IFunction
+    {
+        @Override
+        public void execute(ImageView button)
+        {
+            showMusicPlayer();
+        }
+    }
+
+    public class handleRequestsTouch implements IFunction
+    {
+        @Override
+        public void execute(ImageView button)
+        {
+           showRequestList();
+        }
     }
 }

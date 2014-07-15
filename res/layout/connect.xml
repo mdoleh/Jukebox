@@ -9,7 +9,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/enter_ip"
-            android:id="@+id/textView"
+            android:id="@+id/connectTitle"
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
             android:textSize="30dp"
@@ -22,8 +22,8 @@
             android:hint="@string/ipAddress"
             android:layout_centerHorizontal="true"
             android:gravity="center_horizontal"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="98dp"/>
+            android:layout_marginTop="45dp"
+            android:layout_below="@+id/connectTitle"/>
 
     <Button
             android:layout_width="wrap_content"
@@ -31,7 +31,8 @@
             android:text="@string/connect"
             android:id="@+id/connect"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="149dp"/>
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/ipAddress"/>
 
     <include layout="@layout/loading_image_container"/>
 
