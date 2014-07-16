@@ -23,8 +23,6 @@ public class RequestListFragment extends ListFragment
     private MainActivity mainActivity;
     public ListAdapter requestListAdapter;
     private ArrayList<String> viewableList = new ArrayList<String>();
-    private Integer listViewSize = 0;
-    private boolean keepListenerRunning = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,14 +41,6 @@ public class RequestListFragment extends ListFragment
         ((DragNDropListView)listView).setDragListener(mDragListener);
         ((DragNDropListView)listView).setDropListener(mDropListener);
         ((DragNDropListView)listView).setRemoveListener(mRemoveListener);
-//        new Thread(new ListViewSizeListener()).start();
-    }
-
-    @Override
-    public void onDestroy()
-    {
-        super.onDestroy();
-        keepListenerRunning = false;
     }
 
     private void setupButtonListeners()
@@ -261,29 +251,6 @@ public class RequestListFragment extends ListFragment
     {
         View element = view.findViewById(id);
         if (element != null) { view.findViewById(id).setVisibility(View.GONE); }
-    }
-
-    private class ListViewSizeListener implements Runnable
-    {
-        @Override
-        public void run()
-        {
-            while (keepListenerRunning)
-            {
-                if (listView.getChildCount() != listViewSize)
-                {
-                    if (((DragNDropListView)listView).editingEnabled)
-                    {
-                        showAllImages();
-                    }
-                    else
-                    {
-                        hideAllImages();
-                    }
-                    listViewSize = listView.getChildCount();
-                }
-            }
-        }
     }
 
     private class handleEditTouch implements IFunction
