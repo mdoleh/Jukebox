@@ -43,7 +43,7 @@ public class RequestListFragment extends ListFragment
         ((DragNDropListView)listView).setDragListener(mDragListener);
         ((DragNDropListView)listView).setDropListener(mDropListener);
         ((DragNDropListView)listView).setRemoveListener(mRemoveListener);
-        new Thread(new ListViewSizeListener()).start();
+//        new Thread(new ListViewSizeListener()).start();
     }
 
     @Override
@@ -276,6 +276,10 @@ public class RequestListFragment extends ListFragment
                     {
                         showAllImages();
                     }
+                    else
+                    {
+                        hideAllImages();
+                    }
                     listViewSize = listView.getChildCount();
                 }
             }
@@ -302,5 +306,24 @@ public class RequestListFragment extends ListFragment
             final ImageView saveButton = (ImageView)view.findViewById(R.id.saveButton);
             saveChanges(editButton, saveButton);
         }
+    }
+
+    public void updateUI()
+    {
+        mainActivity.runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                if (((DragNDropListView)listView).editingEnabled)
+                {
+                    showAllImages();
+                }
+                else
+                {
+                    hideAllImages();
+                }
+            }
+        });
     }
 }

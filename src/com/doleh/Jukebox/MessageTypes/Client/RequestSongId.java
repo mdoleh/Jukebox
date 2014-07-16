@@ -34,6 +34,7 @@ public class RequestSongId extends ClientMessage implements Serializable
                 }
             });
             sender.write(new RequestAccepted(server.getRemainingRequests(sender.ipAddress)));
+            server.requestListFragment.updateUI();
         }
         else { sender.write(new LimitRejection()); }
     }
