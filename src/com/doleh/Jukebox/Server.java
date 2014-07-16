@@ -165,11 +165,11 @@ public class Server implements Networked
     public boolean checkMessageCount(String ipAddress)
     {
         Integer count = messageCount.get(ipAddress);
-        if (count == null) { messageCount.put(ipAddress, 0); return true; }
+        if (count == null) { messageCount.put(ipAddress, 1); return true; }
         else
         {
             ++count;
-            if (count >= MAX_MESSAGE_COUNT)
+            if (count > MAX_MESSAGE_COUNT)
             {
                 return false;
             }
@@ -196,7 +196,7 @@ public class Server implements Networked
         Integer count = messageCount.get(ipAddress);
         if (count != null)
         {
-            return MAX_MESSAGE_COUNT - count - 1;
+            return MAX_MESSAGE_COUNT - count;
         }
         return MAX_MESSAGE_COUNT;
     }
