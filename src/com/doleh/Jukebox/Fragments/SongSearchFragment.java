@@ -25,6 +25,7 @@ public class SongSearchFragment extends Fragment
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.song_search, container, false);
+        FragmentHelper.setupBannerAds(view);
         mainActivity = (MainActivity)getActivity();
         Client.songSearchFragment = this;
         setupButtonEventListener();

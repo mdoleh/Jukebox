@@ -24,6 +24,7 @@ public class ControlCenterFragment extends Fragment
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.control_center, container, false);
+        FragmentHelper.setupBannerAds(view);
         mainActivity = (MainActivity)getActivity();
         playerFragment = new PlayerFragment(this);
         requestListFragment = new RequestListFragment();

@@ -34,6 +34,7 @@ public class PlayerFragment extends Fragment
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.player, container, false);
+        FragmentHelper.setupBannerAds(view);
         mainActivity = (MainActivity)getActivity();
         setupButtonEventListeners();
         setupMediaPlayerListeners();

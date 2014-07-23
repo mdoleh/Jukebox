@@ -29,6 +29,7 @@ public class SongRequestFragment extends Fragment
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.request_song, container, false);
+        FragmentHelper.setupBannerAds(view);
         mainActivity = (MainActivity)getActivity();
         setupButtonEventListener();
         createSongListForSpinner(Client.receivedSongs);
