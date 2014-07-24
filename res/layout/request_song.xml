@@ -41,7 +41,7 @@
                                        android:layout_height="wrap_content"
                                        android:layout_alignParentBottom="true"
                                        android:layout_centerHorizontal="true"
-                                       ads:adUnitId="ca-app-pub-2972857431315665/1386539239"
+                                       ads:adUnitId="ca-app-pub-2972857431315665/9136805237"
                                        ads:adSize="SMART_BANNER"/>
 
 </RelativeLayout>
