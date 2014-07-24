@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Jukebox</string>
+    <string name="app_name">FreeJay</string>
     <string name="songListPrompt">Songs Found</string>
     <string name="musicControlCenter">Music Control Center</string>
     <string name="requestSong">Request a Song</string>
@@ -72,5 +72,5 @@
     <string name="notOnWifiMsgListen">You must be connected to Wi-Fi to start listening for requests.</string>
     <string name="notOnWifiMsgConnect">You must be connected to Wi-Fi before attempting to connect to another device.
     </string>
-    <string name="search_instructions">Leave blank to search all</string>
+    <string name="search_instructions">Enter partial info or leave blank to search all</string>
 </resources>
