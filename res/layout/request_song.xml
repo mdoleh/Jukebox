@@ -3,7 +3,8 @@
 <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:ads="http://schemas.android.com/apk/res-auto">
 
     <TextView
             android:layout_width="wrap_content"
@@ -35,5 +36,12 @@
 
     <include layout="@layout/loading_image_container"/>
 
+    <com.google.android.gms.ads.AdView android:id="@+id/bottomBanner"
+                                       android:layout_width="wrap_content"
+                                       android:layout_height="wrap_content"
+                                       android:layout_alignParentBottom="true"
+                                       android:layout_centerHorizontal="true"
+                                       ads:adUnitId="ca-app-pub-2972857431315665/9136805237"
+                                       ads:adSize="SMART_BANNER"/>
 
 </RelativeLayout>

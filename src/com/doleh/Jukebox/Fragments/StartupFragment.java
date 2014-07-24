@@ -19,6 +19,7 @@ public class StartupFragment extends Fragment
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.startup, container, false);
+        FragmentHelper.loadBannerAds(view);
         setupButtonEventListener();
         hideActionBar();
         return view;
