@@ -17,12 +17,15 @@ import com.google.android.gms.ads.AdView;
 
 public class FragmentHelper
 {
-    public static void setupBannerAds(View view)
+    public static Fragment activeFragment;
+
+    public static void loadBannerAds(View view)
     {
         // Look up the AdView as a resource and load a request.
         AdView adView = (AdView)view.findViewById(R.id.bottomBanner);
         AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("05EB5BB05700B41A96F9FAA7933F2832").build();
+                .addTestDevice("05EB5BB05700B41A96F9FAA7933F2832")
+                .addTestDevice("A6A88EF525F683BB326EECB11E4504D6").build();
         adView.loadAd(adRequest);
     }
 
@@ -51,6 +54,7 @@ public class FragmentHelper
         transaction.add(R.id.main, newFragment, newFragmentTag);
         transaction.addToBackStack(currentFragmentTag);
         transaction.commit();
+        activeFragment = newFragment;
     }
 
     public static void showFragment(String newFragmentTag, Fragment newFragment, FragmentManager fragmentManager)
@@ -59,6 +63,7 @@ public class FragmentHelper
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         transaction.add(R.id.main, newFragment, newFragmentTag);
         transaction.commit();
+        activeFragment = newFragment;
     }
 
     public static void addFragment(String fragmentTag, Fragment fragment, FragmentManager fragmentManager)
@@ -75,6 +80,7 @@ public class FragmentHelper
         transaction.setCustomAnimations(animationSetting.enter, animationSetting.exit, animationSetting.popEnter, animationSetting.popExit);
         transaction.show(fragment);
         transaction.commit();
+        activeFragment = fragment;
     }
 
     public static void hideFragment(String fragmentTag, Fragment fragment, FragmentManager fragmentManager, AnimationSetting animationSetting)

@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.view.KeyEvent;
@@ -55,6 +56,14 @@ public class MainActivity extends Activity
         super.onPause();
         // Allow LCD screen to turn off
         if (wakeLock.isHeld()) { wakeLock.release(); }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig)
+    {
+        super.onConfigurationChanged(newConfig);
+        // Resize banner ads on orientation change
+//        FragmentHelper.activeFragment.getView();
     }
 
     public void showMessageBox(final String title, final String message)

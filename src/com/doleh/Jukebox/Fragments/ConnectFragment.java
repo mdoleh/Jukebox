@@ -23,7 +23,7 @@ public class ConnectFragment extends Fragment
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.connect, container, false);
-        FragmentHelper.setupBannerAds(view);
+        FragmentHelper.loadBannerAds(view);
         mainActivity = (MainActivity)getActivity();
         Client.connectFragment = this;
         setupButtonEventListener();
