@@ -22,9 +22,9 @@ public class RequestSongId extends ClientMessage implements Serializable
     {
         if (server.checkMessageCount(sender.ipAddress))
         {
-            final PlayerFragment playerFragment = server.playerFragment;
+            final PlayerFragment playerFragment = server.controlCenterFragment.playerFragment;
             MainActivity mainActivity = server.mainActivity;
-            MediaLibraryHelper.playRequest(_requestedSong, mainActivity.getApplicationContext(), playerFragment.mediaPlayer, mainActivity.getContentResolver(), server);
+            MediaLibraryHelper.playRequest(_requestedSong, mainActivity.getApplicationContext(), playerFragment.mediaPlayer, mainActivity.getContentResolver(), server.controlCenterFragment);
             mainActivity.runOnUiThread(new Runnable()
             {
                 @Override
@@ -34,7 +34,7 @@ public class RequestSongId extends ClientMessage implements Serializable
                 }
             });
             sender.write(new RequestAccepted(server.getRemainingRequests(sender.ipAddress)));
-            server.requestListFragment.updateUI();
+            server.controlCenterFragment.requestListFragment.updateUI();
         }
         else { sender.write(new LimitRejection()); }
     }

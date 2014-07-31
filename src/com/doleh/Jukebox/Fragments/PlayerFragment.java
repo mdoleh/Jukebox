@@ -20,13 +20,13 @@ public class PlayerFragment extends Fragment
     public MediaPlayer mediaPlayer = new MediaPlayer();
     private MainActivity mainActivity;
     private boolean mediaPlayerReady = false;
-    private ControlCenterFragment controlCenterFragment;
+    private Server _server;
     private Handler updateHandler = new Handler();
     private boolean pauseOnButtonPush = false;
 
-    public PlayerFragment(ControlCenterFragment _controlCenterFragment)
+    public PlayerFragment(Server server)
     {
-        controlCenterFragment = _controlCenterFragment;
+        _server = server;
     }
 
     @Override
@@ -97,9 +97,9 @@ public class PlayerFragment extends Fragment
                 mp.stop();
                 mp.reset();
                 // If songs are in the queue play them next
-                MediaLibraryHelper.playNextSongInQueue(mp, mainActivity.getApplicationContext(), controlCenterFragment.server);
+                MediaLibraryHelper.playNextSongInQueue(mp, mainActivity.getApplicationContext(), _server.controlCenterFragment);
                 if (!mediaPlayerReady && !mediaPlayer.isPlaying()) { resetMusicPlayer(); }
-                controlCenterFragment.server.clearMessageCounts();
+                _server.clearMessageCounts();
             }
         });
 
@@ -328,8 +328,8 @@ public class PlayerFragment extends Fragment
             mediaPlayer.stop();
             mediaPlayer.reset();
             ((ImageView)view.findViewById(R.id.pauseButton)).setImageResource(R.drawable.pause_icon);
-            MediaLibraryHelper.playNextSongInQueue(mediaPlayer, mainActivity.getApplicationContext(), controlCenterFragment.server);
-            controlCenterFragment.server.clearMessageCounts();
+            MediaLibraryHelper.playNextSongInQueue(mediaPlayer, mainActivity.getApplicationContext(), _server.controlCenterFragment);
+            _server.clearMessageCounts();
             if (!mediaPlayer.isPlaying()) { resetMusicPlayer(); }
             setTime((TextView)view.findViewById(R.id.currentTime), 0);
             resetSeekBar();
