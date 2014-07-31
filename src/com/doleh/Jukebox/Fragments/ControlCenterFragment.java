@@ -15,9 +15,9 @@ public class ControlCenterFragment extends Fragment
 {
     private MainActivity mainActivity;
     private View view;
-    public Server server;
-    private PlayerFragment playerFragment;
-    private RequestListFragment requestListFragment;
+    private Server server;
+    public PlayerFragment playerFragment;
+    public RequestListFragment requestListFragment;
     private boolean listenImageToggle = false;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -26,11 +26,11 @@ public class ControlCenterFragment extends Fragment
         view = inflater.inflate(R.layout.control_center, container, false);
         FragmentHelper.loadBannerAds(view);
         mainActivity = (MainActivity)getActivity();
-        playerFragment = new PlayerFragment(this);
+        server = new Server(mainActivity, this);
+        playerFragment = new PlayerFragment(server);
         requestListFragment = new RequestListFragment();
         FragmentHelper.addFragment("music_player", playerFragment, getFragmentManager());
         FragmentHelper.addFragment("request_list", requestListFragment, getFragmentManager());
-        server = new Server(mainActivity, this, playerFragment, requestListFragment);
 
         setupButtonEventListener();
 
