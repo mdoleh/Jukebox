@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">FreeJay</string>
+    <string name="app_name">ElectroDJ</string>
     <string name="songListPrompt">Songs Found</string>
     <string name="musicControlCenter">Music Control Center</string>
     <string name="requestSong">Request a Song</string>

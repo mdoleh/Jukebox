@@ -99,6 +99,6 @@
                                        android:layout_height="wrap_content"
                                        android:layout_alignParentBottom="true"
                                        android:layout_centerHorizontal="true"
-                                       ads:adUnitId="ca-app-pub-2972857431315665/9276406037"
+                                       ads:adUnitId="@string/banner_control_center"
                                        ads:adSize="SMART_BANNER"/>
 </RelativeLayout>

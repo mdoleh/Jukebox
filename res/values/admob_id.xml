@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="banner_connect">ca-app-pub-2972857431315665/3229872439</string>
+    <string name="banner_control_center">ca-app-pub-2972857431315665/9276406037</string>
+    <string name="banner_request_song">ca-app-pub-2972857431315665/9136805237</string>
+    <string name="banner_song_search">ca-app-pub-2972857431315665/1613538435</string>
+    <string name="banner_startup">ca-app-pub-2972857431315665/1386539239</string>
+    <string name="banner_player">ca-app-pub-2972857431315665/6183338832</string>
+</resources>
