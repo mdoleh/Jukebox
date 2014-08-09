@@ -48,6 +48,8 @@ public class MainActivity extends Activity
         wakeLock.acquire();
 
         AppRater.app_launched(this);
+
+        FragmentHelper.shouldShowAds = true;
     }
 
     @Override
