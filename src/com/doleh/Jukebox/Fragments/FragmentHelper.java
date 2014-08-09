@@ -17,15 +17,19 @@ import com.google.android.gms.ads.AdView;
 
 public class FragmentHelper
 {
+    public static boolean shouldShowAds = true;
+
     public static void loadBannerAds(View view)
     {
-        // Look up the AdView as a resource and load a request.
-        AdView adView = (AdView)view.findViewById(R.id.bottomBanner);
-        AdRequest adRequest = new AdRequest.Builder()
-//                .addTestDevice("05EB5BB05700B41A96F9FAA7933F2832")
-//                .addTestDevice("A6A88EF525F683BB326EECB11E4504D6")
-                .build();
-        adView.loadAd(adRequest);
+        if (shouldShowAds) {
+            // Look up the AdView as a resource and load a request.
+            AdView adView = (AdView)view.findViewById(R.id.bottomBanner);
+            AdRequest adRequest = new AdRequest.Builder()
+    //                .addTestDevice("05EB5BB05700B41A96F9FAA7933F2832")
+    //                .addTestDevice("A6A88EF525F683BB326EECB11E4504D6")
+                    .build();
+            adView.loadAd(adRequest);
+        }
     }
 
     public static void handleTouchEvents(MotionEvent event, ImageView button, IFunction touchHandler)
