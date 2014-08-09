@@ -22,8 +22,9 @@ public class FragmentHelper
         // Look up the AdView as a resource and load a request.
         AdView adView = (AdView)view.findViewById(R.id.bottomBanner);
         AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice("05EB5BB05700B41A96F9FAA7933F2832")
-                .addTestDevice("A6A88EF525F683BB326EECB11E4504D6").build();
+//                .addTestDevice("05EB5BB05700B41A96F9FAA7933F2832")
+//                .addTestDevice("A6A88EF525F683BB326EECB11E4504D6")
+                .build();
         adView.loadAd(adRequest);
     }
 
