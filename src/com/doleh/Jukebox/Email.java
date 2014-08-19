@@ -1,14 +1,22 @@
 package com.doleh.Jukebox;
 
+import android.util.Base64;
 import com.hardiktrivedi.Exception.ExceptionHandler;
-import com.jon.Mail.Mail;
-import com.snippets.Utils.AES;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.util.ArrayList;
 
 public class Email
 {
-    private final static String APPLICATION_PREFIX = "Jukebox - ";
-    private final static String SENDER_EMAIL = "SJl7RSlk6mAZzw8HhgmF0FN7P4U60qrfUBjdkwM7wf8=\n";
-    private final static String SENDER_PASS = "UXTxMqg1u08trcX7GOo1jmzdwtqUld51BcxSdKDaPpY=\n";
+    private final static String APPLICATION_PREFIX = "ElectroDJ - ";
 
     public static void sendErrorReport(Throwable ex)
     {
@@ -31,19 +39,20 @@ public class Email
 
     private static void sendEmail(String subject, String body) throws Exception
     {
-        String email = AES.decrypt(SENDER_EMAIL);
-        Mail m = new Mail(email, AES.decrypt(SENDER_PASS));
-
-        String[] toArr = {email};
-        m.setTo(toArr);
-        m.setFrom("noreply@jukebox.com");
-        m.setSubject(APPLICATION_PREFIX + subject);
-        m.setBody(subject + "\n\n" + body);
-
-        try {
-            m.send();
-        } catch(Exception e) {
-            // email failed to send
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpPost request = new HttpPost("https://api.mailgun.net/v2/sandbox222da1e2f56641cc8a3c988ebc09fe3f.mailgun.org/messages");
+        String auth =new String(Base64.encode(( "api" + ":" + "key-d0d5950ae6a02b975efaf6a4f99093d4").getBytes(),Base64.URL_SAFE| Base64.NO_WRAP));
+        request.addHeader("Authorization", "Basic " + auth);
+        ArrayList<NameValuePair> data = new ArrayList<NameValuePair>();
+        data.add(new BasicNameValuePair("from", "ElectroDJ <postmaster@sandbox222da1e2f56641cc8a3c988ebc09fe3f.mailgun.org>"));
+        data.add(new BasicNameValuePair("to", "doleh.jukebox@gmail.com"));
+        data.add(new BasicNameValuePair("subject", APPLICATION_PREFIX + subject));
+        data.add(new BasicNameValuePair("text", body));
+        request.setEntity(new UrlEncodedFormEntity(data));
+        HttpResponse response = httpclient.execute(request);
+        StatusLine statusLine = response.getStatusLine();
+        if(statusLine.getStatusCode() != HttpStatus.SC_OK){
+            response.getEntity().getContent().close();
         }
     }
 

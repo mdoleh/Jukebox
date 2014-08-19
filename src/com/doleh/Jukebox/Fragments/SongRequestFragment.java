@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import com.doleh.Jukebox.Client;
+import com.doleh.Jukebox.NetworkClient;
 import com.doleh.Jukebox.MainActivity;
 import com.doleh.Jukebox.MessageTypes.Client.RequestSongId;
 import com.doleh.Jukebox.R;
@@ -32,8 +32,8 @@ public class SongRequestFragment extends Fragment
         FragmentHelper.loadBannerAds(view);
         mainActivity = (MainActivity)getActivity();
         setupButtonEventListener();
-        createSongListForSpinner(Client.receivedSongs);
-        Client.songRequestFragment = this;
+        createSongListForSpinner(NetworkClient.receivedSongs);
+        NetworkClient.songRequestFragment = this;
         return view;
     }
 
@@ -78,8 +78,8 @@ public class SongRequestFragment extends Fragment
         final Spinner songIdSpinner = (Spinner)view.findViewById(R.id.songListSpinner);
 
         int selectedIndex = songIdSpinner.getSelectedItemPosition();
-        RequestSongId requestSongId = new RequestSongId(Client.receivedSongs.get(selectedIndex));
-        Client.netComm.write(requestSongId);
+        RequestSongId requestSongId = new RequestSongId(NetworkClient.receivedSongs.get(selectedIndex));
+        NetworkClient.netComm.write(requestSongId);
     }
 
     private void blockUI(final Button requestButton)

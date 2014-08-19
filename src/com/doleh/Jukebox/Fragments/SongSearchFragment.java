@@ -10,7 +10,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import com.doleh.Jukebox.Client;
+import com.doleh.Jukebox.NetworkClient;
 import com.doleh.Jukebox.MainActivity;
 import com.doleh.Jukebox.MessageTypes.Client.RequestSongList;
 import com.doleh.Jukebox.R;
@@ -27,7 +27,7 @@ public class SongSearchFragment extends Fragment
         view = inflater.inflate(R.layout.song_search, container, false);
         FragmentHelper.loadBannerAds(view);
         mainActivity = (MainActivity)getActivity();
-        Client.songSearchFragment = this;
+        NetworkClient.songSearchFragment = this;
         setupButtonEventListener();
         hideActionBar();
         return view;
@@ -37,7 +37,7 @@ public class SongSearchFragment extends Fragment
     public void onDestroy()
     {
         super.onDestroy();
-        Client.netComm.close();
+        NetworkClient.netComm.close();
     }
 
     private void setupButtonEventListener()
@@ -69,7 +69,7 @@ public class SongSearchFragment extends Fragment
         final EditText songArtist = (EditText)view.findViewById(R.id.songArtist);
 
         RequestSongList requestSongList = new RequestSongList(songTitle.getText().toString(), songArtist.getText().toString());
-        Client.netComm.write(requestSongList);
+        NetworkClient.netComm.write(requestSongList);
     }
 
     private void hideKeyboard()
