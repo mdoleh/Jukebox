@@ -12,7 +12,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.List;
 
-public class Client implements Networked
+public class NetworkClient implements Networked
 {
     public static List<Song> receivedSongs;
     public static String ip;
@@ -42,7 +42,7 @@ public class Client implements Networked
             try {
                 socket = new Socket();
                 socket.connect(new InetSocketAddress(ip, Server.PORT), 30 * 1000);
-                netComm = new NetComm(socket, Client.this);
+                netComm = new NetComm(socket, NetworkClient.this);
             }
             catch (Exception ex) {
                 cancelConnect();

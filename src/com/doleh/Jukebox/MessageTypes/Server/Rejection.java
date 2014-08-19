@@ -1,6 +1,6 @@
 package com.doleh.Jukebox.MessageTypes.Server;
 
-import com.doleh.Jukebox.Client;
+import com.doleh.Jukebox.NetworkClient;
 import com.doleh.Jukebox.Fragments.FragmentHelper;
 import com.doleh.Jukebox.R;
 
@@ -23,9 +23,9 @@ public class Rejection extends ServerMessage implements Serializable
     @Override
     public void Execute()
     {
-        Client.mainActivity.showMessageBox(Client.mainActivity.getString(R.string.connectionFailed), Client.mainActivity.getString(R.string.connectionFailedMsg));
-        Client.connectFragment.unBlockUI();
-        FragmentHelper.goBackToBeginning(Client.mainActivity.getFragmentManager());
-        if (closeNetComm) { Client.netComm.close(); }
+        NetworkClient.mainActivity.showMessageBox(NetworkClient.mainActivity.getString(R.string.connectionFailed), NetworkClient.mainActivity.getString(R.string.connectionFailedMsg));
+        NetworkClient.connectFragment.unBlockUI();
+        FragmentHelper.goBackToBeginning(NetworkClient.mainActivity.getFragmentManager());
+        if (closeNetComm) { NetworkClient.netComm.close(); }
     }
 }

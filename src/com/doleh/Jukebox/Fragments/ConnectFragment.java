@@ -16,7 +16,7 @@ public class ConnectFragment extends Fragment
 {
     private View view;
     private MainActivity mainActivity;
-    private Client client = new Client();
+    private NetworkClient networkClient = new NetworkClient();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -25,7 +25,7 @@ public class ConnectFragment extends Fragment
         view = inflater.inflate(R.layout.connect, container, false);
         FragmentHelper.loadBannerAds(view);
         mainActivity = (MainActivity)getActivity();
-        Client.connectFragment = this;
+        NetworkClient.connectFragment = this;
         setupButtonEventListener();
         return view;
     }
@@ -41,9 +41,9 @@ public class ConnectFragment extends Fragment
     {
         try
         {
-            if (Client.socket != null && !Client.socket.isClosed())
+            if (NetworkClient.socket != null && !NetworkClient.socket.isClosed())
             {
-                Client.socket.close();
+                NetworkClient.socket.close();
             }
         }
         catch (IOException ex)
@@ -72,9 +72,9 @@ public class ConnectFragment extends Fragment
     private void connectDevices()
     {
         final EditText ipAddress = (EditText)view.findViewById(R.id.ipAddress);
-        Client.ip = ipAddress.getText().toString();
-        Client.mainActivity = mainActivity;
-        client.startNetworkThread();
+        NetworkClient.ip = ipAddress.getText().toString();
+        NetworkClient.mainActivity = mainActivity;
+        networkClient.startNetworkThread();
     }
 
     public void showSongSearch()
