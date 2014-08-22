@@ -1,5 +1,6 @@
 package com.doleh.Jukebox.Fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,11 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Spinner;
-import com.doleh.Jukebox.NetworkClient;
-import com.doleh.Jukebox.MainActivity;
 import com.doleh.Jukebox.MessageTypes.Client.RequestSongId;
+import com.doleh.Jukebox.NetworkClient;
 import com.doleh.Jukebox.R;
 import com.doleh.Jukebox.Song;
 
@@ -21,7 +20,7 @@ import java.util.List;
 
 public class SongRequestFragment extends Fragment
 {
-    private MainActivity mainActivity;
+    private Activity mainActivity;
     private View view;
 
     @Override
@@ -30,7 +29,7 @@ public class SongRequestFragment extends Fragment
 
         view = inflater.inflate(R.layout.request_song, container, false);
         FragmentHelper.loadBannerAds(view);
-        mainActivity = (MainActivity)getActivity();
+        mainActivity = getActivity();
         setupButtonEventListener();
         createSongListForSpinner(NetworkClient.receivedSongs);
         NetworkClient.songRequestFragment = this;
@@ -84,28 +83,12 @@ public class SongRequestFragment extends Fragment
 
     private void blockUI(final Button requestButton)
     {
-        mainActivity.runOnUiThread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                final ImageView blocker = (ImageView)view.findViewById(R.id.loadingImage);
-                FragmentHelper.blockUI(requestButton, blocker);
-            }
-        });
+        FragmentHelper.blockUI(mainActivity, requestButton, view);
     }
 
     public void unBlockUI()
     {
-        mainActivity.runOnUiThread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                final Button requestButton = (Button)view.findViewById(R.id.requestButton);
-                final ImageView blocker = (ImageView)view.findViewById(R.id.loadingImage);
-                FragmentHelper.unBlockUI(requestButton, blocker);
-            }
-        });
+        final Button requestButton = (Button)view.findViewById(R.id.requestButton);
+        FragmentHelper.unBlockUI(mainActivity, requestButton, view);
     }
 }

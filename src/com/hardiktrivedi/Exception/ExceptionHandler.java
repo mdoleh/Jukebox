@@ -1,8 +1,9 @@
 package com.hardiktrivedi.Exception;
 
+import android.app.Activity;
 import android.os.Build;
 import com.doleh.Jukebox.Email;
-import com.doleh.Jukebox.MainActivity;
+import com.doleh.Jukebox.MessageDialog;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -10,9 +11,9 @@ import java.io.StringWriter;
 public class ExceptionHandler implements
         java.lang.Thread.UncaughtExceptionHandler {
     private final static String LINE_SEPARATOR = "\n";
-    private MainActivity _mainActivity;
+    private Activity _mainActivity;
 
-    public ExceptionHandler(MainActivity mainActivity)
+    public ExceptionHandler(Activity mainActivity)
     {
         _mainActivity = mainActivity;
     }
@@ -20,7 +21,7 @@ public class ExceptionHandler implements
     public void uncaughtException(Thread thread, Throwable exception) {
         Email.sendErrorReport(exception);
 
-        _mainActivity.showErrorMessage();
+        MessageDialog.showErrorMessage(_mainActivity);
     }
 
     public static String generateReport(Throwable exception)

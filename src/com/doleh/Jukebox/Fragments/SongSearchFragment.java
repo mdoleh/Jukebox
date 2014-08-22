@@ -1,5 +1,6 @@
 package com.doleh.Jukebox.Fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -9,16 +10,14 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import com.doleh.Jukebox.NetworkClient;
-import com.doleh.Jukebox.MainActivity;
 import com.doleh.Jukebox.MessageTypes.Client.RequestSongList;
+import com.doleh.Jukebox.NetworkClient;
 import com.doleh.Jukebox.R;
 
 public class SongSearchFragment extends Fragment
 {
     private View view;
-    private MainActivity mainActivity;
+    private Activity mainActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -26,7 +25,7 @@ public class SongSearchFragment extends Fragment
 
         view = inflater.inflate(R.layout.song_search, container, false);
         FragmentHelper.loadBannerAds(view);
-        mainActivity = (MainActivity)getActivity();
+        mainActivity = getActivity();
         NetworkClient.songSearchFragment = this;
         setupButtonEventListener();
         hideActionBar();
@@ -82,28 +81,12 @@ public class SongSearchFragment extends Fragment
 
     private void blockUI(final Button searchButton)
     {
-        mainActivity.runOnUiThread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                final ImageView blocker = (ImageView)view.findViewById(R.id.loadingImage);
-                FragmentHelper.blockUI(searchButton, blocker);
-            }
-        });
+        FragmentHelper.blockUI(mainActivity, searchButton, view);
     }
 
     public void unBlockUI()
     {
-        mainActivity.runOnUiThread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                final Button searchButton = (Button)view.findViewById(R.id.searchButton);
-                final ImageView blocker = (ImageView)view.findViewById(R.id.loadingImage);
-                FragmentHelper.unBlockUI(searchButton, blocker);
-            }
-        });
+        final Button searchButton = (Button)view.findViewById(R.id.searchButton);
+        FragmentHelper.unBlockUI(mainActivity, searchButton, view);
     }
 }

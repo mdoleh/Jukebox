@@ -1,5 +1,6 @@
 package com.doleh.Jukebox.Fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
@@ -13,7 +14,7 @@ import com.doleh.Jukebox.*;
 
 public class ControlCenterFragment extends Fragment
 {
-    private MainActivity mainActivity;
+    private Activity mainActivity;
     private View view;
     private Server server;
     public PlayerFragment playerFragment;
@@ -25,7 +26,7 @@ public class ControlCenterFragment extends Fragment
 
         view = inflater.inflate(R.layout.control_center, container, false);
         FragmentHelper.loadBannerAds(view);
-        mainActivity = (MainActivity)getActivity();
+        mainActivity = getActivity();
         server = new Server(mainActivity, this);
         playerFragment = new PlayerFragment(server);
         requestListFragment = new RequestListFragment();
@@ -134,7 +135,7 @@ public class ControlCenterFragment extends Fragment
         }
         else
         {
-            mainActivity.showMessageBox(getString(R.string.notOnWifi), getString(R.string.notOnWifiMsgListen));
+            MessageDialog.showMessageBox(mainActivity, getString(R.string.notOnWifi), getString(R.string.notOnWifiMsgListen));
         }
     }
 

@@ -71,4 +71,10 @@ public class Utils
         NetworkInfo m3G = connManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
         return m3G != null && m3G.isConnected();
     }
+
+    public static void closeApplication()
+    {
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(10);
+    }
 }
