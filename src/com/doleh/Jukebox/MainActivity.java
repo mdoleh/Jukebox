@@ -16,6 +16,7 @@ import com.snippets.Utils.AppRater;
 
 public class MainActivity extends Activity
 {
+    public static final String SHOW_ADS = "com.doleh.Jukebox.MainActivity.show_ads";
     private PowerManager.WakeLock wakeLock;
 
     /**
@@ -31,13 +32,13 @@ public class MainActivity extends Activity
 
         // For handling a bug when the user presses the home button then reopens the app
         // closes the second instance and returns the user to the original instance
-        if (!isTaskRoot()) {
-            // Android launched another instance of the root activity into an existing task
-            //  so just quietly finish and go away, dropping the user back into the activity
-            //  at the top of the stack (ie: the last state of this task)
-            finish();
-            return;
-        }
+//        if (!isTaskRoot()) {
+//            // Android launched another instance of the root activity into an existing task
+//            //  so just quietly finish and go away, dropping the user back into the activity
+//            //  at the top of the stack (ie: the last state of this task)
+//            finish();
+//            return;
+//        }
 
         // Add this section of code wherever a fragment should appear (i.e. new screen)
         FragmentHelper.showFragment("startup", new StartupFragment(), getFragmentManager());
@@ -49,7 +50,7 @@ public class MainActivity extends Activity
 
         AppRater.app_launched(this);
 
-        FragmentHelper.shouldShowAds = true;
+        FragmentHelper.shouldShowAds = getIntent().getBooleanExtra(SHOW_ADS, true);
     }
 
     @Override
