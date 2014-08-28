@@ -73,4 +73,5 @@
     <string name="notOnWifiMsgConnect">You must be connected to Wi-Fi before attempting to connect to another device.
     </string>
     <string name="search_instructions">Enter partial info or leave blank to search all</string>
+    <string name="splashScreen">Splash Screen</string>
 </resources>
