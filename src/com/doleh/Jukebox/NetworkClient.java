@@ -1,5 +1,6 @@
 package com.doleh.Jukebox;
 
+import android.app.Activity;
 import com.doleh.Jukebox.Fragments.ConnectFragment;
 import com.doleh.Jukebox.Fragments.SongRequestFragment;
 import com.doleh.Jukebox.Fragments.SongSearchFragment;
@@ -18,7 +19,7 @@ public class NetworkClient implements Networked
     public static String ip;
     public static NetComm netComm;
     public static Socket socket;
-    public static MainActivity mainActivity;
+    public static Activity mainActivity;
     public static SongRequestFragment songRequestFragment;
     public static SongSearchFragment songSearchFragment;
     public static ConnectFragment connectFragment;
@@ -53,7 +54,7 @@ public class NetworkClient implements Networked
     private void cancelConnect()
     {
         netComm = null;
-        mainActivity.showMessageBox(mainActivity.getString(R.string.connectionFailed), mainActivity.getString(R.string.connectionFailedMsg2));
+        MessageDialog.showMessageBox(mainActivity, mainActivity.getString(R.string.connectionFailed), mainActivity.getString(R.string.connectionFailedMsg2));
         connectFragment.unBlockUI();
     }
 }

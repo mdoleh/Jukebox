@@ -16,6 +16,7 @@ import com.snippets.Utils.AppRater;
 
 public class MainActivity extends Activity
 {
+    public static final String SHOW_ADS = "com.doleh.Jukebox.MainActivity.show_ads";
     private PowerManager.WakeLock wakeLock;
 
     /**
@@ -49,7 +50,7 @@ public class MainActivity extends Activity
 
         AppRater.app_launched(this);
 
-        FragmentHelper.shouldShowAds = true;
+        FragmentHelper.shouldShowAds = getIntent().getBooleanExtra(SHOW_ADS, true);
     }
 
     @Override
@@ -57,23 +58,6 @@ public class MainActivity extends Activity
         super.onPause();
         // Allow LCD screen to turn off
         if (wakeLock.isHeld()) { wakeLock.release(); }
-    }
-
-    public void showMessageBox(final String title, final String message)
-    {
-        runOnUiThread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                AlertDialog.Builder alert  = new AlertDialog.Builder(MainActivity.this);
-                alert.setMessage(message);
-                alert.setTitle(title);
-                alert.setPositiveButton(getString(R.string.ok), null);
-                alert.setCancelable(false);
-                alert.create().show();
-            }
-        });
     }
 
     // Detects back button press and asks the user if they want to leave the control center
@@ -107,35 +91,5 @@ public class MainActivity extends Activity
     private boolean controlCenterVisibleAndOnBackStack(FragmentManager fragmentManager, ControlCenterFragment controlCenterFragment)
     {
         return fragmentManager.getBackStackEntryCount() <= 2 && controlCenterFragment != null && controlCenterFragment.isVisible();
-    }
-
-    public void showErrorMessage()
-    {
-        runOnUiThread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                AlertDialog.Builder alert  = new AlertDialog.Builder(MainActivity.this);
-                alert.setMessage(getString(R.string.forceCloseMsg));
-                alert.setTitle(getString(R.string.forceClose));
-                alert.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        closeApplication();
-                    }
-                });
-                alert.setCancelable(false);
-                alert.create().show();
-            }
-        });
-    }
-
-    private void closeApplication()
-    {
-        android.os.Process.killProcess(android.os.Process.myPid());
-        System.exit(10);
     }
 }

@@ -1,5 +1,6 @@
 package com.doleh.Jukebox;
 
+import android.app.Activity;
 import android.os.AsyncTask;
 import com.doleh.Jukebox.Fragments.ControlCenterFragment;
 import com.doleh.Jukebox.MessageTypes.Client.ClientMessage;
@@ -24,7 +25,7 @@ public class Server implements Networked
 
     private boolean listeningForRequests = false;
     private Map<String, Integer> messageCount = new HashMap<String, Integer>();
-    public MainActivity mainActivity;
+    public Activity mainActivity;
     public ControlCenterFragment controlCenterFragment;
 
     // Network globals
@@ -36,7 +37,7 @@ public class Server implements Networked
     private ArrayList<NetComm> netComms = new ArrayList<NetComm>();
     private boolean running = false;
 
-    public Server(MainActivity _mainActivity, ControlCenterFragment _controlCenterFragment)
+    public Server(Activity _mainActivity, ControlCenterFragment _controlCenterFragment)
     {
         mainActivity = _mainActivity;
         controlCenterFragment = _controlCenterFragment;
@@ -61,11 +62,11 @@ public class Server implements Networked
                 // wait for clients to connect
                 new Thread(new AcceptClientsThread()).start();
             }
-            mainActivity.showMessageBox(mainActivity.getString(R.string.toggleListener), mainActivity.getString(R.string.toggleListenerMessageOn));
+            MessageDialog.showMessageBox(mainActivity, mainActivity.getString(R.string.toggleListener), mainActivity.getString(R.string.toggleListenerMessageOn));
         }
         else
         {
-            mainActivity.showMessageBox(mainActivity.getString(R.string.toggleListener), mainActivity.getString(R.string.toggleListenerMessageOff));
+            MessageDialog.showMessageBox(mainActivity, mainActivity.getString(R.string.toggleListener), mainActivity.getString(R.string.toggleListenerMessageOff));
         }
     }
 

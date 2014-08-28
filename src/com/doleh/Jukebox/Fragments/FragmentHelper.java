@@ -1,5 +1,6 @@
 package com.doleh.Jukebox.Fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -101,10 +102,18 @@ public class FragmentHelper
         }
     }
 
-    public static void blockUI(Button button, ImageView blocker)
+    public static void blockUI(Activity mainActivity, final Button button, final View view)
     {
-        button.setEnabled(false);
-        showLoadingImage(blocker);
+        mainActivity.runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                final ImageView blocker = (ImageView)view.findViewById(R.id.loadingImage);
+                button.setEnabled(false);
+                showLoadingImage(blocker);
+            }
+        });
     }
 
     private static void showLoadingImage(ImageView blocker)
@@ -116,10 +125,18 @@ public class FragmentHelper
         frameAnimation.start();
     }
 
-    public static void unBlockUI(Button button, ImageView blocker)
+    public static void unBlockUI(Activity mainActivity, final Button button, final View view)
     {
-        button.setEnabled(true);
-        hideLoadingImage(blocker);
+        mainActivity.runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                button.setEnabled(true);
+                final ImageView blocker = (ImageView)view.findViewById(R.id.loadingImage);
+                hideLoadingImage(blocker);
+            }
+        });
     }
 
     private static void hideLoadingImage(ImageView blocker)

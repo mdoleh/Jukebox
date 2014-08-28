@@ -1,5 +1,6 @@
 package com.doleh.Jukebox.Fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import com.doleh.Jukebox.*;
 
 import java.io.IOException;
@@ -15,7 +15,7 @@ import java.io.IOException;
 public class ConnectFragment extends Fragment
 {
     private View view;
-    private MainActivity mainActivity;
+    private Activity mainActivity;
     private NetworkClient networkClient = new NetworkClient();
 
     @Override
@@ -24,7 +24,7 @@ public class ConnectFragment extends Fragment
 
         view = inflater.inflate(R.layout.connect, container, false);
         FragmentHelper.loadBannerAds(view);
-        mainActivity = (MainActivity)getActivity();
+        mainActivity = getActivity();
         NetworkClient.connectFragment = this;
         setupButtonEventListener();
         return view;
@@ -64,7 +64,7 @@ public class ConnectFragment extends Fragment
                 }
                 else
                 {
-                    mainActivity.showMessageBox(getString(R.string.notOnWifi), getString(R.string.notOnWifiMsgConnect));
+                    MessageDialog.showMessageBox(mainActivity, getString(R.string.notOnWifi), getString(R.string.notOnWifiMsgConnect));
                 }
             }});
     }
@@ -82,30 +82,14 @@ public class ConnectFragment extends Fragment
         FragmentHelper.showFragment("connect", this, "song_search", new SongSearchFragment(), getFragmentManager());
     }
 
-    private void blockUI(final Button connectButton)
+    private void blockUI(Button connectButton)
     {
-        mainActivity.runOnUiThread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                final ImageView blocker = (ImageView)view.findViewById(R.id.loadingImage);
-                FragmentHelper.blockUI(connectButton, blocker);
-            }
-        });
+        FragmentHelper.blockUI(mainActivity, connectButton, view);
     }
 
     public void unBlockUI()
     {
-        mainActivity.runOnUiThread(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                final Button connectButton = (Button)view.findViewById(R.id.connect);
-                final ImageView blocker = (ImageView)view.findViewById(R.id.loadingImage);
-                FragmentHelper.unBlockUI(connectButton, blocker);
-            }
-        });
+        final Button connectButton = (Button)view.findViewById(R.id.connect);
+        FragmentHelper.unBlockUI(mainActivity, connectButton, view);
     }
 }

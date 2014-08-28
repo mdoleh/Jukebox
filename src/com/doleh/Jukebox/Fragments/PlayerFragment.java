@@ -1,5 +1,6 @@
 package com.doleh.Jukebox.Fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.graphics.PorterDuff;
 import android.media.MediaPlayer;
@@ -18,7 +19,7 @@ public class PlayerFragment extends Fragment
 {
     private View view;
     public MediaPlayer mediaPlayer = new MediaPlayer();
-    private MainActivity mainActivity;
+    private Activity mainActivity;
     private boolean mediaPlayerReady = false;
     private Server _server;
     private Handler updateHandler = new Handler();
@@ -35,7 +36,7 @@ public class PlayerFragment extends Fragment
 
         view = inflater.inflate(R.layout.player, container, false);
         FragmentHelper.loadBannerAds(view);
-        mainActivity = (MainActivity)getActivity();
+        mainActivity = getActivity();
         setupButtonEventListeners();
         setupMediaPlayerListeners();
         setupSeekBarListeners();

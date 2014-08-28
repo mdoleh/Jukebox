@@ -1,5 +1,6 @@
 package com.doleh.Jukebox.Fragments;
 
+import android.app.Activity;
 import android.app.ListFragment;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,7 +11,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import com.doleh.Jukebox.*;
+import com.doleh.Jukebox.IFunction;
+import com.doleh.Jukebox.MediaLibraryHelper;
+import com.doleh.Jukebox.R;
+import com.doleh.Jukebox.Song;
 import com.ericharlow.DragNDrop.*;
 
 import java.util.ArrayList;
@@ -20,14 +24,14 @@ public class RequestListFragment extends ListFragment
 {
     private View view;
     private ListView listView;
-    private MainActivity mainActivity;
+    private Activity mainActivity;
     public ListAdapter requestListAdapter;
     private ArrayList<String> viewableList = new ArrayList<String>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.request_list, container, false);
-        mainActivity = (MainActivity)getActivity();
+        mainActivity = getActivity();
         setupListAdapter();
         setupButtonListeners();
 
