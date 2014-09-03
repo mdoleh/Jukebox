@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 public class AppRater {
     private final static String APP_TITLE = "ElectroDJ";
-    private final static String APP_PNAME = "com.doleh.Jukebox";
+    public static String APP_PNAME;
 
     private final static int DAYS_UNTIL_PROMPT = 2;
     private final static int LAUNCHES_UNTIL_PROMPT = 3;
