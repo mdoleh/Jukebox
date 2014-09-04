@@ -52,6 +52,7 @@ public class MainActivity extends Activity
 
         AppRater.APP_PNAME = getIntent().getStringExtra(APP_PNAME);
         AppRater.APP_TITLE = getIntent().getStringExtra(APP_TITLE);
+        Email.APP_TITLE = getIntent().getStringExtra(APP_TITLE);
 
         AppRater.app_launched(this);
 
