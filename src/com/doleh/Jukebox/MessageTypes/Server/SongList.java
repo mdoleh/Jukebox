@@ -1,5 +1,6 @@
 package com.doleh.Jukebox.MessageTypes.Server;
 
+import com.doleh.Jukebox.Fragments.FragmentHelper;
 import com.doleh.Jukebox.MessageDialog;
 import com.doleh.Jukebox.NetworkClient;
 import com.doleh.Jukebox.Fragments.SongSearchFragment;
@@ -30,6 +31,6 @@ public class SongList extends ServerMessage implements Serializable
         {
             MessageDialog.showMessageBox(NetworkClient.mainActivity, NetworkClient.mainActivity.getString(R.string.noSongsFound), NetworkClient.mainActivity.getString(R.string.noSongsFoundMsg));
         }
-        NetworkClient.songSearchFragment.unBlockUI();
+        FragmentHelper.getFragment(SongSearchFragment.class, NetworkClient.mainActivity.getFragmentManager(), FragmentHelper.SONG_SEARCH).unBlockUI();
     }
 }

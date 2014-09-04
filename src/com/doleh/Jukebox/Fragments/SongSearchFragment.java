@@ -26,7 +26,6 @@ public class SongSearchFragment extends Fragment
         view = inflater.inflate(R.layout.song_search, container, false);
         FragmentHelper.loadBannerAds(view);
         mainActivity = getActivity();
-        NetworkClient.songSearchFragment = this;
         setupButtonEventListener();
         hideActionBar();
         return view;

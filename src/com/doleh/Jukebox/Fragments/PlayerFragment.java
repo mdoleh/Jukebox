@@ -98,7 +98,7 @@ public class PlayerFragment extends Fragment
                 mp.stop();
                 mp.reset();
                 // If songs are in the queue play them next
-                MediaLibraryHelper.playNextSongInQueue(mp, mainActivity.getApplicationContext(), _server.controlCenterFragment);
+                MediaLibraryHelper.playNextSongInQueue(mp, mainActivity.getApplicationContext(), PlayerFragment.this, FragmentHelper.getFragment(RequestListFragment.class, getFragmentManager(), FragmentHelper.REQUEST_LIST));
                 if (!mediaPlayerReady && !mediaPlayer.isPlaying()) { resetMusicPlayer(); }
                 _server.clearMessageCounts();
             }
@@ -329,7 +329,7 @@ public class PlayerFragment extends Fragment
             mediaPlayer.stop();
             mediaPlayer.reset();
             ((ImageView)view.findViewById(R.id.pauseButton)).setImageResource(R.drawable.pause_icon);
-            MediaLibraryHelper.playNextSongInQueue(mediaPlayer, mainActivity.getApplicationContext(), _server.controlCenterFragment);
+            MediaLibraryHelper.playNextSongInQueue(mediaPlayer, mainActivity.getApplicationContext(), PlayerFragment.this, FragmentHelper.getFragment(RequestListFragment.class, getFragmentManager(), FragmentHelper.REQUEST_LIST));
             _server.clearMessageCounts();
             if (!mediaPlayer.isPlaying()) { resetMusicPlayer(); }
             setTime((TextView)view.findViewById(R.id.currentTime), 0);

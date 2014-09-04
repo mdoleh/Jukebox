@@ -25,7 +25,6 @@ public class ConnectFragment extends Fragment
         view = inflater.inflate(R.layout.connect, container, false);
         FragmentHelper.loadBannerAds(view);
         mainActivity = getActivity();
-        NetworkClient.connectFragment = this;
         setupButtonEventListener();
         return view;
     }

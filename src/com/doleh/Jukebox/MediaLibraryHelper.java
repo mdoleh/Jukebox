@@ -8,7 +8,8 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.provider.MediaStore;
-import com.doleh.Jukebox.Fragments.ControlCenterFragment;
+import com.doleh.Jukebox.Fragments.PlayerFragment;
+import com.doleh.Jukebox.Fragments.RequestListFragment;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -60,7 +61,7 @@ public class MediaLibraryHelper
         return allInfo;
     }
 
-    public static void playRequest(Song requestedSong, Context context, MediaPlayer mediaPlayer, ContentResolver contentResolver, ControlCenterFragment controlCenterFragment)
+    public static void playRequest(Song requestedSong, Context context, MediaPlayer mediaPlayer, ContentResolver contentResolver, PlayerFragment playerFragment, RequestListFragment requestListFragment)
     {
         if (mediaPlayer.isPlaying() || isPaused || songQueue.size() > 0)
         {
@@ -69,14 +70,14 @@ public class MediaLibraryHelper
             {
                 if (requestedSong.id != null) {
                     moveSongUp(requestedSong, index);
-                    notifyDataSetUpdate(controlCenterFragment);
+                    notifyDataSetUpdate(requestListFragment);
                 }
             }
             else
             {
                 if (requestedSong.id != null) {
                     songQueue.add(requestedSong);
-                    notifyDataSetUpdate(controlCenterFragment);
+                    notifyDataSetUpdate(requestListFragment);
                 }
             }
         }
@@ -85,12 +86,12 @@ public class MediaLibraryHelper
             mediaPlayer.stop();
             mediaPlayer.reset();
             playSong(requestedSong.id, context, mediaPlayer);
-            setCurrentSongPlaying(controlCenterFragment, requestedSong);
-            startUpdatingPlayerUI(controlCenterFragment);
+            setCurrentSongPlaying(playerFragment, requestedSong);
+            startUpdatingPlayerUI(playerFragment);
         }
     }
 
-    public static void playNextSongInQueue(MediaPlayer mediaPlayer, Context context, ControlCenterFragment controlCenterFragment)
+    public static void playNextSongInQueue(MediaPlayer mediaPlayer, Context context, PlayerFragment playerFragment, RequestListFragment requestListFragment)
     {
         if (!songQueue.isEmpty())
         {
@@ -98,21 +99,21 @@ public class MediaLibraryHelper
             songQueue.remove(0);
             playSong(nextSong.id, context, mediaPlayer);
             isPaused = false;
-            notifyDataSetUpdate(controlCenterFragment);
-            setCurrentSongPlaying(controlCenterFragment, nextSong);
-            startUpdatingPlayerUI(controlCenterFragment);
+            notifyDataSetUpdate(requestListFragment);
+            setCurrentSongPlaying(playerFragment, nextSong);
+            startUpdatingPlayerUI(playerFragment);
         }
     }
 
-    private static void startUpdatingPlayerUI(ControlCenterFragment controlCenterFragment)
+    private static void startUpdatingPlayerUI(PlayerFragment playerFragment)
     {
-        controlCenterFragment.playerFragment.stopUpdatingUI();
-        controlCenterFragment.playerFragment.startUpdatingUI();
+        playerFragment.stopUpdatingUI();
+        playerFragment.startUpdatingUI();
     }
 
-    private static void setCurrentSongPlaying(ControlCenterFragment controlCenterFragment, Song song)
+    private static void setCurrentSongPlaying(PlayerFragment playerFragment, Song song)
     {
-        controlCenterFragment.playerFragment.setCurrentSongPlaying(song.title + "-" + song.artist);
+        playerFragment.setCurrentSongPlaying(song.title + "-" + song.artist);
     }
 
     private static void playSong(Long songId, Context context, MediaPlayer mediaPlayer)
@@ -185,9 +186,9 @@ public class MediaLibraryHelper
         songQueue = new ArrayList<Song>(newQueue);
     }
 
-    private static void notifyDataSetUpdate(final ControlCenterFragment controlCenterFragment)
+    private static void notifyDataSetUpdate(final RequestListFragment requestListFragment)
     {
-        controlCenterFragment.requestListFragment.createViewableList(songQueue);
-        controlCenterFragment.requestListFragment.notifyDataSetChanged();
+        requestListFragment.createViewableList(songQueue);
+        requestListFragment.notifyDataSetChanged();
     }
 }

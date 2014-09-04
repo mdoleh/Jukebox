@@ -1,7 +1,9 @@
 package com.doleh.Jukebox.MessageTypes.Client;
 
 import android.app.Activity;
+import com.doleh.Jukebox.Fragments.FragmentHelper;
 import com.doleh.Jukebox.Fragments.PlayerFragment;
+import com.doleh.Jukebox.Fragments.RequestListFragment;
 import com.doleh.Jukebox.MediaLibraryHelper;
 import com.doleh.Jukebox.MessageTypes.Server.LimitRejection;
 import com.doleh.Jukebox.MessageTypes.Server.RequestAccepted;
@@ -25,9 +27,11 @@ public class RequestSongId extends ClientMessage implements Serializable
     {
         if (server.checkMessageCount(sender.ipAddress))
         {
-            final PlayerFragment playerFragment = server.controlCenterFragment.playerFragment;
+            final PlayerFragment playerFragment = FragmentHelper.getFragment(PlayerFragment.class, server.mainActivity.getFragmentManager(), FragmentHelper.MUSIC_PLAYER);
+            final RequestListFragment requestListFragment = FragmentHelper.getFragment(RequestListFragment.class, server.mainActivity.getFragmentManager(), FragmentHelper.REQUEST_LIST);
             Activity mainActivity = server.mainActivity;
-            MediaLibraryHelper.playRequest(_requestedSong, mainActivity.getApplicationContext(), playerFragment.mediaPlayer, mainActivity.getContentResolver(), server.controlCenterFragment);
+
+            MediaLibraryHelper.playRequest(_requestedSong, mainActivity.getApplicationContext(), playerFragment.mediaPlayer, mainActivity.getContentResolver(), playerFragment, requestListFragment);
             mainActivity.runOnUiThread(new Runnable()
             {
                 @Override
@@ -37,7 +41,7 @@ public class RequestSongId extends ClientMessage implements Serializable
                 }
             });
             sender.write(new RequestAccepted(server.getRemainingRequests(sender.ipAddress)));
-            server.controlCenterFragment.requestListFragment.updateUI();
+            requestListFragment.updateUI();
         }
         else { sender.write(new LimitRejection()); }
     }

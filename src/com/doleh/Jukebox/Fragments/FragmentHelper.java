@@ -152,4 +152,9 @@ public class FragmentHelper
         AnimationDrawable frameAnimation = (AnimationDrawable) blocker.getBackground();
         frameAnimation.stop();
     }
+
+    public static <T extends Fragment> T getFragment(Class<T> type, FragmentManager fragmentManager, String tag)
+    {
+        return type.cast(fragmentManager.findFragmentByTag(tag));
+    }
 }

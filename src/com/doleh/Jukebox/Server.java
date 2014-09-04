@@ -3,6 +3,7 @@ package com.doleh.Jukebox;
 import android.app.Activity;
 import android.os.AsyncTask;
 import com.doleh.Jukebox.Fragments.ControlCenterFragment;
+import com.doleh.Jukebox.Fragments.FragmentHelper;
 import com.doleh.Jukebox.MessageTypes.Client.ClientMessage;
 import com.doleh.Jukebox.MessageTypes.Server.ConnectionAccepted;
 import com.doleh.Jukebox.MessageTypes.Server.ConnectionClosed;
@@ -25,8 +26,8 @@ public class Server implements Networked
 
     private boolean listeningForRequests = false;
     private Map<String, Integer> messageCount = new HashMap<String, Integer>();
-    public Activity _mainActivity;
-    private ControlCenterFragment _controlCenterFragment;
+    public Activity mainActivity;
+    private ControlCenterFragment controlCenterFragment;
 
     // Network globals
     /** networking port that server listens on */
@@ -37,10 +38,10 @@ public class Server implements Networked
     private ArrayList<NetComm> netComms = new ArrayList<NetComm>();
     private boolean running = false;
 
-    public Server(Activity mainActivity)
+    public Server(Activity _mainActivity)
     {
-        _mainActivity = mainActivity;
-        _controlCenterFragment = _mainActivity.getFragmentManager().findFragmentByTag("")
+        mainActivity = _mainActivity;
+        controlCenterFragment = (ControlCenterFragment)_mainActivity.getFragmentManager().findFragmentByTag(FragmentHelper.CONTROL_CENTER);
     }
 
     public void toggleListener()

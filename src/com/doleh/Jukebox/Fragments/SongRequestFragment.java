@@ -32,7 +32,6 @@ public class SongRequestFragment extends Fragment
         mainActivity = getActivity();
         setupButtonEventListener();
         createSongListForSpinner(NetworkClient.receivedSongs);
-        NetworkClient.songRequestFragment = this;
         return view;
     }
 

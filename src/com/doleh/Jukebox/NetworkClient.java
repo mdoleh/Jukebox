@@ -2,8 +2,7 @@ package com.doleh.Jukebox;
 
 import android.app.Activity;
 import com.doleh.Jukebox.Fragments.ConnectFragment;
-import com.doleh.Jukebox.Fragments.SongRequestFragment;
-import com.doleh.Jukebox.Fragments.SongSearchFragment;
+import com.doleh.Jukebox.Fragments.FragmentHelper;
 import com.doleh.Jukebox.MessageTypes.Server.ServerMessage;
 import com.jackieloven.thebasics.CloseConnectionMsg;
 import com.jackieloven.thebasics.NetComm;
@@ -20,9 +19,6 @@ public class NetworkClient implements Networked
     public static NetComm netComm;
     public static Socket socket;
     public static Activity mainActivity;
-    public static SongRequestFragment songRequestFragment;
-    public static SongSearchFragment songSearchFragment;
-    public static ConnectFragment connectFragment;
 
     @Override
     public void msgReceived(Object msgObj, NetComm sender)
@@ -55,6 +51,6 @@ public class NetworkClient implements Networked
     {
         netComm = null;
         MessageDialog.showMessageBox(mainActivity, mainActivity.getString(R.string.connectionFailed), mainActivity.getString(R.string.connectionFailedMsg2));
-        connectFragment.unBlockUI();
+        FragmentHelper.getFragment(ConnectFragment.class, mainActivity.getFragmentManager(), FragmentHelper.CONNECT).unBlockUI();
     }
 }
