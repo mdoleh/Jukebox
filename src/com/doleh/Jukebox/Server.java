@@ -25,8 +25,8 @@ public class Server implements Networked
 
     private boolean listeningForRequests = false;
     private Map<String, Integer> messageCount = new HashMap<String, Integer>();
-    public Activity mainActivity;
-    public ControlCenterFragment controlCenterFragment;
+    public Activity _mainActivity;
+    private ControlCenterFragment _controlCenterFragment;
 
     // Network globals
     /** networking port that server listens on */
@@ -37,10 +37,10 @@ public class Server implements Networked
     private ArrayList<NetComm> netComms = new ArrayList<NetComm>();
     private boolean running = false;
 
-    public Server(Activity _mainActivity, ControlCenterFragment _controlCenterFragment)
+    public Server(Activity mainActivity)
     {
-        mainActivity = _mainActivity;
-        controlCenterFragment = _controlCenterFragment;
+        _mainActivity = mainActivity;
+        _controlCenterFragment = _mainActivity.getFragmentManager().findFragmentByTag("")
     }
 
     public void toggleListener()

@@ -58,7 +58,7 @@ public class SongSearchFragment extends Fragment
     public void showSongRequest()
     {
         hideKeyboard();
-        FragmentHelper.showFragment("song_search", this, "song_request", new SongRequestFragment(), getFragmentManager());
+        FragmentHelper.showFragment(FragmentHelper.SONG_SEARCH, this, FragmentHelper.SONG_REQUEST, new SongRequestFragment(), getFragmentManager());
     }
 
     private void sendSearch()

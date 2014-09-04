@@ -18,6 +18,13 @@ import com.google.android.gms.ads.AdView;
 
 public class FragmentHelper
 {
+    public static final String CONTROL_CENTER = "control_center";
+    public static final String MUSIC_PLAYER = "music_player";
+    public static final String REQUEST_LIST = "request_list";
+    public static final String SONG_SEARCH = "song_search";
+    public static final String SONG_REQUEST = "song_request";
+    public static final String STARTUP = "startup";
+    public static final String CONNECT = "connect";
     public static boolean shouldShowAds = true;
 
     public static void loadBannerAds(View view)

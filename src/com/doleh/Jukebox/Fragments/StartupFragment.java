@@ -66,7 +66,7 @@ public class StartupFragment extends Fragment
 
     private void showControlCenter()
     {
-        FragmentHelper.showFragment("startup", this, "control_center", new ControlCenterFragment(), getFragmentManager());
+        FragmentHelper.showFragment(FragmentHelper.STARTUP, this, FragmentHelper.CONTROL_CENTER, new ControlCenterFragment(), getFragmentManager());
     }
 
     private class handleSendTouch implements IFunction
@@ -80,6 +80,6 @@ public class StartupFragment extends Fragment
 
     private void showConnectDevices()
     {
-        FragmentHelper.showFragment("startup", this, "connect", new ConnectFragment(), getFragmentManager());
+        FragmentHelper.showFragment(FragmentHelper.STARTUP, this, "connect", new ConnectFragment(), getFragmentManager());
     }
 }

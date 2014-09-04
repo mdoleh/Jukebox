@@ -79,7 +79,7 @@ public class ConnectFragment extends Fragment
 
     public void showSongSearch()
     {
-        FragmentHelper.showFragment("connect", this, "song_search", new SongSearchFragment(), getFragmentManager());
+        FragmentHelper.showFragment(FragmentHelper.CONNECT, this, FragmentHelper.SONG_SEARCH, new SongSearchFragment(), getFragmentManager());
     }
 
     private void blockUI(Button connectButton)
