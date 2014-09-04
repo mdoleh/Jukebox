@@ -18,6 +18,7 @@ public class MainActivity extends Activity
 {
     public static final String SHOW_ADS = "com.doleh.Jukebox.MainActivity.show_ads";
     public static final String APP_PNAME = "com.doleh.Jukebox.MainActivity.app_pname";
+    public static final String APP_TITLE = "com.doleh.Jukebox.MainActivity.app_title";
     private PowerManager.WakeLock wakeLock;
 
     /**
@@ -50,6 +51,8 @@ public class MainActivity extends Activity
         wakeLock.acquire();
 
         AppRater.APP_PNAME = getIntent().getStringExtra(APP_PNAME);
+        AppRater.APP_TITLE = getIntent().getStringExtra(APP_TITLE);
+
         AppRater.app_launched(this);
 
         FragmentHelper.shouldShowAds = getIntent().getBooleanExtra(SHOW_ADS, true);

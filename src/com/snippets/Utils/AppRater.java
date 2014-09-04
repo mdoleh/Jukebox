@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class AppRater {
-    private final static String APP_TITLE = "ElectroDJ";
+    public static String APP_TITLE;
     public static String APP_PNAME;
 
     private final static int DAYS_UNTIL_PROMPT = 2;
