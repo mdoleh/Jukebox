@@ -1,6 +1,7 @@
 package com.doleh.Jukebox.MessageTypes.Client;
 
 import android.app.Activity;
+import com.doleh.Jukebox.Config;
 import com.doleh.Jukebox.Fragments.FragmentHelper;
 import com.doleh.Jukebox.Fragments.PlayerFragment;
 import com.doleh.Jukebox.Fragments.RequestListFragment;
@@ -16,16 +17,19 @@ import java.io.Serializable;
 public class RequestSongId extends ClientMessage implements Serializable
 {
     public Song _requestedSong;
+    public int MAX_MESSAGE_COUNT;
 
-    public RequestSongId(Song requestedSong)
+    public RequestSongId(Song requestedSong, int max_message_count)
     {
         _requestedSong = requestedSong;
+        MAX_MESSAGE_COUNT = max_message_count;
     }
 
     @Override
     public void Execute(NetworkServer networkServer, NetComm sender)
     {
-        if (networkServer.checkMessageCount(sender.ipAddress))
+        if (Config.APP_PAID) { MAX_MESSAGE_COUNT = Config.MAX_MESSAGE_COUNT; }
+        if (networkServer.checkMessageCount(sender.ipAddress, MAX_MESSAGE_COUNT))
         {
             final PlayerFragment playerFragment = FragmentHelper.getFragment(PlayerFragment.class, networkServer.mainActivity.getFragmentManager(), FragmentHelper.MUSIC_PLAYER);
             final RequestListFragment requestListFragment = FragmentHelper.getFragment(RequestListFragment.class, networkServer.mainActivity.getFragmentManager(), FragmentHelper.REQUEST_LIST);
@@ -40,7 +44,7 @@ public class RequestSongId extends ClientMessage implements Serializable
                     playerFragment.enableAllElements();
                 }
             });
-            sender.write(new RequestAccepted(networkServer.getRemainingRequests(sender.ipAddress)));
+            sender.write(new RequestAccepted(networkServer.getRemainingRequests(sender.ipAddress, MAX_MESSAGE_COUNT)));
             requestListFragment.updateUI();
         }
         else { sender.write(new LimitRejection()); }

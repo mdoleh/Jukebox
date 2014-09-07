@@ -155,14 +155,14 @@ public class NetworkServer implements Networked
         }
     }
 
-    public boolean checkMessageCount(String ipAddress)
+    public boolean checkMessageCount(String ipAddress, int MAX_MESSAGE_COUNT)
     {
         Integer count = messageCount.get(ipAddress);
         if (count == null) { messageCount.put(ipAddress, 1); return true; }
         else
         {
             ++count;
-            if (count > Config.MAX_MESSAGE_COUNT)
+            if (count > MAX_MESSAGE_COUNT)
             {
                 return false;
             }
@@ -184,13 +184,13 @@ public class NetworkServer implements Networked
         _controlCenterFragment.updateRequesterCount(newValue);
     }
 
-    public int getRemainingRequests(String ipAddress)
+    public int getRemainingRequests(String ipAddress, int MAX_MESSAGE_COUNT)
     {
         Integer count = messageCount.get(ipAddress);
         if (count != null)
         {
-            return Config.MAX_MESSAGE_COUNT - count;
+            return MAX_MESSAGE_COUNT - count;
         }
-        return Config.MAX_MESSAGE_COUNT;
+        return MAX_MESSAGE_COUNT;
     }
 }

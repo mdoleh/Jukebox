@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import com.doleh.Jukebox.Config;
 import com.doleh.Jukebox.MessageTypes.Client.RequestSongId;
 import com.doleh.Jukebox.NetworkClient;
 import com.doleh.Jukebox.R;
@@ -76,7 +77,7 @@ public class SongRequestFragment extends Fragment
         final Spinner songIdSpinner = (Spinner)view.findViewById(R.id.songListSpinner);
 
         int selectedIndex = songIdSpinner.getSelectedItemPosition();
-        RequestSongId requestSongId = new RequestSongId(NetworkClient.receivedSongs.get(selectedIndex));
+        RequestSongId requestSongId = new RequestSongId(NetworkClient.receivedSongs.get(selectedIndex), Config.MAX_MESSAGE_COUNT);
         NetworkClient.netComm.write(requestSongId);
     }
 
