@@ -22,16 +22,11 @@ import java.util.Map;
 
 public class NetworkServer implements Networked
 {
-    private static final int MAX_MESSAGE_COUNT = 3;
-
     private boolean listeningForRequests = false;
     private Map<String, Integer> messageCount = new HashMap<String, Integer>();
     public Activity mainActivity;
-    private ControlCenterFragment controlCenterFragment;
 
     // Network globals
-    /** networking port that server listens on */
-    public static final int PORT = 35768;
     /** server socket used to set up connections with clients */
     private ServerSocket serverSocket;
     /** ArrayList of client connections */
@@ -41,7 +36,6 @@ public class NetworkServer implements Networked
     public NetworkServer(Activity _mainActivity)
     {
         mainActivity = _mainActivity;
-        controlCenterFragment = (ControlCenterFragment)_mainActivity.getFragmentManager().findFragmentByTag(FragmentHelper.CONTROL_CENTER);
     }
 
     public void toggleListener()
@@ -54,7 +48,7 @@ public class NetworkServer implements Networked
                 running = true;
                 // initialize server socket
                 try {
-                    serverSocket = new ServerSocket(PORT);
+                    serverSocket = new ServerSocket(Config.PORT);
                 }
                 catch (IOException ex) {
                     Email.sendErrorReport(ex);
@@ -165,7 +159,7 @@ public class NetworkServer implements Networked
         else
         {
             ++count;
-            if (count > MAX_MESSAGE_COUNT)
+            if (count > Config.MAX_MESSAGE_COUNT)
             {
                 return false;
             }
@@ -184,6 +178,7 @@ public class NetworkServer implements Networked
 
     private void updateRequesterCount(int newValue)
     {
+        ControlCenterFragment controlCenterFragment = FragmentHelper.getFragment(ControlCenterFragment.class, mainActivity.getFragmentManager(), FragmentHelper.CONTROL_CENTER);
         controlCenterFragment.updateRequesterCount(newValue);
     }
 
@@ -192,8 +187,8 @@ public class NetworkServer implements Networked
         Integer count = messageCount.get(ipAddress);
         if (count != null)
         {
-            return MAX_MESSAGE_COUNT - count;
+            return Config.MAX_MESSAGE_COUNT - count;
         }
-        return MAX_MESSAGE_COUNT;
+        return Config.MAX_MESSAGE_COUNT;
     }
 }

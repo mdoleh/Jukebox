@@ -7,7 +7,11 @@ public class Config
     public static String APP_PNAME;
     public static String APP_TITLE;
     public static boolean SHOULD_SHOW_ADS;
+    public static final int MAX_MESSAGE_COUNT = 3;
+    /** networking port that server listens on */
+    public static final int PORT = 35768;
 
+    // Intent keys
     public static final String SHOULD_SHOW_ADS_KEY = "com.doleh.Jukebox.MainActivity.show_ads";
     public static final String APP_PNAME_KEY = "com.doleh.Jukebox.MainActivity.app_pname";
     public static final String APP_TITLE_KEY = "com.doleh.Jukebox.MainActivity.app_title";
