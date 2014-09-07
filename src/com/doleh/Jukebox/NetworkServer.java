@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Server implements Networked
+public class NetworkServer implements Networked
 {
     private static final int MAX_MESSAGE_COUNT = 3;
 
@@ -38,7 +38,7 @@ public class Server implements Networked
     private ArrayList<NetComm> netComms = new ArrayList<NetComm>();
     private boolean running = false;
 
-    public Server(Activity _mainActivity)
+    public NetworkServer(Activity _mainActivity)
     {
         mainActivity = _mainActivity;
         controlCenterFragment = (ControlCenterFragment)_mainActivity.getFragmentManager().findFragmentByTag(FragmentHelper.CONTROL_CENTER);
@@ -112,14 +112,14 @@ public class Server implements Networked
                     Socket socket = serverSocket.accept();
                     if (listeningForRequests)
                     {
-                        NetComm requester = new NetComm(socket, Server.this);
+                        NetComm requester = new NetComm(socket, NetworkServer.this);
                         netComms.add(requester);
                         requester.write(new ConnectionAccepted());
                         updateRequesterCount(netComms.size());
                     }
                     else
                     {
-                        new NetComm(socket, Server.this).write(new Rejection(false));
+                        new NetComm(socket, NetworkServer.this).write(new Rejection(false));
                     }
                 }
                 catch (SocketException ex)

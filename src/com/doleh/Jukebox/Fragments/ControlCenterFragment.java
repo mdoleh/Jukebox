@@ -16,7 +16,7 @@ public class ControlCenterFragment extends Fragment
 {
     private Activity mainActivity;
     private View view;
-    private Server server;
+    private NetworkServer networkServer;
     private PlayerFragment playerFragment;
     private RequestListFragment requestListFragment;
     private boolean listenImageToggle = false;
@@ -27,8 +27,8 @@ public class ControlCenterFragment extends Fragment
         view = inflater.inflate(R.layout.control_center, container, false);
         FragmentHelper.loadBannerAds(view);
         mainActivity = getActivity();
-        server = new Server(mainActivity);
-        playerFragment = new PlayerFragment(server);
+        networkServer = new NetworkServer(mainActivity);
+        playerFragment = new PlayerFragment(networkServer);
         requestListFragment = new RequestListFragment();
         FragmentHelper.addFragment(FragmentHelper.MUSIC_PLAYER, playerFragment, getFragmentManager());
         FragmentHelper.addFragment(FragmentHelper.REQUEST_LIST, requestListFragment, getFragmentManager());
@@ -42,8 +42,8 @@ public class ControlCenterFragment extends Fragment
     public void onDestroy()
     {
         super.onDestroy();
-        server.closePort();
-        server.clearMessageCounts();
+        networkServer.closePort();
+        networkServer.clearMessageCounts();
         playerFragment.onDestroy();
         requestListFragment.onDestroy();
         FragmentHelper.goBackToBeginning(getFragmentManager());
@@ -127,7 +127,7 @@ public class ControlCenterFragment extends Fragment
     {
         if (Utils.isOnWifi(mainActivity))
         {
-            server.toggleListener();
+            networkServer.toggleListener();
             final TextView ipAddress = (TextView)view.findViewById(R.id.deviceAddress);
             ipAddress.setText(Utils.getIPAddress(true));
 

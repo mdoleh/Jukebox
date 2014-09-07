@@ -21,13 +21,13 @@ public class PlayerFragment extends Fragment
     public MediaPlayer mediaPlayer = new MediaPlayer();
     private Activity mainActivity;
     private boolean mediaPlayerReady = false;
-    private Server _server;
+    private NetworkServer _networkServer;
     private Handler updateHandler = new Handler();
     private boolean pauseOnButtonPush = false;
 
-    public PlayerFragment(Server server)
+    public PlayerFragment(NetworkServer networkServer)
     {
-        _server = server;
+        _networkServer = networkServer;
     }
 
     @Override
@@ -100,7 +100,7 @@ public class PlayerFragment extends Fragment
                 // If songs are in the queue play them next
                 MediaLibraryHelper.playNextSongInQueue(mp, mainActivity.getApplicationContext(), PlayerFragment.this, FragmentHelper.getFragment(RequestListFragment.class, getFragmentManager(), FragmentHelper.REQUEST_LIST));
                 if (!mediaPlayerReady && !mediaPlayer.isPlaying()) { resetMusicPlayer(); }
-                _server.clearMessageCounts();
+                _networkServer.clearMessageCounts();
             }
         });
 
@@ -330,7 +330,7 @@ public class PlayerFragment extends Fragment
             mediaPlayer.reset();
             ((ImageView)view.findViewById(R.id.pauseButton)).setImageResource(R.drawable.pause_icon);
             MediaLibraryHelper.playNextSongInQueue(mediaPlayer, mainActivity.getApplicationContext(), PlayerFragment.this, FragmentHelper.getFragment(RequestListFragment.class, getFragmentManager(), FragmentHelper.REQUEST_LIST));
-            _server.clearMessageCounts();
+            _networkServer.clearMessageCounts();
             if (!mediaPlayer.isPlaying()) { resetMusicPlayer(); }
             setTime((TextView)view.findViewById(R.id.currentTime), 0);
             resetSeekBar();

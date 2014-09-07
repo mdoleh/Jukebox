@@ -38,7 +38,7 @@ public class NetworkClient implements Networked
         public void run() {
             try {
                 socket = new Socket();
-                socket.connect(new InetSocketAddress(ip, Server.PORT), 30 * 1000);
+                socket.connect(new InetSocketAddress(ip, NetworkServer.PORT), 30 * 1000);
                 netComm = new NetComm(socket, NetworkClient.this);
             }
             catch (Exception ex) {

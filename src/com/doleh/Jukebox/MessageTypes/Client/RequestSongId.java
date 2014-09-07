@@ -7,7 +7,7 @@ import com.doleh.Jukebox.Fragments.RequestListFragment;
 import com.doleh.Jukebox.MediaLibraryHelper;
 import com.doleh.Jukebox.MessageTypes.Server.LimitRejection;
 import com.doleh.Jukebox.MessageTypes.Server.RequestAccepted;
-import com.doleh.Jukebox.Server;
+import com.doleh.Jukebox.NetworkServer;
 import com.doleh.Jukebox.Song;
 import com.jackieloven.thebasics.NetComm;
 
@@ -23,13 +23,13 @@ public class RequestSongId extends ClientMessage implements Serializable
     }
 
     @Override
-    public void Execute(Server server, NetComm sender)
+    public void Execute(NetworkServer networkServer, NetComm sender)
     {
-        if (server.checkMessageCount(sender.ipAddress))
+        if (networkServer.checkMessageCount(sender.ipAddress))
         {
-            final PlayerFragment playerFragment = FragmentHelper.getFragment(PlayerFragment.class, server.mainActivity.getFragmentManager(), FragmentHelper.MUSIC_PLAYER);
-            final RequestListFragment requestListFragment = FragmentHelper.getFragment(RequestListFragment.class, server.mainActivity.getFragmentManager(), FragmentHelper.REQUEST_LIST);
-            Activity mainActivity = server.mainActivity;
+            final PlayerFragment playerFragment = FragmentHelper.getFragment(PlayerFragment.class, networkServer.mainActivity.getFragmentManager(), FragmentHelper.MUSIC_PLAYER);
+            final RequestListFragment requestListFragment = FragmentHelper.getFragment(RequestListFragment.class, networkServer.mainActivity.getFragmentManager(), FragmentHelper.REQUEST_LIST);
+            Activity mainActivity = networkServer.mainActivity;
 
             MediaLibraryHelper.playRequest(_requestedSong, mainActivity.getApplicationContext(), playerFragment.mediaPlayer, mainActivity.getContentResolver(), playerFragment, requestListFragment);
             mainActivity.runOnUiThread(new Runnable()
@@ -40,7 +40,7 @@ public class RequestSongId extends ClientMessage implements Serializable
                     playerFragment.enableAllElements();
                 }
             });
-            sender.write(new RequestAccepted(server.getRemainingRequests(sender.ipAddress)));
+            sender.write(new RequestAccepted(networkServer.getRemainingRequests(sender.ipAddress)));
             requestListFragment.updateUI();
         }
         else { sender.write(new LimitRejection()); }

@@ -2,7 +2,7 @@ package com.doleh.Jukebox.MessageTypes.Client;
 
 import com.doleh.Jukebox.MediaLibraryHelper;
 import com.doleh.Jukebox.MessageTypes.Server.SongList;
-import com.doleh.Jukebox.Server;
+import com.doleh.Jukebox.NetworkServer;
 import com.jackieloven.thebasics.NetComm;
 
 import java.io.Serializable;
@@ -19,9 +19,9 @@ public class RequestSongList extends ClientMessage implements Serializable
     }
 
     @Override
-    public void Execute(Server server, NetComm sender)
+    public void Execute(NetworkServer networkServer, NetComm sender)
     {
-        SongList listMessage = new SongList(MediaLibraryHelper.getSongList(server.mainActivity.getContentResolver(), _title, _artist));
+        SongList listMessage = new SongList(MediaLibraryHelper.getSongList(networkServer.mainActivity.getContentResolver(), _title, _artist));
         if (listMessage.songs != null)
         {
             sender.write(listMessage);

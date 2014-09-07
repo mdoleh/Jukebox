@@ -8,7 +8,7 @@ import java.net.SocketException;
 
 /** encapsulates networked communication with a single client or server;
     this class is modified from PlayerSocket.java in Andrew's HW3 submission */
-// This is the network communication class that handles all communication methods, Server and Patient are dependent on this
+// This is the network communication class that handles all communication methods, NetworkServer and Patient are dependent on this
 public class NetComm {
 	/** object that is notified when a new message is received */
 	private Networked node;
