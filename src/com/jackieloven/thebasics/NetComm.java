@@ -78,7 +78,7 @@ public class NetComm {
 				if (msgObj != null) {
                     node.msgReceived(msgObj, NetComm.this); // forward message to network node
 					if (msgObj instanceof CloseConnectionMsg) {
-                        return; // stop polling for messages if disconnected
+                        break; // stop polling for messages if disconnected
 					}
 				}
 			}
