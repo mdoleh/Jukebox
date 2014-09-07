@@ -25,6 +25,7 @@ public class NetworkServer implements Networked
     private boolean listeningForRequests = false;
     private Map<String, Integer> messageCount = new HashMap<String, Integer>();
     public Activity mainActivity;
+    private ControlCenterFragment _controlCenterFragment;
 
     // Network globals
     /** server socket used to set up connections with clients */
@@ -36,6 +37,7 @@ public class NetworkServer implements Networked
     public NetworkServer(Activity _mainActivity)
     {
         mainActivity = _mainActivity;
+        _controlCenterFragment = FragmentHelper.getFragment(ControlCenterFragment.class, mainActivity.getFragmentManager(), FragmentHelper.CONTROL_CENTER);
     }
 
     public void toggleListener()
@@ -143,6 +145,7 @@ public class NetworkServer implements Networked
                     netcomm.write(new ConnectionClosed());
                 }
                 if (serverSocket != null) { serverSocket.close(); }
+                running = false;
             }
             catch (IOException ex)
             {
@@ -178,8 +181,7 @@ public class NetworkServer implements Networked
 
     private void updateRequesterCount(int newValue)
     {
-        ControlCenterFragment controlCenterFragment = FragmentHelper.getFragment(ControlCenterFragment.class, mainActivity.getFragmentManager(), FragmentHelper.CONTROL_CENTER);
-        controlCenterFragment.updateRequesterCount(newValue);
+        _controlCenterFragment.updateRequesterCount(newValue);
     }
 
     public int getRemainingRequests(String ipAddress)

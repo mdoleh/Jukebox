@@ -2,6 +2,8 @@ package com.hardiktrivedi.Exception;
 
 import android.app.Activity;
 import android.os.Build;
+import android.util.Log;
+import com.doleh.Jukebox.Config;
 import com.doleh.Jukebox.Email;
 import com.doleh.Jukebox.MessageDialog;
 
@@ -20,6 +22,7 @@ public class ExceptionHandler implements
 
     public void uncaughtException(Thread thread, Throwable exception) {
         Email.sendErrorReport(exception);
+        Log.e(Config.APP_TITLE, exception.getMessage(), exception);
 
         MessageDialog.showErrorMessage(_mainActivity);
     }
