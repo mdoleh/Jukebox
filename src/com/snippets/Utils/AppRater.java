@@ -9,11 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import com.doleh.Jukebox.Config;
 
 public class AppRater {
-    public static String APP_TITLE;
-    public static String APP_PNAME;
-
     private final static int DAYS_UNTIL_PROMPT = 2;
     private final static int LAUNCHES_UNTIL_PROMPT = 3;
 
@@ -47,22 +45,22 @@ public class AppRater {
 
     public static void showRateDialog(final Context mContext, final SharedPreferences.Editor editor) {
         final Dialog dialog = new Dialog(mContext);
-        dialog.setTitle("Rate " + APP_TITLE);
+        dialog.setTitle("Rate " + Config.APP_TITLE);
 
         LinearLayout ll = new LinearLayout(mContext);
         ll.setOrientation(LinearLayout.VERTICAL);
 
         TextView tv = new TextView(mContext);
-        tv.setText("If you enjoy using " + APP_TITLE + ", please take a moment to rate it. Thanks for your support!");
+        tv.setText("If you enjoy using " + Config.APP_TITLE + ", please take a moment to rate it. Thanks for your support!");
         tv.setWidth(240);
         tv.setPadding(4, 0, 4, 10);
         ll.addView(tv);
 
         Button b1 = new Button(mContext);
-        b1.setText("Rate " + APP_TITLE);
+        b1.setText("Rate " + Config.APP_TITLE);
         b1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + APP_PNAME)));
+                mContext.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + Config.APP_PNAME)));
                 dialog.dismiss();
             }
         });

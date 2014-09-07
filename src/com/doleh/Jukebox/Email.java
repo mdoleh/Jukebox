@@ -16,8 +16,7 @@ import java.util.ArrayList;
 
 public class Email
 {
-    public static String APP_TITLE;
-    private static String APPLICATION_PREFIX = APP_TITLE + " - ";
+    private static String APPLICATION_PREFIX = Config.APP_TITLE + " - ";
 
     public static void sendErrorReport(Throwable ex)
     {
@@ -45,7 +44,7 @@ public class Email
         String auth =new String(Base64.encode(( "api" + ":" + "key-d0d5950ae6a02b975efaf6a4f99093d4").getBytes(),Base64.URL_SAFE| Base64.NO_WRAP));
         request.addHeader("Authorization", "Basic " + auth);
         ArrayList<NameValuePair> data = new ArrayList<NameValuePair>();
-        data.add(new BasicNameValuePair("from", APP_TITLE + " <postmaster@sandbox222da1e2f56641cc8a3c988ebc09fe3f.mailgun.org>"));
+        data.add(new BasicNameValuePair("from", Config.APP_TITLE + " <postmaster@sandbox222da1e2f56641cc8a3c988ebc09fe3f.mailgun.org>"));
         data.add(new BasicNameValuePair("to", "doleh.jukebox@gmail.com"));
         data.add(new BasicNameValuePair("subject", APPLICATION_PREFIX + subject));
         data.add(new BasicNameValuePair("text", body));

@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import com.doleh.Jukebox.AnimationSetting;
+import com.doleh.Jukebox.Config;
 import com.doleh.Jukebox.IFunction;
 import com.doleh.Jukebox.R;
 import com.google.android.gms.ads.AdRequest;
@@ -25,11 +26,10 @@ public class FragmentHelper
     public static final String SONG_REQUEST = "song_request";
     public static final String STARTUP = "startup";
     public static final String CONNECT = "connect";
-    public static boolean shouldShowAds = true;
 
     public static void loadBannerAds(View view)
     {
-        if (shouldShowAds) {
+        if (Config.SHOULD_SHOW_ADS) {
             // Look up the AdView as a resource and load a request.
             AdView adView = (AdView)view.findViewById(R.id.bottomBanner);
             AdRequest adRequest = new AdRequest.Builder()
