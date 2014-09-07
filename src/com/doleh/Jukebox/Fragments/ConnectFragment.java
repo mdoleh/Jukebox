@@ -24,6 +24,7 @@ public class ConnectFragment extends Fragment
 
         view = inflater.inflate(R.layout.connect, container, false);
         FragmentHelper.loadBannerAds(view);
+        initializeIpAddress();
         mainActivity = getActivity();
         setupButtonEventListener();
         return view;
@@ -34,6 +35,16 @@ public class ConnectFragment extends Fragment
     {
         super.onDestroy();
         closeSocket();
+    }
+
+    private void initializeIpAddress()
+    {
+        final EditText ipAddress = (EditText)view.findViewById(R.id.ipAddress);
+        String defaultIp = Utils.getIPAddress(true);
+        defaultIp = defaultIp.substring(0, defaultIp.indexOf(".") + 1);
+        if (defaultIp.contains("192")) { defaultIp += "168.0.0"; }
+        else { defaultIp += "0.0.0"; }
+        ipAddress.setText(defaultIp);
     }
 
     private void closeSocket()
