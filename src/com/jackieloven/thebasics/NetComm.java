@@ -105,7 +105,7 @@ public class NetComm {
 			// (if I don't know what causes the error then I can't write code to handle it)
 			catch (Exception ex) {
 				Email.sendErrorReport(ex);
-				return null;
+				return new CloseConnectionMsg();
 			}
 		}
 	}
