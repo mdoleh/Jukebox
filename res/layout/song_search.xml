@@ -12,7 +12,7 @@
             android:id="@+id/searchTitle"
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
-            android:textSize="30dp"
+            android:textSize="@dimen/title_size"
             android:layout_gravity="center_horizontal|top"/>
 
     <TextView
@@ -21,28 +21,28 @@
             android:text="@string/search_instructions"
             android:id="@+id/searchInstructions"
             android:layout_centerHorizontal="true"
-            android:textSize="18dp"
-            android:layout_marginTop="45dp"
+            android:textSize="@dimen/search_intructions_size"
+            android:layout_marginTop="@dimen/header_margin"
             android:layout_below="@+id/searchTitle"/>
 
     <EditText
-            android:layout_width="300dp"
+            android:layout_width="@dimen/text_input_width"
             android:layout_height="wrap_content"
             android:id="@+id/songTitle"
             android:hint="@string/songTitle"
             android:gravity="center_horizontal"
             android:layout_alignLeft="@+id/songArtist"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="@dimen/text_input_margin"
             android:layout_below="@id/searchInstructions"/>
 
     <EditText
-            android:layout_width="300dp"
+            android:layout_width="@dimen/text_input_width"
             android:layout_height="wrap_content"
             android:id="@+id/songArtist"
             android:hint="@string/songArtist"
             android:gravity="center_horizontal"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/text_input_under_text_input_margin"
             android:layout_below="@id/songTitle"/>
 
     <Button
@@ -51,7 +51,7 @@
             android:text="@string/search_for_songs"
             android:id="@+id/searchButton"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/bottom_button_margin"
             android:layout_below="@+id/songArtist"/>
 
     <include layout="@layout/loading_image_container"/>

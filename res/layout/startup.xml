@@ -14,7 +14,7 @@
             android:id="@+id/startupTitle"
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
-            android:textSize="30dp"
+            android:textSize="@dimen/title_size"
             android:layout_gravity="center_horizontal|top"/>
 
     <ImageView
@@ -23,7 +23,7 @@
             android:contentDescription="@string/receive_requests"
             android:id="@+id/receive_requests"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="45dp"
+            android:layout_marginTop="@dimen/header_margin"
             android:layout_below="@id/startupTitle"
             android:src="@drawable/receive_requests"/>
 
@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/receive_requests"
-            android:textSize="20dp"
+            android:textSize="@dimen/startup_label_size"
             android:id="@+id/receive_requests_text"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/receive_requests"/>
@@ -42,7 +42,7 @@
             android:contentDescription="@string/send_a_request"
             android:id="@+id/send_a_request"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="@dimen/startup_image_margin_top"
             android:layout_below="@+id/receive_requests_text"
             android:src="@drawable/send_requests"/>
 
@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/send_a_request"
-            android:textSize="20dp"
+            android:textSize="@dimen/startup_label_size"
             android:id="@+id/send_a_request_text"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/send_a_request"/>

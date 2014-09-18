@@ -13,7 +13,7 @@
             android:id="@+id/requestSongTitle"
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
-            android:textSize="30dp"
+            android:textSize="@dimen/title_size"
             android:layout_gravity="center_horizontal|top"/>
 
     <Spinner
@@ -23,7 +23,7 @@
             android:prompt="@string/songListPrompt"
             android:id="@+id/songListSpinner"
             android:layout_below="@+id/requestSongTitle"
-            android:layout_marginTop="30dp"/>
+            android:layout_marginTop="@dimen/request_song_header_margin"/>
 
     <Button
             android:layout_width="wrap_content"
@@ -32,7 +32,7 @@
             android:id="@+id/requestButton"
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/songListSpinner"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="@dimen/bottom_button_margin"/>
 
     <include layout="@layout/loading_image_container"/>
 

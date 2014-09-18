@@ -13,7 +13,7 @@
             android:id="@+id/controlCenterTitle"
             android:layout_centerHorizontal="true"
             android:layout_alignParentTop="true"
-            android:textSize="30dp"
+            android:textSize="@dimen/title_size"
             android:layout_gravity="center_horizontal|top"/>
 
     <ImageView
@@ -22,7 +22,7 @@
             android:contentDescription="@string/toggleListener"
             android:id="@+id/listenerToggle"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="98dp"
+            android:layout_marginTop="@dimen/control_center_header_margin"
             android:src="@drawable/stop_listening_icon"/>
 
     <TextView
@@ -31,26 +31,26 @@
             android:text="@string/toggleListener"
             android:id="@+id/listenerToggleLabel"
             android:layout_centerHorizontal="true"
-            android:textSize="20dp"
+            android:textSize="@dimen/control_center_label_size"
             android:layout_below="@id/listenerToggle"/>
 
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/control_center_device_address_margin_top"
             android:text="@string/deviceAddressLabel"
             android:id="@+id/deviceAddressLabel"
             android:layout_centerHorizontal="false"
             android:layout_alignLeft="@id/controlCenterTitle"
-            android:textSize="20dp"
+            android:textSize="@dimen/control_center_label_size"
             android:layout_below="@id/listenerToggleLabel"/>
 
     <TextView
             android:id="@+id/deviceAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="25dp"
-            android:layout_marginLeft="3dp"
+            android:textSize="@dimen/control_center_device_address_size"
+            android:layout_marginLeft="@dimen/control_center_margin_left"
             android:layout_toRightOf="@+id/deviceAddressLabel"
             android:layout_alignBaseline="@+id/deviceAddressLabel"/>
 
@@ -59,18 +59,18 @@
             android:layout_height="wrap_content"
             android:text="@string/requestersLabel"
             android:id="@+id/requestersLabel"
-            android:textSize="20dp"
+            android:textSize="@dimen/control_center_label_size"
             android:layout_alignLeft="@+id/controlCenterTitle"
             android:layout_below="@+id/deviceAddressLabel"
-            android:layout_marginTop="5dp"/>
+            android:layout_marginTop="@dimen/control_center_requesters_label_margin_top"/>
 
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/requesterDefaultCount"
             android:id="@+id/requesterCount"
-            android:textSize="18dp"
-            android:layout_marginLeft="3dp"
+            android:textSize="@dimen/control_center_requester_count_size"
+            android:layout_marginLeft="@dimen/control_center_margin_left"
             android:layout_toRightOf="@+id/requestersLabel"
             android:layout_alignBaseline="@+id/requestersLabel"/>
 

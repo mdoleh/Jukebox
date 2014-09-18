@@ -15,7 +15,31 @@
   limitations under the License.
  -->
 <resources>
-    <dimen name="tablet_list_width">300dp</dimen>
-    <dimen name="phone_list_height">200dp</dimen>
-    
+    <dimen name="title_size">25dp</dimen>
+    <dimen name="search_intructions_size">18dp</dimen>
+    <dimen name="current_song_playing_size">15dp</dimen>
+    <dimen name="music_player_label_size">20dp</dimen>
+    <dimen name="music_player_time_margin">5dp</dimen>
+    <dimen name="control_center_label_size">20dp</dimen>
+    <dimen name="control_center_device_address_size">25dp</dimen>
+    <dimen name="control_center_requester_count_size">18dp</dimen>
+    <dimen name="control_center_margin_left">3dp</dimen>
+    <dimen name="control_center_device_address_margin_top">10dp</dimen>
+    <dimen name="control_center_requesters_label_margin_top">5dp</dimen>
+    <dimen name="request_list_empty_label">25dp</dimen>
+    <dimen name="request_list_edit_button_margin">2dp</dimen>
+    <dimen name="startup_label_size">20dp</dimen>
+    <dimen name="startup_image_margin_top">25dp</dimen>
+    <dimen name="drag_item_image_size">24dp</dimen>
+    <dimen name="drag_item_list_text_size">20dp</dimen>
+    <dimen name="loading_image_size">66dp</dimen>
+    <dimen name="header_margin">25dp</dimen>
+    <dimen name="control_center_header_margin">45dp</dimen>
+    <dimen name="music_player_header_margin">60dp</dimen>
+    <dimen name="request_song_header_margin">15dp</dimen>
+    <dimen name="bottom_button_margin">10dp</dimen>
+    <dimen name="text_input_under_text_input_margin">10dp</dimen>
+    <dimen name="text_input_margin">5dp</dimen>
+    <dimen name="text_input_width">300dp</dimen>
+
 </resources>
