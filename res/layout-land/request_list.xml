@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/requestList"
+            android:id="@+id/textView"
+            android:textSize="@dimen/title_size"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal|top"/>
+
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/edit"
+            android:id="@+id/editButton"
+            android:enabled="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="@dimen/request_list_edit_button_margin"
+            android:layout_marginRight="@dimen/request_list_edit_button_margin"
+            android:src="@drawable/edit_icon"/>
+
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/save"
+            android:id="@+id/saveButton"
+            android:enabled="false"
+            android:visibility="invisible"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/save_icon"/>
+
+    <com.ericharlow.DragNDrop.DragNDropListView
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:id="@id/android:list"
+        android:layout_below="@+id/textView"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@id/android:empty"
+        android:text="@string/emptyList"
+        android:layout_below="@+id/textView"
+        android:textSize="@dimen/request_list_empty_label"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content" android:orientation="horizontal">
+
+    <ImageView android:id="@+id/moveImage"
+               android:tag="moveImage"
+               android:visibility="gone"
+               android:layout_width="@dimen/drag_item_image_size"
+               android:layout_height="@dimen/drag_item_image_size"
+               android:src="@drawable/move_indicator"
+               android:layout_gravity="center_vertical"
+               android:contentDescription="@string/move_indicator"
+               android:layout_alignParentLeft="true"
+               android:layout_centerVertical="true"/>
+
+    <TextView android:text="@+id/listText"
+              android:id="@+id/listText"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_gravity="center_vertical"
+              android:textSize="@dimen/drag_item_list_text_size"
+              android:layout_centerVertical="true"
+              android:layout_toRightOf="@+id/moveImage"/>
+
+    <ImageView android:id="@+id/deleteImage"
+               android:tag="deleteImage"
+               android:visibility="gone"
+               android:layout_width="@dimen/drag_item_image_size"
+               android:layout_height="@dimen/drag_item_image_size"
+               android:src="@drawable/delete_icon"
+               android:layout_gravity="center_vertical"
+               android:contentDescription="@string/delete"
+               android:layout_alignParentRight="true"
+               android:layout_centerVertical="true"/>
+
+</RelativeLayout>
