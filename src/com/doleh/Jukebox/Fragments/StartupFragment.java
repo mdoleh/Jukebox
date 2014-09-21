@@ -1,6 +1,7 @@
 package com.doleh.Jukebox.Fragments;
 
 import android.app.Fragment;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.doleh.Jukebox.IFunction;
+import com.doleh.Jukebox.MainActivity;
 import com.doleh.Jukebox.R;
 
 public class StartupFragment extends Fragment
@@ -18,11 +20,28 @@ public class StartupFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.startup, container, false);
+        if (((MainActivity)getActivity())._isLandscape)
+        {
+            view = inflater.inflate(R.layout.startup_land, container, false);
+        }
+        else
+        {
+            view = inflater.inflate(R.layout.startup, container, false);
+        }
         FragmentHelper.loadBannerAds(view);
         setupButtonEventListener();
         hideActionBar();
+
         return view;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig)
+    {
+        super.onConfigurationChanged(newConfig);
+        ((MainActivity)getActivity())._isLandscape = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
+        FragmentHelper.removeFragment(this, getFragmentManager());
+        FragmentHelper.showFragment(FragmentHelper.STARTUP, new StartupFragment(), getFragmentManager());
     }
 
     private void setupButtonEventListener()

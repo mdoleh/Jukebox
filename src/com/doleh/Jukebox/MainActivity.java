@@ -17,6 +17,7 @@ import com.snippets.Utils.AppRater;
 public class MainActivity extends Activity
 {
     private PowerManager.WakeLock wakeLock;
+    public boolean _isLandscape;
 
     /**
      * Called when the activity is first created.
@@ -40,7 +41,7 @@ public class MainActivity extends Activity
         }
 
         // Add this section of code wherever a fragment should appear (i.e. new screen)
-        FragmentHelper.showFragment("startup", new StartupFragment(), getFragmentManager());
+        FragmentHelper.showFragment(FragmentHelper.STARTUP, new StartupFragment(), getFragmentManager());
 
         // Prevent LCD screen from turning off
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);

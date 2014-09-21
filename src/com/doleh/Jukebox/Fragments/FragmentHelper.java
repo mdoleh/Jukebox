@@ -75,6 +75,14 @@ public class FragmentHelper
         transaction.commit();
     }
 
+    public static void removeFragment(Fragment fragment, FragmentManager fragmentManager)
+    {
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        transaction.remove(fragment);
+        transaction.commit();
+    }
+
     public static void addFragment(String fragmentTag, Fragment fragment, FragmentManager fragmentManager)
     {
         FragmentTransaction transaction = fragmentManager.beginTransaction();

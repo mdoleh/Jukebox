@@ -21,11 +21,6 @@ public class ControlCenterFragment extends Fragment
     private RequestListFragment requestListFragment;
     private boolean listenImageToggle = false;
 
-    // for loading saved state
-    private final String LISTEN_IMAGE_TOGGLE = "listenImageToggle";
-    private final String IP_ADDRESS = "ipAddress";
-    private final String REQUESTER_COUNT = "requesterCount";
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -41,15 +36,6 @@ public class ControlCenterFragment extends Fragment
         setupButtonEventListener();
 
         return view;
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState)
-    {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(LISTEN_IMAGE_TOGGLE, listenImageToggle);
-        outState.putString(IP_ADDRESS, ((TextView)view.findViewById(R.id.ipAddress)).getText().toString());
-        outState.putString(REQUESTER_COUNT, ((TextView)view.findViewById(R.id.requesterCount)).getText().toString());
     }
 
     @Override
