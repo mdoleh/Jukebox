@@ -52,6 +52,12 @@ public class MainActivity extends Activity
     }
 
     @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState)
+    {
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
         // Allow LCD screen to turn off
