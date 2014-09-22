@@ -41,5 +41,6 @@
     <dimen name="text_input_under_text_input_margin">10dp</dimen>
     <dimen name="text_input_margin">5dp</dimen>
     <dimen name="text_input_width">300dp</dimen>
+    <dimen name="startup_button_padding">5dp</dimen>
 
 </resources>

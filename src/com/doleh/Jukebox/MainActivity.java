@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.view.KeyEvent;
@@ -17,7 +18,7 @@ import com.snippets.Utils.AppRater;
 public class MainActivity extends Activity
 {
     private PowerManager.WakeLock wakeLock;
-    public boolean _isLandscape;
+    public boolean isLandscape;
 
     /**
      * Called when the activity is first created.
@@ -63,6 +64,13 @@ public class MainActivity extends Activity
         super.onPause();
         // Allow LCD screen to turn off
         if (wakeLock.isHeld()) { wakeLock.release(); }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig)
+    {
+        super.onConfigurationChanged(newConfig);
+        isLandscape = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
     // Detects back button press and asks the user if they want to leave the control center
