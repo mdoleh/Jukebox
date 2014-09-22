@@ -8,8 +8,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import com.doleh.Jukebox.Globals;
 import com.doleh.Jukebox.IFunction;
-import com.doleh.Jukebox.MainActivity;
 import com.doleh.Jukebox.R;
 
 public class StartupFragment extends Fragment
@@ -20,7 +20,7 @@ public class StartupFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        if (((MainActivity)getActivity()).isLandscape)
+        if (Globals.IS_LANDSCAPE)
         {
             view = inflater.inflate(R.layout.startup_land, container, false);
         }
@@ -39,7 +39,7 @@ public class StartupFragment extends Fragment
     public void onConfigurationChanged(Configuration newConfig)
     {
         super.onConfigurationChanged(newConfig);
-        ((MainActivity)getActivity()).isLandscape = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
+        Globals.IS_LANDSCAPE = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
         FragmentHelper.removeFragment(this, getFragmentManager());
         FragmentHelper.showFragment(FragmentHelper.STARTUP, new StartupFragment(), getFragmentManager());
     }

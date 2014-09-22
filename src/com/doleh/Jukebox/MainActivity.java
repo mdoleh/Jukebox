@@ -18,7 +18,6 @@ import com.snippets.Utils.AppRater;
 public class MainActivity extends Activity
 {
     private PowerManager.WakeLock wakeLock;
-    public boolean isLandscape;
 
     /**
      * Called when the activity is first created.
@@ -70,7 +69,7 @@ public class MainActivity extends Activity
     public void onConfigurationChanged(Configuration newConfig)
     {
         super.onConfigurationChanged(newConfig);
-        isLandscape = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
+        Globals.IS_LANDSCAPE = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
     // Detects back button press and asks the user if they want to leave the control center
