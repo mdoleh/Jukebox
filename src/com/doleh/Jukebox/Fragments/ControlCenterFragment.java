@@ -83,6 +83,17 @@ public class ControlCenterFragment extends Fragment
                 return true;
             }
         });
+
+        final ImageView configButton = ((ImageView)view.findViewById(R.id.config_icon));
+        configButton.setOnTouchListener(new View.OnTouchListener()
+        {
+            @Override
+            public boolean onTouch(View v, MotionEvent event)
+            {
+                FragmentHelper.handleTouchEvents(event, configButton, new handleConfigTouch());
+                return true;
+            }
+        });
     }
 
     @Override
@@ -108,7 +119,7 @@ public class ControlCenterFragment extends Fragment
     private void showMusicPlayer()
     {
         AnimationSetting controlCenterAnimation = new AnimationSetting(0, R.animator.slide_out_right, R.animator.slide_in_left, 0);
-        FragmentHelper.hideFragment("control_center", this, getFragmentManager(), controlCenterAnimation);
+        FragmentHelper.hideFragment(FragmentHelper.CONTROL_CENTER, this, getFragmentManager(), controlCenterAnimation);
 
         AnimationSetting playerAnimation = new AnimationSetting(R.animator.slide_in_right, 0, 0, 0);
         FragmentHelper.unHideFragment(playerFragment, getFragmentManager(), playerAnimation);
@@ -117,10 +128,15 @@ public class ControlCenterFragment extends Fragment
     private void showRequestList()
     {
         AnimationSetting controlCenterAnimation = new AnimationSetting(0, R.animator.slide_out_left, R.animator.slide_in_right, 0);
-        FragmentHelper.hideFragment("control_center", this, getFragmentManager(), controlCenterAnimation);
+        FragmentHelper.hideFragment(FragmentHelper.CONTROL_CENTER, this, getFragmentManager(), controlCenterAnimation);
 
         AnimationSetting requestListAnimation = new AnimationSetting(R.animator.slide_in_left, 0, 0, 0);
         FragmentHelper.unHideFragment(requestListFragment, getFragmentManager(), requestListAnimation);
+    }
+
+    private void showConfigurations()
+    {
+        FragmentHelper.showFragment(FragmentHelper.CONTROL_CENTER, this, FragmentHelper.CONFIG, new ConfigFragment(), getFragmentManager());
     }
 
     private void toggleListener()
@@ -191,6 +207,15 @@ public class ControlCenterFragment extends Fragment
         public void execute(ImageView button)
         {
            showRequestList();
+        }
+    }
+
+    public class handleConfigTouch implements IFunction
+    {
+        @Override
+        public void execute(ImageView button)
+        {
+            showConfigurations();
         }
     }
 }

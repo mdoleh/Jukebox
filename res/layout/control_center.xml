@@ -19,6 +19,16 @@
     <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/config_icon"
+            android:id="@+id/config_icon"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="@dimen/request_list_edit_button_margin"
+            android:src="@drawable/edit_icon"/>
+
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:contentDescription="@string/toggleListener"
             android:id="@+id/listenerToggle"
             android:layout_centerHorizontal="true"

@@ -26,6 +26,7 @@ public class FragmentHelper
     public static final String SONG_REQUEST = "song_request";
     public static final String STARTUP = "startup";
     public static final String CONNECT = "connect";
+    public static final String CONFIG = "config";
 
     public static void loadBannerAds(View view)
     {
