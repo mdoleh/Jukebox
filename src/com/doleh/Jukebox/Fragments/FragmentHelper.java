@@ -84,6 +84,14 @@ public class FragmentHelper
         transaction.commit();
     }
 
+    public static void removeFragment(Fragment fragment, FragmentManager fragmentManager, AnimationSetting animationSetting)
+    {
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setCustomAnimations(animationSetting.enter, animationSetting.exit, animationSetting.popEnter, animationSetting.popExit);
+        transaction.remove(fragment);
+        transaction.commit();
+    }
+
     public static void addFragment(String fragmentTag, Fragment fragment, FragmentManager fragmentManager)
     {
         FragmentTransaction transaction = fragmentManager.beginTransaction();

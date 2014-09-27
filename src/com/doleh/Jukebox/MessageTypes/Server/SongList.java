@@ -23,14 +23,15 @@ public class SongList extends ServerMessage implements Serializable
     public void Execute()
     {
         NetworkClient.receivedSongs = songs;
+        SongSearchFragment songSearchFragment = FragmentHelper.getFragment(SongSearchFragment.class, NetworkClient.mainActivity.getFragmentManager(), FragmentHelper.SONG_SEARCH);
         if (songs.size() > 0)
         {
-            ((SongSearchFragment) NetworkClient.mainActivity.getFragmentManager().findFragmentByTag("song_search")).showSongRequest();
+            songSearchFragment.showSongRequest();
         }
         else
         {
             MessageDialog.showMessageBox(NetworkClient.mainActivity, NetworkClient.mainActivity.getString(R.string.noSongsFound), NetworkClient.mainActivity.getString(R.string.noSongsFoundMsg));
         }
-        FragmentHelper.getFragment(SongSearchFragment.class, NetworkClient.mainActivity.getFragmentManager(), FragmentHelper.SONG_SEARCH).unBlockUI();
+        songSearchFragment.unBlockUI();
     }
 }

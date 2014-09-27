@@ -18,7 +18,6 @@ public class ConfigFragment extends Fragment
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.config, container, false);
-        FragmentHelper.loadBannerAds(view);
         mainActivity = getActivity();
         return view;
     }

@@ -1,15 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:ads="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-    <com.google.android.gms.ads.AdView android:id="@+id/bottomBanner"
-                                       android:layout_width="wrap_content"
-                                       android:layout_height="wrap_content"
-                                       android:layout_alignParentBottom="true"
-                                       android:layout_centerHorizontal="true"
-                                       ads:adUnitId="@string/banner_config"
-                                       ads:adSize="SMART_BANNER"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/config"
+            android:id="@+id/configTitle"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
+            android:textSize="@dimen/title_size"
+            android:layout_gravity="center_horizontal|top"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/maxRequestCountLabel"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/configTitle"
+            android:text="@string/max_requests"
+            android:textSize="20dp"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/maxRequestCount"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/maxRequestCountLabel"
+            android:text="@string/defaultRequestCount"
+            android:textSize="30dp"/>
+
+    <SeekBar
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:max="@integer/config_seekbar_max"
+            android:layout_toLeftOf="@id/maxRequestCount"
+            android:layout_below="@id/maxRequestCountLabel"
+            android:layout_alignTop="@id/maxRequestCount"
+            android:id="@+id/maxRequestsBar"/>
 </RelativeLayout>

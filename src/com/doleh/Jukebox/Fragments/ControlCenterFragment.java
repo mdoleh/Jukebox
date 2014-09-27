@@ -19,6 +19,7 @@ public class ControlCenterFragment extends Fragment
     private NetworkServer networkServer;
     private PlayerFragment playerFragment;
     private RequestListFragment requestListFragment;
+    private ConfigFragment configFragment;
     private boolean listenImageToggle = false;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -28,14 +29,30 @@ public class ControlCenterFragment extends Fragment
         FragmentHelper.loadBannerAds(view);
         mainActivity = getActivity();
         networkServer = new NetworkServer(mainActivity);
-        playerFragment = new PlayerFragment(networkServer);
-        requestListFragment = new RequestListFragment();
-        FragmentHelper.addFragment(FragmentHelper.MUSIC_PLAYER, playerFragment, getFragmentManager());
-        FragmentHelper.addFragment(FragmentHelper.REQUEST_LIST, requestListFragment, getFragmentManager());
+        loadFragments();
 
         setupButtonEventListener();
 
         return view;
+    }
+
+    private void loadFragments()
+    {
+        playerFragment = new PlayerFragment(networkServer);
+        requestListFragment = new RequestListFragment();
+        FragmentHelper.addFragment(FragmentHelper.MUSIC_PLAYER, playerFragment, getFragmentManager());
+        FragmentHelper.addFragment(FragmentHelper.REQUEST_LIST, requestListFragment, getFragmentManager());
+        loadConfigurationFragment();
+    }
+
+    private void loadConfigurationFragment()
+    {
+        // this fragment does not need to loaded immediately, delayed until needed
+        if (Config.APP_PAID)
+        {
+            configFragment = new ConfigFragment();
+            FragmentHelper.addFragment(FragmentHelper.CONFIG, configFragment, getFragmentManager());
+        }
     }
 
     @Override
@@ -44,8 +61,6 @@ public class ControlCenterFragment extends Fragment
         super.onDestroy();
         networkServer.closePort();
         networkServer.clearMessageCounts();
-        playerFragment.onDestroy();
-        requestListFragment.onDestroy();
         FragmentHelper.goBackToBeginning(getFragmentManager());
         MediaLibraryHelper.clearSongQueue();
     }
@@ -104,15 +119,26 @@ public class ControlCenterFragment extends Fragment
         {
             hideFragment(playerFragment, getFragmentManager(), R.animator.slide_out_left);
             hideFragment(requestListFragment, getFragmentManager(), R.animator.slide_out_right);
+            hideFragment(configFragment, getFragmentManager(), R.animator.slide_out_down);
         }
     }
 
     private void hideFragment(Fragment fragment, FragmentManager fragmentManager, int exit)
     {
-        if (!fragment.isHidden())
+        if (fragment != null && !fragment.isHidden())
         {
             AnimationSetting animationSetting = new AnimationSetting(0, exit, 0, 0);
             FragmentHelper.hideFragment(null, fragment, fragmentManager, animationSetting);
+            removeFragment(fragment, fragmentManager, animationSetting);
+        }
+    }
+
+    private void removeFragment(Fragment fragment, FragmentManager fragmentManager, AnimationSetting animationSetting)
+    {
+        // ConfigFragment can be reloaded every time it is needed, removed when leaving screen
+        if (fragment.getClass() == ConfigFragment.class)
+        {
+            FragmentHelper.removeFragment(fragment, fragmentManager, animationSetting);
         }
     }
 
@@ -136,7 +162,19 @@ public class ControlCenterFragment extends Fragment
 
     private void showConfigurations()
     {
-        FragmentHelper.showFragment(FragmentHelper.CONTROL_CENTER, this, FragmentHelper.CONFIG, new ConfigFragment(), getFragmentManager());
+        if (Config.APP_PAID)
+        {
+            AnimationSetting animationSetting = new AnimationSetting(0, R.animator.slide_out_up, R.animator.slide_in_down, 0);
+            FragmentHelper.hideFragment(FragmentHelper.CONTROL_CENTER, this, getFragmentManager(), animationSetting);
+
+            loadConfigurationFragment();
+            AnimationSetting configAnimation = new AnimationSetting(R.animator.slide_in_up, 0, 0, 0);
+            FragmentHelper.unHideFragment(configFragment, getFragmentManager(), configAnimation);
+        }
+        else
+        {
+            MessageDialog.showMessageBox(mainActivity, getString(R.string.notPaidApp), getString(R.string.notPaidAppMsg));
+        }
     }
 
     private void toggleListener()
