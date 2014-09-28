@@ -35,7 +35,7 @@ public class RequestSongId extends ClientMessage implements Serializable
             final RequestListFragment requestListFragment = FragmentHelper.getFragment(RequestListFragment.class, networkServer.mainActivity.getFragmentManager(), FragmentHelper.REQUEST_LIST);
             Activity mainActivity = networkServer.mainActivity;
 
-            MediaLibraryHelper.playRequest(_requestedSong, mainActivity.getApplicationContext(), playerFragment.mediaPlayer, mainActivity.getContentResolver(), playerFragment, requestListFragment);
+            MediaLibraryHelper.playRequest(_requestedSong, mainActivity.getApplicationContext(), playerFragment.mediaPlayer, playerFragment, requestListFragment);
             mainActivity.runOnUiThread(new Runnable()
             {
                 @Override

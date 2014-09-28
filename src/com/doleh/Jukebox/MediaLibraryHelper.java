@@ -61,7 +61,7 @@ public class MediaLibraryHelper
         return allInfo;
     }
 
-    public static void playRequest(Song requestedSong, Context context, MediaPlayer mediaPlayer, ContentResolver contentResolver, PlayerFragment playerFragment, RequestListFragment requestListFragment)
+    public static void playRequest(Song requestedSong, Context context, MediaPlayer mediaPlayer, PlayerFragment playerFragment, RequestListFragment requestListFragment)
     {
         if (mediaPlayer.isPlaying() || isPaused || songQueue.size() > 0)
         {
@@ -179,11 +179,6 @@ public class MediaLibraryHelper
     public static List<Song> getSongQueue()
     {
         return songQueue;
-    }
-
-    public static void setSongQueue(List<Song> newQueue)
-    {
-        songQueue = new ArrayList<Song>(newQueue);
     }
 
     private static void notifyDataSetUpdate(final RequestListFragment requestListFragment)
