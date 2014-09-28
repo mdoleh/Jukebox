@@ -94,12 +94,15 @@ public class PlayerFragment extends Fragment
             @Override
             public void onCompletion(MediaPlayer mp)
             {
-                mediaPlayerReady = false;
-                mp.stop();
-                mp.reset();
-                // If songs are in the queue play them next
-                MediaLibraryHelper.playNextSongInQueue(mp, mainActivity.getApplicationContext(), PlayerFragment.this, FragmentHelper.getFragment(RequestListFragment.class, getFragmentManager(), FragmentHelper.REQUEST_LIST));
-                if (!mediaPlayerReady && !mediaPlayer.isPlaying()) { resetMusicPlayer(); }
+                if (Config.AUTO_PLAY)
+                {
+                    mediaPlayerReady = false;
+                    mp.stop();
+                    mp.reset();
+                    // If songs are in the queue play them next
+                    MediaLibraryHelper.playNextSongInQueue(mp, mainActivity.getApplicationContext(), PlayerFragment.this, FragmentHelper.getFragment(RequestListFragment.class, getFragmentManager(), FragmentHelper.REQUEST_LIST));
+                    if (!mediaPlayerReady && !mediaPlayer.isPlaying()) { resetMusicPlayer(); }
+                }
                 _networkServer.clearMessageCounts();
             }
         });
@@ -302,7 +305,15 @@ public class PlayerFragment extends Fragment
         @Override
         public void execute(ImageView button)
         {
-            togglePlay(button);
+            if (mediaPlayerReady)
+            {
+                togglePlay(button);
+            }
+            else
+            {
+                MediaLibraryHelper.playNextSongInQueue(mediaPlayer, mainActivity.getApplicationContext(), PlayerFragment.this, FragmentHelper.getFragment(RequestListFragment.class, getFragmentManager(), FragmentHelper.REQUEST_LIST));
+                button.setImageResource(R.drawable.pause_icon);
+            }
         }
     }
 

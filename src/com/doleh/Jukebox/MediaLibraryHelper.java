@@ -63,7 +63,7 @@ public class MediaLibraryHelper
 
     public static void playRequest(Song requestedSong, Context context, MediaPlayer mediaPlayer, PlayerFragment playerFragment, RequestListFragment requestListFragment)
     {
-        if (mediaPlayer.isPlaying() || isPaused || songQueue.size() > 0)
+        if (!Config.AUTO_PLAY || mediaPlayer.isPlaying() || isPaused || songQueue.size() > 0)
         {
             int index = songExistsInQueue(requestedSong);
             if (index != -1)
