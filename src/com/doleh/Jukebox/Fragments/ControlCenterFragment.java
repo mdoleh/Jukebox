@@ -61,6 +61,8 @@ public class ControlCenterFragment extends Fragment
         super.onDestroy();
         networkServer.closePort();
         networkServer.clearMessageCounts();
+        playerFragment.onDestroy();
+        requestListFragment.onDestroy();
         FragmentHelper.goBackToBeginning(getFragmentManager());
         MediaLibraryHelper.clearSongQueue();
     }
