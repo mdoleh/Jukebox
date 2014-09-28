@@ -27,14 +27,14 @@
     <string name="requestersLabel">Number of Requesters:</string>
     <string name="warning">Warning</string>
     <string name="unknownRequester">Received message from unknown requester: </string>
-    <string name="connectionSuccessMsg">You have successfully connected to the Control Center!</string>
+    <string name="connectionSuccessMsg">You have successfully connected to the DJ!</string>
     <string name="connectionSuccess">Connection Success</string>
     <string name="connectionFailed">Connection Failed</string>
-    <string name="connectionFailedMsg">Control Center is not accepting requests at this time.</string>
-    <string name="connectionFailedMsg2">One of the following has occurred: \n1. Control Center is not accepting requests at this time \n2. The IP address is incorrect \n3. You cancelled the connection</string>
+    <string name="connectionFailedMsg">The DJ is not accepting requests at this time.</string>
+    <string name="connectionFailedMsg2">One of the following has occurred: \n1. The DJ is not accepting requests at this time \n2. The IP address is incorrect \n3. You cancelled the connection</string>
     <string name="ok">OK</string>
     <string name="connectionLost">Connection Lost</string>
-    <string name="connectionLostMsg">Control Center has disconnected.</string>
+    <string name="connectionLostMsg">The DJ has disconnected.</string>
     <string name="requesterDefaultCount">0</string>
     <string name="deviceAddressLabel">IP Address:</string>
     <string name="noSongsFound">No Songs Found</string>
@@ -84,4 +84,6 @@
     <string name="config_save_button">Save</string>
     <string name="settingsSaved" type="id">Save Successful</string>
     <string name="settingsSavedMsg" type="id">You have successfully saved your settings.</string>
+    <string name="configUpdated">Configuration Updated</string>
+    <string name="configUpdatedMsg">The DJ updated the configuration. You now have {0} requests left.</string>
 </resources>
