@@ -50,7 +50,7 @@ public class ConfigFragment extends Fragment
             public void onClick(View v)
             {
                 Config.MAX_MESSAGE_COUNT = seekBar.getProgress();
-                Config.SHOULD_PLAY_AUTOMATICALLY = autoplay.isChecked();
+                Config.AUTO_PLAY = autoplay.isChecked();
                 MessageDialog.showMessageBox(mainActivity, getString(R.string.settingsSaved), getString(R.string.settingsSavedMsg));
             }
         });
@@ -62,7 +62,7 @@ public class ConfigFragment extends Fragment
         CheckedTextView autoplay = (CheckedTextView)view.findViewById(R.id.autoplay);
 
         seekBar.setProgress(Config.MAX_MESSAGE_COUNT);
-        autoplay.setChecked(Config.SHOULD_PLAY_AUTOMATICALLY);
+        autoplay.setChecked(Config.AUTO_PLAY);
     }
 
     private void setupCheckBoxListeners()

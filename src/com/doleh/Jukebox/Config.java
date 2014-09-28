@@ -10,7 +10,7 @@ public class Config
     public static boolean SHOULD_SHOW_ADS;
     public static int MAX_MESSAGE_COUNT;
     public static boolean APP_PAID;
-    public static boolean SHOULD_PLAY_AUTOMATICALLY;
+    public static boolean AUTO_PLAY;
     /** networking port that server listens on */
     public static final int PORT = 35768;
 
@@ -29,7 +29,7 @@ public class Config
         SHOULD_SHOW_ADS = intent.getBooleanExtra(SHOULD_SHOW_ADS_KEY, true);
         MAX_MESSAGE_COUNT = intent.getIntExtra(MAX_MESSAGE_COUNT_KEY, 5);
         APP_PAID = intent.getBooleanExtra(APP_PAID_KEY, false);
-        SHOULD_PLAY_AUTOMATICALLY = intent.getBooleanExtra(AUTO_PLAY_KEY, true);
+        AUTO_PLAY = intent.getBooleanExtra(AUTO_PLAY_KEY, true);
         SHOW_SPLASH_SCREEN = false;
     }
 }
