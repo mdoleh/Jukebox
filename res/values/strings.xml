@@ -81,4 +81,7 @@
     <string name="notPaidAppMsg">You must have the paid version of the app to use this feature.</string>
     <string name="notPaidApp">Feature Not Available</string>
     <string name="auto_play_config">Autoplay Song Requests</string>
+    <string name="config_save_button">Save</string>
+    <string name="settingsSaved" type="id">Save Successful</string>
+    <string name="settingsSavedMsg" type="id">You have successfully saved your settings.</string>
 </resources>

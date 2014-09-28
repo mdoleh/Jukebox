@@ -20,15 +20,16 @@ public class Config
     public static final String APP_TITLE_KEY = "com.doleh.Jukebox.MainActivity.app_title";
     public static final String MAX_MESSAGE_COUNT_KEY = "com.doleh.Jukebox.MainActivity.max_message_count";
     public static final String APP_PAID_KEY = "com.doleh.Jukebox.MainActivity.app_paid";
+    public static final String AUTO_PLAY_KEY = "com.doleh.Jukebox.MainActivity.auto_play";
 
     public static void initialize(Intent intent)
     {
         APP_PNAME = intent.getStringExtra(APP_PNAME_KEY);
         APP_TITLE = intent.getStringExtra(APP_TITLE_KEY);
         SHOULD_SHOW_ADS = intent.getBooleanExtra(SHOULD_SHOW_ADS_KEY, true);
-        MAX_MESSAGE_COUNT = intent.getIntExtra(MAX_MESSAGE_COUNT_KEY, 3);
+        MAX_MESSAGE_COUNT = intent.getIntExtra(MAX_MESSAGE_COUNT_KEY, 5);
         APP_PAID = intent.getBooleanExtra(APP_PAID_KEY, false);
-        SHOULD_PLAY_AUTOMATICALLY = true;
+        SHOULD_PLAY_AUTOMATICALLY = intent.getBooleanExtra(AUTO_PLAY_KEY, true);
         SHOW_SPLASH_SCREEN = false;
     }
 }

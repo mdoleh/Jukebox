@@ -14,6 +14,14 @@
             android:textSize="@dimen/title_size"
             android:layout_gravity="center_horizontal|top"/>
 
+    <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/configSaveButton"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/config_save_button"/>
+
     <CheckedTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
