@@ -14,14 +14,26 @@
             android:textSize="@dimen/title_size"
             android:layout_gravity="center_horizontal|top"/>
 
+    <CheckedTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/configTitle"
+            android:text="@string/auto_play_config"
+            android:textSize="@dimen/config_option_size"
+            android:drawableLeft="?android:attr/listChoiceIndicatorMultiple"
+            android:checked="true"
+            android:id="@+id/autoplay"
+            android:layout_marginTop="@dimen/header_margin"/>
+
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/maxRequestCountLabel"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/configTitle"
+            android:layout_below="@id/autoplay"
             android:text="@string/max_requests"
-            android:textSize="20dp"/>
+            android:textSize="@dimen/config_option_size"
+            android:layout_marginTop="@dimen/config_option_margin_top"/>
 
     <TextView
             android:layout_width="wrap_content"
@@ -30,7 +42,8 @@
             android:layout_alignParentRight="true"
             android:layout_below="@id/maxRequestCountLabel"
             android:text="@string/defaultRequestCount"
-            android:textSize="30dp"/>
+            android:textSize="@dimen/config_request_count_size"
+            android:layout_marginRight="@dimen/config_request_count_margin"/>
 
     <SeekBar
             android:layout_width="fill_parent"

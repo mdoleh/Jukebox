@@ -76,8 +76,9 @@
     <string name="splashScreen">Splash Screen</string>
     <string name="config_icon">Config Icon</string>
     <string name="config">Settings</string>
-    <string name="max_requests">Maximum Requests Allowed Per Requester:</string>
+    <string name="max_requests">Max Requests Allowed Per Requester:</string>
     <string name="defaultRequestCount">10</string>
     <string name="notPaidAppMsg">You must have the paid version of the app to use this feature.</string>
     <string name="notPaidApp">Feature Not Available</string>
+    <string name="auto_play_config">Autoplay Song Requests</string>
 </resources>

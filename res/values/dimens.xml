@@ -42,5 +42,9 @@
     <dimen name="text_input_margin">5dp</dimen>
     <dimen name="text_input_width">300dp</dimen>
     <dimen name="startup_button_padding">5dp</dimen>
+    <dimen name="config_option_size">16dp</dimen>
+    <dimen name="config_request_count_size">20dp</dimen>
+    <dimen name="config_request_count_margin">2dp</dimen>
+    <dimen name="config_option_margin_top">5dp</dimen>
 
 </resources>
