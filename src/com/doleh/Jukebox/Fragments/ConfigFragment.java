@@ -87,8 +87,7 @@ public class ConfigFragment extends Fragment
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
             {
-                progress = progress / SEEK_BAR_STEP;
-                progress = progress * SEEK_BAR_STEP;
+                progress = adjustProgress(seekBar, progress);
                 maxCount.setText(Integer.toString(progress));
             }
 
@@ -104,5 +103,13 @@ public class ConfigFragment extends Fragment
                 // do nothing
             }
         });
+    }
+
+    private int adjustProgress(SeekBar seekBar, int progress)
+    {
+        progress = progress / SEEK_BAR_STEP;
+        progress = progress * SEEK_BAR_STEP;
+        seekBar.setProgress(progress);
+        return progress;
     }
 }
