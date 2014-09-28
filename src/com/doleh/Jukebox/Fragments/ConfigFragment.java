@@ -12,6 +12,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import com.doleh.Jukebox.Config;
 import com.doleh.Jukebox.MessageDialog;
+import com.doleh.Jukebox.NetworkServer;
 import com.doleh.Jukebox.R;
 
 public class ConfigFragment extends Fragment
@@ -19,6 +20,12 @@ public class ConfigFragment extends Fragment
     private View view;
     private Activity mainActivity;
     private final int SEEK_BAR_STEP = 5;
+    private NetworkServer _networkServer;
+
+    public ConfigFragment(NetworkServer networkServer)
+    {
+        _networkServer = networkServer;
+    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState)
@@ -49,7 +56,12 @@ public class ConfigFragment extends Fragment
             @Override
             public void onClick(View v)
             {
-                Config.MAX_MESSAGE_COUNT = seekBar.getProgress();
+                int progress = seekBar.getProgress();
+                if (Config.MAX_MESSAGE_COUNT != progress)
+                {
+                    _networkServer.notifyConfigUpdate(progress);
+                }
+                Config.MAX_MESSAGE_COUNT = progress;
                 Config.AUTO_PLAY = autoplay.isChecked();
                 MessageDialog.showMessageBox(mainActivity, getString(R.string.settingsSaved), getString(R.string.settingsSavedMsg));
             }

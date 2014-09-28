@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import com.doleh.Jukebox.Fragments.ControlCenterFragment;
 import com.doleh.Jukebox.Fragments.FragmentHelper;
 import com.doleh.Jukebox.MessageTypes.Client.ClientMessage;
+import com.doleh.Jukebox.MessageTypes.Server.ConfigUpdated;
 import com.doleh.Jukebox.MessageTypes.Server.ConnectionAccepted;
 import com.doleh.Jukebox.MessageTypes.Server.ConnectionClosed;
 import com.doleh.Jukebox.MessageTypes.Server.Rejection;
@@ -192,5 +193,15 @@ public class NetworkServer implements Networked
             return MAX_MESSAGE_COUNT - count;
         }
         return MAX_MESSAGE_COUNT;
+    }
+
+    public void notifyConfigUpdate(int MAX_MESSAGE_COUNT)
+    {
+        for (NetComm netComm : netComms)
+        {
+            int requestsRemaining = getRemainingRequests(netComm.ipAddress, MAX_MESSAGE_COUNT);
+            if (requestsRemaining < 0) { requestsRemaining = 0; }
+            netComm.write(new ConfigUpdated(requestsRemaining));
+        }
     }
 }

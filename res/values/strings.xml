@@ -85,5 +85,5 @@
     <string name="settingsSaved" type="id">Save Successful</string>
     <string name="settingsSavedMsg" type="id">You have successfully saved your settings.</string>
     <string name="configUpdated">Configuration Updated</string>
-    <string name="configUpdatedMsg">The DJ updated the configuration. You now have {0} requests left.</string>
+    <string name="configUpdatedMsg">The DJ updated the configuration. You now have %d requests left.</string>
 </resources>

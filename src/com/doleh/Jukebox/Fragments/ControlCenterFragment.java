@@ -50,7 +50,7 @@ public class ControlCenterFragment extends Fragment
         // this fragment does not need to loaded immediately, delayed until needed
         if (Config.APP_PAID)
         {
-            configFragment = new ConfigFragment();
+            configFragment = new ConfigFragment(networkServer);
             FragmentHelper.addFragment(FragmentHelper.CONFIG, configFragment, getFragmentManager());
         }
     }
