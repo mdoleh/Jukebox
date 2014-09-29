@@ -1,4 +1,4 @@
-package com.doleh.Jukebox;
+package com.doleh.Jukebox.Static;
 
 import android.app.Activity;
 import android.net.ConnectivityManager;

@@ -14,18 +14,23 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import com.doleh.Jukebox.*;
+import com.doleh.Jukebox.Interfaces.IFunction;
+import com.doleh.Jukebox.Interfaces.INetworkServer;
+import com.doleh.Jukebox.Interfaces.IPlayerView;
+import com.doleh.Jukebox.Static.Config;
+import com.doleh.Jukebox.Static.Utils;
 
-public class PlayerFragment extends Fragment
+public class PlayerFragment extends Fragment implements IPlayerView
 {
     private View view;
     public MediaPlayer mediaPlayer = new MediaPlayer();
     private Activity mainActivity;
     private boolean mediaPlayerReady = false;
-    private NetworkServer _networkServer;
+    private INetworkServer _networkServer;
     private Handler updateHandler = new Handler();
     private boolean pauseOnButtonPush = false;
 
-    public PlayerFragment(NetworkServer networkServer)
+    public PlayerFragment(INetworkServer networkServer)
     {
         _networkServer = networkServer;
     }

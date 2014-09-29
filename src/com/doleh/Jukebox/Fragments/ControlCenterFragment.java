@@ -11,15 +11,19 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.doleh.Jukebox.*;
+import com.doleh.Jukebox.Interfaces.*;
+import com.doleh.Jukebox.Static.Config;
+import com.doleh.Jukebox.Static.MessageDialog;
+import com.doleh.Jukebox.Static.Utils;
 
-public class ControlCenterFragment extends Fragment
+public class ControlCenterFragment extends Fragment implements IControlCenterView
 {
     private Activity mainActivity;
     private View view;
-    private NetworkServer networkServer;
-    private PlayerFragment playerFragment;
-    private RequestListFragment requestListFragment;
-    private ConfigFragment configFragment;
+    private INetworkServer networkServer;
+    private IPlayerView playerFragment;
+    private IRequestListView requestListFragment;
+    private IConfigView configFragment;
     private boolean listenImageToggle = false;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,8 +44,8 @@ public class ControlCenterFragment extends Fragment
     {
         playerFragment = new PlayerFragment(networkServer);
         requestListFragment = new RequestListFragment();
-        FragmentHelper.addFragment(FragmentHelper.MUSIC_PLAYER, playerFragment, getFragmentManager());
-        FragmentHelper.addFragment(FragmentHelper.REQUEST_LIST, requestListFragment, getFragmentManager());
+        FragmentHelper.addFragment(FragmentHelper.MUSIC_PLAYER, (Fragment)playerFragment, getFragmentManager());
+        FragmentHelper.addFragment(FragmentHelper.REQUEST_LIST, (Fragment)requestListFragment, getFragmentManager());
         loadConfigurationFragment();
     }
 
@@ -51,7 +55,7 @@ public class ControlCenterFragment extends Fragment
         if (Config.APP_PAID)
         {
             configFragment = new ConfigFragment(networkServer);
-            FragmentHelper.addFragment(FragmentHelper.CONFIG, configFragment, getFragmentManager());
+            FragmentHelper.addFragment(FragmentHelper.CONFIG, (Fragment)configFragment, getFragmentManager());
         }
     }
 
@@ -61,8 +65,8 @@ public class ControlCenterFragment extends Fragment
         super.onDestroy();
         networkServer.closePort();
         networkServer.clearMessageCounts();
-        playerFragment.onDestroy();
-        requestListFragment.onDestroy();
+        ((Fragment)playerFragment).onDestroy();
+        ((Fragment)requestListFragment).onDestroy();
         FragmentHelper.goBackToBeginning(getFragmentManager());
         MediaLibraryHelper.clearSongQueue();
     }
@@ -119,9 +123,9 @@ public class ControlCenterFragment extends Fragment
         super.onHiddenChanged(hidden);
         if (!hidden)
         {
-            hideFragment(playerFragment, getFragmentManager(), R.animator.slide_out_left);
-            hideFragment(requestListFragment, getFragmentManager(), R.animator.slide_out_right);
-            hideFragment(configFragment, getFragmentManager(), R.animator.slide_out_down);
+            hideFragment((Fragment)playerFragment, getFragmentManager(), R.animator.slide_out_left);
+            hideFragment((Fragment)requestListFragment, getFragmentManager(), R.animator.slide_out_right);
+            hideFragment((Fragment)configFragment, getFragmentManager(), R.animator.slide_out_down);
         }
     }
 
@@ -150,7 +154,7 @@ public class ControlCenterFragment extends Fragment
         FragmentHelper.hideFragment(FragmentHelper.CONTROL_CENTER, this, getFragmentManager(), controlCenterAnimation);
 
         AnimationSetting playerAnimation = new AnimationSetting(R.animator.slide_in_right, 0, 0, 0);
-        FragmentHelper.unHideFragment(playerFragment, getFragmentManager(), playerAnimation);
+        FragmentHelper.unHideFragment((Fragment)playerFragment, getFragmentManager(), playerAnimation);
     }
 
     private void showRequestList()
@@ -159,7 +163,7 @@ public class ControlCenterFragment extends Fragment
         FragmentHelper.hideFragment(FragmentHelper.CONTROL_CENTER, this, getFragmentManager(), controlCenterAnimation);
 
         AnimationSetting requestListAnimation = new AnimationSetting(R.animator.slide_in_left, 0, 0, 0);
-        FragmentHelper.unHideFragment(requestListFragment, getFragmentManager(), requestListAnimation);
+        FragmentHelper.unHideFragment((Fragment)requestListFragment, getFragmentManager(), requestListAnimation);
     }
 
     private void showConfigurations()
@@ -171,7 +175,7 @@ public class ControlCenterFragment extends Fragment
 
             loadConfigurationFragment();
             AnimationSetting configAnimation = new AnimationSetting(R.animator.slide_in_up, 0, 0, 0);
-            FragmentHelper.unHideFragment(configFragment, getFragmentManager(), configAnimation);
+            FragmentHelper.unHideFragment((Fragment)configFragment, getFragmentManager(), configAnimation);
         }
         else
         {
@@ -223,7 +227,7 @@ public class ControlCenterFragment extends Fragment
         });
     }
 
-    public class handleListenerToggleTouch implements IFunction
+    private class handleListenerToggleTouch implements IFunction
     {
         @Override
         public void execute(ImageView button)
@@ -232,7 +236,7 @@ public class ControlCenterFragment extends Fragment
         }
     }
 
-    public class handlePlayerTouch implements IFunction
+    private class handlePlayerTouch implements IFunction
     {
         @Override
         public void execute(ImageView button)
@@ -241,7 +245,7 @@ public class ControlCenterFragment extends Fragment
         }
     }
 
-    public class handleRequestsTouch implements IFunction
+    private class handleRequestsTouch implements IFunction
     {
         @Override
         public void execute(ImageView button)
@@ -250,7 +254,7 @@ public class ControlCenterFragment extends Fragment
         }
     }
 
-    public class handleConfigTouch implements IFunction
+    private class handleConfigTouch implements IFunction
     {
         @Override
         public void execute(ImageView button)

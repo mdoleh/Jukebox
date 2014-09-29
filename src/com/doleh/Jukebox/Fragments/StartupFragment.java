@@ -8,11 +8,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import com.doleh.Jukebox.Globals;
-import com.doleh.Jukebox.IFunction;
+import com.doleh.Jukebox.Static.Globals;
+import com.doleh.Jukebox.Interfaces.IFunction;
+import com.doleh.Jukebox.Interfaces.IStartupView;
 import com.doleh.Jukebox.R;
 
-public class StartupFragment extends Fragment
+public class StartupFragment extends Fragment implements IStartupView
 {
     private View view;
 

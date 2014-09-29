@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.doleh.Jukebox.Config;
+import com.doleh.Jukebox.Static.Config;
 
 public class AppRater {
     private final static int DAYS_UNTIL_PROMPT = 2;

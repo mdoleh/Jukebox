@@ -9,7 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import com.doleh.Jukebox.Config;
+import com.doleh.Jukebox.Static.Config;
+import com.doleh.Jukebox.Interfaces.ISongRequestView;
 import com.doleh.Jukebox.MessageTypes.Client.RequestSongId;
 import com.doleh.Jukebox.NetworkClient;
 import com.doleh.Jukebox.R;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class SongRequestFragment extends Fragment
+public class SongRequestFragment extends Fragment implements ISongRequestView
 {
     private Activity mainActivity;
     private View view;

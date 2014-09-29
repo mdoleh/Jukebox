@@ -10,19 +10,20 @@ import android.widget.Button;
 import android.widget.CheckedTextView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import com.doleh.Jukebox.Config;
-import com.doleh.Jukebox.MessageDialog;
-import com.doleh.Jukebox.NetworkServer;
+import com.doleh.Jukebox.Static.Config;
+import com.doleh.Jukebox.Interfaces.IConfigView;
+import com.doleh.Jukebox.Interfaces.INetworkServer;
+import com.doleh.Jukebox.Static.MessageDialog;
 import com.doleh.Jukebox.R;
 
-public class ConfigFragment extends Fragment
+public class ConfigFragment extends Fragment implements IConfigView
 {
     private View view;
     private Activity mainActivity;
     private final int SEEK_BAR_STEP = 5;
-    private NetworkServer _networkServer;
+    private INetworkServer _networkServer;
 
-    public ConfigFragment(NetworkServer networkServer)
+    public ConfigFragment(INetworkServer networkServer)
     {
         _networkServer = networkServer;
     }

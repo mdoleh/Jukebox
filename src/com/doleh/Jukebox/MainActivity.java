@@ -2,6 +2,7 @@ package com.doleh.Jukebox;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,6 +13,9 @@ import android.view.KeyEvent;
 import com.doleh.Jukebox.Fragments.ControlCenterFragment;
 import com.doleh.Jukebox.Fragments.FragmentHelper;
 import com.doleh.Jukebox.Fragments.StartupFragment;
+import com.doleh.Jukebox.Interfaces.IControlCenterView;
+import com.doleh.Jukebox.Static.Config;
+import com.doleh.Jukebox.Static.Globals;
 import com.hardiktrivedi.Exception.ExceptionHandler;
 import com.snippets.Utils.AppRater;
 
@@ -77,9 +81,9 @@ public class MainActivity extends Activity
     @Override
     public boolean onKeyDown(final int keyCode, final KeyEvent event) {
         final FragmentManager fragmentManager = getFragmentManager();
-        ControlCenterFragment controlCenterFragment = (ControlCenterFragment)fragmentManager.findFragmentByTag("control_center");
+        IControlCenterView controlCenterFragment = (ControlCenterFragment)fragmentManager.findFragmentByTag("control_center");
         //Handle the back button
-        if(keyCode == KeyEvent.KEYCODE_BACK && controlCenterVisibleAndOnBackStack(fragmentManager, controlCenterFragment)) {
+        if(keyCode == KeyEvent.KEYCODE_BACK && controlCenterVisibleAndOnBackStack(fragmentManager, (Fragment)controlCenterFragment)) {
             //Ask the user if they want to quit
             new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_dialog_alert)
@@ -100,7 +104,7 @@ public class MainActivity extends Activity
         }
     }
 
-    private boolean controlCenterVisibleAndOnBackStack(FragmentManager fragmentManager, ControlCenterFragment controlCenterFragment)
+    private boolean controlCenterVisibleAndOnBackStack(FragmentManager fragmentManager, Fragment controlCenterFragment)
     {
         return fragmentManager.getBackStackEntryCount() <= 2 && controlCenterFragment != null && controlCenterFragment.isVisible();
     }

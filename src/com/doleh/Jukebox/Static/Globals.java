@@ -1,4 +1,4 @@
-package com.doleh.Jukebox;
+package com.doleh.Jukebox.Static;
 
 public class Globals
 {

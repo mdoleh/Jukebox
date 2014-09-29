@@ -1,7 +1,7 @@
 package com.doleh.Jukebox.MessageTypes.Client;
 
 import android.app.Activity;
-import com.doleh.Jukebox.Config;
+import com.doleh.Jukebox.Static.Config;
 import com.doleh.Jukebox.Fragments.FragmentHelper;
 import com.doleh.Jukebox.Fragments.PlayerFragment;
 import com.doleh.Jukebox.Fragments.RequestListFragment;

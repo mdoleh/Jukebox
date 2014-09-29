@@ -1,4 +1,4 @@
-package com.doleh.Jukebox;
+package com.doleh.Jukebox.Static;
 
 import android.util.Base64;
 import com.hardiktrivedi.Exception.ExceptionHandler;

@@ -9,14 +9,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import com.doleh.Jukebox.*;
+import com.doleh.Jukebox.Interfaces.IConnectView;
+import com.doleh.Jukebox.Interfaces.INetworkClient;
+import com.doleh.Jukebox.Static.Email;
+import com.doleh.Jukebox.Static.MessageDialog;
+import com.doleh.Jukebox.Static.Utils;
 
 import java.io.IOException;
 
-public class ConnectFragment extends Fragment
+public class ConnectFragment extends Fragment implements IConnectView
 {
     private View view;
     private Activity mainActivity;
-    private NetworkClient networkClient = new NetworkClient();
+    private INetworkClient networkClient = new NetworkClient();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

@@ -3,7 +3,10 @@ package com.doleh.Jukebox;
 import android.app.Activity;
 import com.doleh.Jukebox.Fragments.ConnectFragment;
 import com.doleh.Jukebox.Fragments.FragmentHelper;
+import com.doleh.Jukebox.Interfaces.INetworkClient;
 import com.doleh.Jukebox.MessageTypes.Server.ServerMessage;
+import com.doleh.Jukebox.Static.Config;
+import com.doleh.Jukebox.Static.MessageDialog;
 import com.jackieloven.thebasics.CloseConnectionMsg;
 import com.jackieloven.thebasics.NetComm;
 import com.jackieloven.thebasics.Networked;
@@ -12,7 +15,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.List;
 
-public class NetworkClient implements Networked
+public class NetworkClient implements Networked, INetworkClient
 {
     public static List<Song> receivedSongs;
     public static String ip;

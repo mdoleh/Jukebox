@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import com.doleh.Jukebox.Fragments.PlayerFragment;
 import com.doleh.Jukebox.Fragments.RequestListFragment;
+import com.doleh.Jukebox.Static.Config;
+import com.doleh.Jukebox.Static.Email;
 
 import java.io.IOException;
 import java.util.ArrayList;

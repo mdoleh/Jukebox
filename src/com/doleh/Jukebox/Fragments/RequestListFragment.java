@@ -11,7 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import com.doleh.Jukebox.IFunction;
+import com.doleh.Jukebox.Interfaces.IFunction;
+import com.doleh.Jukebox.Interfaces.IRequestListView;
 import com.doleh.Jukebox.MediaLibraryHelper;
 import com.doleh.Jukebox.R;
 import com.doleh.Jukebox.Song;
@@ -20,7 +21,7 @@ import com.ericharlow.DragNDrop.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RequestListFragment extends ListFragment
+public class RequestListFragment extends ListFragment implements IRequestListView
 {
     private View view;
     private ListView listView;

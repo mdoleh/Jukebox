@@ -3,9 +3,9 @@ package com.hardiktrivedi.Exception;
 import android.app.Activity;
 import android.os.Build;
 import android.util.Log;
-import com.doleh.Jukebox.Config;
-import com.doleh.Jukebox.Email;
-import com.doleh.Jukebox.MessageDialog;
+import com.doleh.Jukebox.Static.Config;
+import com.doleh.Jukebox.Static.Email;
+import com.doleh.Jukebox.Static.MessageDialog;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

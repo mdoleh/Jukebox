@@ -1,6 +1,6 @@
 package com.doleh.Jukebox.MessageTypes.Server;
 
-import com.doleh.Jukebox.MessageDialog;
+import com.doleh.Jukebox.Static.MessageDialog;
 import com.doleh.Jukebox.NetworkClient;
 import com.doleh.Jukebox.Fragments.FragmentHelper;
 import com.doleh.Jukebox.R;

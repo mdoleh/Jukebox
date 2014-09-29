@@ -10,11 +10,12 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import com.doleh.Jukebox.Interfaces.ISongSearchView;
 import com.doleh.Jukebox.MessageTypes.Client.RequestSongList;
 import com.doleh.Jukebox.NetworkClient;
 import com.doleh.Jukebox.R;
 
-public class SongSearchFragment extends Fragment
+public class SongSearchFragment extends Fragment implements ISongSearchView
 {
     private View view;
     private Activity mainActivity;

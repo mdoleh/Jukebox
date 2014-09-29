@@ -1,6 +1,6 @@
 package com.jackieloven.thebasics;
 
-import com.doleh.Jukebox.Email;
+import com.doleh.Jukebox.Static.Email;
 
 import java.io.*;
 import java.net.Socket;

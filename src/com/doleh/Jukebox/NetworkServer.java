@@ -4,11 +4,16 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import com.doleh.Jukebox.Fragments.ControlCenterFragment;
 import com.doleh.Jukebox.Fragments.FragmentHelper;
+import com.doleh.Jukebox.Interfaces.IControlCenterView;
+import com.doleh.Jukebox.Interfaces.INetworkServer;
 import com.doleh.Jukebox.MessageTypes.Client.ClientMessage;
 import com.doleh.Jukebox.MessageTypes.Server.ConfigUpdated;
 import com.doleh.Jukebox.MessageTypes.Server.ConnectionAccepted;
 import com.doleh.Jukebox.MessageTypes.Server.ConnectionClosed;
 import com.doleh.Jukebox.MessageTypes.Server.Rejection;
+import com.doleh.Jukebox.Static.Config;
+import com.doleh.Jukebox.Static.Email;
+import com.doleh.Jukebox.Static.MessageDialog;
 import com.jackieloven.thebasics.CloseConnectionMsg;
 import com.jackieloven.thebasics.NetComm;
 import com.jackieloven.thebasics.Networked;
@@ -21,12 +26,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class NetworkServer implements Networked
+public class NetworkServer implements Networked, INetworkServer
 {
     private boolean listeningForRequests = false;
     private Map<String, Integer> messageCount = new HashMap<String, Integer>();
     public Activity mainActivity;
-    private ControlCenterFragment _controlCenterFragment;
+    private IControlCenterView _controlCenterFragment;
 
     // Network globals
     /** server socket used to set up connections with clients */

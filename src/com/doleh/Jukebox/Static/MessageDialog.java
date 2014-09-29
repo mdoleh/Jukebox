@@ -1,8 +1,9 @@
-package com.doleh.Jukebox;
+package com.doleh.Jukebox.Static;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import com.doleh.Jukebox.R;
 
 public class MessageDialog
 {
