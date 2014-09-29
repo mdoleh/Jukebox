@@ -8,6 +8,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import com.doleh.Jukebox.Static.Factories.ConnectViewFactory;
+import com.doleh.Jukebox.Static.Factories.ControlCenterViewFactory;
 import com.doleh.Jukebox.Static.Globals;
 import com.doleh.Jukebox.Interfaces.IFunction;
 import com.doleh.Jukebox.Interfaces.IStartupView;
@@ -86,7 +88,7 @@ public class StartupFragment extends Fragment implements IStartupView
 
     private void showControlCenter()
     {
-        FragmentHelper.showFragment(FragmentHelper.STARTUP, this, FragmentHelper.CONTROL_CENTER, new ControlCenterFragment(), getFragmentManager());
+        FragmentHelper.showFragment(FragmentHelper.STARTUP, this, FragmentHelper.CONTROL_CENTER, (Fragment)ControlCenterViewFactory.createControlCenterView(), getFragmentManager());
     }
 
     private class handleSendTouch implements IFunction
@@ -100,6 +102,6 @@ public class StartupFragment extends Fragment implements IStartupView
 
     private void showConnectDevices()
     {
-        FragmentHelper.showFragment(FragmentHelper.STARTUP, this, "connect", new ConnectFragment(), getFragmentManager());
+        FragmentHelper.showFragment(FragmentHelper.STARTUP, this, "connect", (Fragment)ConnectViewFactory.createConnectView(), getFragmentManager());
     }
 }

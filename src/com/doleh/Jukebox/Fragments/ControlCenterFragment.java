@@ -13,6 +13,10 @@ import android.widget.TextView;
 import com.doleh.Jukebox.*;
 import com.doleh.Jukebox.Interfaces.*;
 import com.doleh.Jukebox.Static.Config;
+import com.doleh.Jukebox.Static.Factories.ConfigViewFactory;
+import com.doleh.Jukebox.Static.Factories.NetworkServerFactory;
+import com.doleh.Jukebox.Static.Factories.PlayerViewFactory;
+import com.doleh.Jukebox.Static.Factories.RequestListViewFactory;
 import com.doleh.Jukebox.Static.MessageDialog;
 import com.doleh.Jukebox.Static.Utils;
 
@@ -32,7 +36,7 @@ public class ControlCenterFragment extends Fragment implements IControlCenterVie
         view = inflater.inflate(R.layout.control_center, container, false);
         FragmentHelper.loadBannerAds(view);
         mainActivity = getActivity();
-        networkServer = new NetworkServer(mainActivity);
+        networkServer = NetworkServerFactory.createNetworkServer(mainActivity);
         loadFragments();
 
         setupButtonEventListener();
@@ -42,8 +46,8 @@ public class ControlCenterFragment extends Fragment implements IControlCenterVie
 
     private void loadFragments()
     {
-        playerFragment = new PlayerFragment(networkServer);
-        requestListFragment = new RequestListFragment();
+        playerFragment = PlayerViewFactory.createPlayerView(networkServer);
+        requestListFragment = RequestListViewFactory.createRequestListView();
         FragmentHelper.addFragment(FragmentHelper.MUSIC_PLAYER, (Fragment)playerFragment, getFragmentManager());
         FragmentHelper.addFragment(FragmentHelper.REQUEST_LIST, (Fragment)requestListFragment, getFragmentManager());
         loadConfigurationFragment();
@@ -54,7 +58,7 @@ public class ControlCenterFragment extends Fragment implements IControlCenterVie
         // this fragment does not need to loaded immediately, delayed until needed
         if (Config.APP_PAID)
         {
-            configFragment = new ConfigFragment(networkServer);
+            configFragment = ConfigViewFactory.createConfigView(networkServer);
             FragmentHelper.addFragment(FragmentHelper.CONFIG, (Fragment)configFragment, getFragmentManager());
         }
     }

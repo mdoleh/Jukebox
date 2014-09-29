@@ -12,9 +12,9 @@ import android.os.PowerManager;
 import android.view.KeyEvent;
 import com.doleh.Jukebox.Fragments.ControlCenterFragment;
 import com.doleh.Jukebox.Fragments.FragmentHelper;
-import com.doleh.Jukebox.Fragments.StartupFragment;
 import com.doleh.Jukebox.Interfaces.IControlCenterView;
 import com.doleh.Jukebox.Static.Config;
+import com.doleh.Jukebox.Static.Factories.StartupViewFactory;
 import com.doleh.Jukebox.Static.Globals;
 import com.hardiktrivedi.Exception.ExceptionHandler;
 import com.snippets.Utils.AppRater;
@@ -45,7 +45,7 @@ public class MainActivity extends Activity
         }
 
         // Add this section of code wherever a fragment should appear (i.e. new screen)
-        FragmentHelper.showFragment(FragmentHelper.STARTUP, new StartupFragment(), getFragmentManager());
+        FragmentHelper.showFragment(FragmentHelper.STARTUP, (Fragment)StartupViewFactory.createStartupView(), getFragmentManager());
 
         // Prevent LCD screen from turning off
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);

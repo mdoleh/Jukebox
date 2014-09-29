@@ -12,6 +12,8 @@ import com.doleh.Jukebox.*;
 import com.doleh.Jukebox.Interfaces.IConnectView;
 import com.doleh.Jukebox.Interfaces.INetworkClient;
 import com.doleh.Jukebox.Static.Email;
+import com.doleh.Jukebox.Static.Factories.NetworkClientFactory;
+import com.doleh.Jukebox.Static.Factories.SongSearchViewFactory;
 import com.doleh.Jukebox.Static.MessageDialog;
 import com.doleh.Jukebox.Static.Utils;
 
@@ -21,7 +23,7 @@ public class ConnectFragment extends Fragment implements IConnectView
 {
     private View view;
     private Activity mainActivity;
-    private INetworkClient networkClient = new NetworkClient();
+    private INetworkClient networkClient = NetworkClientFactory.createNetworkClient();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -94,7 +96,7 @@ public class ConnectFragment extends Fragment implements IConnectView
 
     public void showSongSearch()
     {
-        FragmentHelper.showFragment(FragmentHelper.CONNECT, this, FragmentHelper.SONG_SEARCH, new SongSearchFragment(), getFragmentManager());
+        FragmentHelper.showFragment(FragmentHelper.CONNECT, this, FragmentHelper.SONG_SEARCH, (Fragment)SongSearchViewFactory.createSongSearchView(), getFragmentManager());
     }
 
     private void blockUI(Button connectButton)

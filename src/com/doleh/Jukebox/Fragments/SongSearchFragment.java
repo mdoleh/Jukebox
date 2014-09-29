@@ -14,6 +14,7 @@ import com.doleh.Jukebox.Interfaces.ISongSearchView;
 import com.doleh.Jukebox.MessageTypes.Client.RequestSongList;
 import com.doleh.Jukebox.NetworkClient;
 import com.doleh.Jukebox.R;
+import com.doleh.Jukebox.Static.Factories.SongRequestViewFactory;
 
 public class SongSearchFragment extends Fragment implements ISongSearchView
 {
@@ -58,7 +59,7 @@ public class SongSearchFragment extends Fragment implements ISongSearchView
     public void showSongRequest()
     {
         hideKeyboard();
-        FragmentHelper.showFragment(FragmentHelper.SONG_SEARCH, this, FragmentHelper.SONG_REQUEST, new SongRequestFragment(), getFragmentManager());
+        FragmentHelper.showFragment(FragmentHelper.SONG_SEARCH, this, FragmentHelper.SONG_REQUEST, (Fragment)SongRequestViewFactory.createSongRequestView(), getFragmentManager());
     }
 
     private void sendSearch()
