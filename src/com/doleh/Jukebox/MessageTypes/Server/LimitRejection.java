@@ -13,7 +13,7 @@ public class LimitRejection extends ServerMessage implements Serializable
     @Override
     public void Execute()
     {
-        MessageDialog.showMessageBox(NetworkClient.mainActivity, NetworkClient.mainActivity.getString(R.string.connectionFailed), NetworkClient.mainActivity.getString(R.string.limitReachedMsg));
+        MessageDialog.showMessageBox(NetworkClient.mainActivity, NetworkClient.mainActivity.getString(R.string.connectionFailed), NetworkClient.mainActivity.getString(R.string.limitReachedMsg), null);
         FragmentHelper.getFragment(SongRequestFragment.class, NetworkClient.mainActivity.getFragmentManager(), FragmentHelper.SONG_REQUEST).unBlockUI();
     }
 }

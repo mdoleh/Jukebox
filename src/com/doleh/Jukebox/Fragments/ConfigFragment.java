@@ -15,6 +15,7 @@ import com.doleh.Jukebox.Interfaces.IConfigView;
 import com.doleh.Jukebox.Interfaces.INetworkServer;
 import com.doleh.Jukebox.Static.MessageDialog;
 import com.doleh.Jukebox.R;
+import com.doleh.Jukebox.Static.Tracking;
 
 public class ConfigFragment extends Fragment implements IConfigView
 {
@@ -64,7 +65,7 @@ public class ConfigFragment extends Fragment implements IConfigView
                 }
                 Config.MAX_MESSAGE_COUNT = progress;
                 Config.AUTO_PLAY = autoplay.isChecked();
-                MessageDialog.showMessageBox(mainActivity, getString(R.string.settingsSaved), getString(R.string.settingsSavedMsg));
+                MessageDialog.showMessageBox(mainActivity, getString(R.string.settingsSaved), getString(R.string.settingsSavedMsg), null);
             }
         });
     }
@@ -107,13 +108,13 @@ public class ConfigFragment extends Fragment implements IConfigView
             @Override
             public void onStartTrackingTouch(SeekBar seekBar)
             {
-                // do nothing
+                Tracking.logSeekBarBeginTouch(seekBar, seekBar.getProgress());
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar)
             {
-                // do nothing
+                Tracking.logSeekBarEndTouch(seekBar, seekBar.getProgress());
             }
         });
     }

@@ -8,12 +8,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import com.doleh.Jukebox.Static.Factories.ConnectViewFactory;
-import com.doleh.Jukebox.Static.Factories.ControlCenterViewFactory;
-import com.doleh.Jukebox.Static.Globals;
 import com.doleh.Jukebox.Interfaces.IFunction;
 import com.doleh.Jukebox.Interfaces.IStartupView;
 import com.doleh.Jukebox.R;
+import com.doleh.Jukebox.Static.Factories.ConnectViewFactory;
+import com.doleh.Jukebox.Static.Factories.ControlCenterViewFactory;
+import com.doleh.Jukebox.Static.Globals;
 
 public class StartupFragment extends Fragment implements IStartupView
 {
@@ -102,6 +102,6 @@ public class StartupFragment extends Fragment implements IStartupView
 
     private void showConnectDevices()
     {
-        FragmentHelper.showFragment(FragmentHelper.STARTUP, this, "connect", (Fragment)ConnectViewFactory.createConnectView(), getFragmentManager());
+        FragmentHelper.showFragment(FragmentHelper.STARTUP, this, FragmentHelper.CONNECT, (Fragment)ConnectViewFactory.createConnectView(), getFragmentManager());
     }
 }

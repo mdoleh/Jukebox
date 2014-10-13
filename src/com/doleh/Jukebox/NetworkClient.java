@@ -53,7 +53,7 @@ public class NetworkClient implements Networked, INetworkClient
     private void cancelConnect()
     {
         netComm = null;
-        MessageDialog.showMessageBox(mainActivity, mainActivity.getString(R.string.connectionFailed), mainActivity.getString(R.string.connectionFailedMsg2));
+        MessageDialog.showMessageBox(mainActivity, mainActivity.getString(R.string.connectionFailed), mainActivity.getString(R.string.connectionFailedMsg2), null);
         FragmentHelper.getFragment(ConnectFragment.class, mainActivity.getFragmentManager(), FragmentHelper.CONNECT).unBlockUI();
     }
 }

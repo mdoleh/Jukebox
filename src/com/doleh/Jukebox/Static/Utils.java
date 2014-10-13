@@ -1,8 +1,10 @@
 package com.doleh.Jukebox.Static;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.view.View;
 import org.apache.http.conn.util.InetAddressUtils;
 
 import java.net.InetAddress;
@@ -76,5 +78,17 @@ public class Utils
     {
         android.os.Process.killProcess(android.os.Process.myPid());
         System.exit(10);
+    }
+
+    public static String getIDName(View view)
+    {
+        int id = view.getId();                       // get integer id of view
+        String idString = "no id";
+        if(id != View.NO_ID) {                    // make sure id is valid
+            Resources res = view.getResources();     // get resources
+            if(res != null)
+                idString = res.getResourceEntryName(id); // get id string entry
+        }
+        return idString;
     }
 }

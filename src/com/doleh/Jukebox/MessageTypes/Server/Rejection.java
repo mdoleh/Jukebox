@@ -25,7 +25,7 @@ public class Rejection extends ServerMessage implements Serializable
     @Override
     public void Execute()
     {
-        MessageDialog.showMessageBox(NetworkClient.mainActivity, NetworkClient.mainActivity.getString(R.string.connectionFailed), NetworkClient.mainActivity.getString(R.string.connectionFailedMsg));
+        MessageDialog.showMessageBox(NetworkClient.mainActivity, NetworkClient.mainActivity.getString(R.string.connectionFailed), NetworkClient.mainActivity.getString(R.string.connectionFailedMsg), null);
         FragmentHelper.getFragment(ConnectFragment.class, NetworkClient.mainActivity.getFragmentManager(), FragmentHelper.CONNECT).unBlockUI();
         FragmentHelper.goBackToBeginning(NetworkClient.mainActivity.getFragmentManager());
         if (closeNetComm) { NetworkClient.netComm.close(); }

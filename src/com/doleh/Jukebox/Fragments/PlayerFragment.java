@@ -18,6 +18,7 @@ import com.doleh.Jukebox.Interfaces.IFunction;
 import com.doleh.Jukebox.Interfaces.INetworkServer;
 import com.doleh.Jukebox.Interfaces.IPlayerView;
 import com.doleh.Jukebox.Static.Config;
+import com.doleh.Jukebox.Static.Tracking;
 import com.doleh.Jukebox.Static.Utils;
 
 public class PlayerFragment extends Fragment implements IPlayerView
@@ -57,6 +58,8 @@ public class PlayerFragment extends Fragment implements IPlayerView
         mediaPlayer.release();
         stopUpdatingUI();
         MediaLibraryHelper.isPaused = false;
+        Fragment testFailure = null;
+        testFailure.onDestroy();
     }
 
     private void setupButtonEventListeners()
@@ -140,6 +143,7 @@ public class PlayerFragment extends Fragment implements IPlayerView
             @Override
             public void onStartTrackingTouch(SeekBar seekBar)
             {
+                Tracking.logSeekBarBeginTouch(seekBar, seekBar.getProgress());
                 if (mediaPlayer.isPlaying() && !MediaLibraryHelper.isPaused)
                 {
                     togglePlay(null);
@@ -149,6 +153,7 @@ public class PlayerFragment extends Fragment implements IPlayerView
             @Override
             public void onStopTrackingTouch(SeekBar seekBar)
             {
+                Tracking.logSeekBarEndTouch(seekBar, seekBar.getProgress());
                 if (!pauseOnButtonPush)
                 {
                     togglePlay(null);
@@ -246,8 +251,14 @@ public class PlayerFragment extends Fragment implements IPlayerView
             @Override
             public void run()
             {
-                if (mediaPlayer.isPlaying() || mediaPlayerReady) { element.setText(Utils.millisecondsToTime(duration)); }
-                else { element.setText(Utils.millisecondsToTime(0)); }
+                if (mediaPlayer.isPlaying() || mediaPlayerReady)
+                {
+                    element.setText(Utils.millisecondsToTime(duration));
+                }
+                else
+                {
+                    element.setText(Utils.millisecondsToTime(0));
+                }
             }
         });
     }
@@ -259,7 +270,7 @@ public class PlayerFragment extends Fragment implements IPlayerView
             @Override
             public void run()
             {
-                final SeekBar seekBar = (SeekBar)view.findViewById(R.id.songSeekBar);
+                final SeekBar seekBar = (SeekBar) view.findViewById(R.id.songSeekBar);
                 seekBar.setProgress(0);
             }
         });

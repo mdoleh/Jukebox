@@ -30,7 +30,7 @@ public class SongList extends ServerMessage implements Serializable
         }
         else
         {
-            MessageDialog.showMessageBox(NetworkClient.mainActivity, NetworkClient.mainActivity.getString(R.string.noSongsFound), NetworkClient.mainActivity.getString(R.string.noSongsFoundMsg));
+            MessageDialog.showMessageBox(NetworkClient.mainActivity, NetworkClient.mainActivity.getString(R.string.noSongsFound), NetworkClient.mainActivity.getString(R.string.noSongsFoundMsg), null);
         }
         songSearchFragment.unBlockUI();
     }

@@ -183,7 +183,7 @@ public class ControlCenterFragment extends Fragment implements IControlCenterVie
         }
         else
         {
-            MessageDialog.showMessageBox(mainActivity, getString(R.string.notPaidApp), getString(R.string.notPaidAppMsg));
+            MessageDialog.showMessageBox(mainActivity, getString(R.string.notPaidApp), getString(R.string.notPaidAppMsg), null);
         }
     }
 
@@ -199,7 +199,7 @@ public class ControlCenterFragment extends Fragment implements IControlCenterVie
         }
         else
         {
-            MessageDialog.showMessageBox(mainActivity, getString(R.string.notOnWifi), getString(R.string.notOnWifiMsgListen));
+            MessageDialog.showMessageBox(mainActivity, getString(R.string.notOnWifi), getString(R.string.notOnWifiMsgListen), null);
         }
     }
 

@@ -16,6 +16,7 @@ import com.doleh.Jukebox.Interfaces.IControlCenterView;
 import com.doleh.Jukebox.Static.Config;
 import com.doleh.Jukebox.Static.Factories.StartupViewFactory;
 import com.doleh.Jukebox.Static.Globals;
+import com.doleh.Jukebox.Static.Tracking;
 import com.hardiktrivedi.Exception.ExceptionHandler;
 import com.snippets.Utils.AppRater;
 
@@ -31,6 +32,7 @@ public class MainActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
+        Tracking.initialize();
 
         setContentView(R.layout.main);
 
@@ -65,6 +67,7 @@ public class MainActivity extends Activity
     @Override
     public void onPause() {
         super.onPause();
+        Tracking.logPause();
         // Allow LCD screen to turn off
         if (wakeLock.isHeld()) { wakeLock.release(); }
     }
@@ -74,6 +77,7 @@ public class MainActivity extends Activity
     {
         super.onConfigurationChanged(newConfig);
         Globals.IS_LANDSCAPE = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE;
+        Tracking.logOrientationChange(newConfig.orientation);
     }
 
     // Detects back button press and asks the user if they want to leave the control center
@@ -81,8 +85,12 @@ public class MainActivity extends Activity
     @Override
     public boolean onKeyDown(final int keyCode, final KeyEvent event) {
         final FragmentManager fragmentManager = getFragmentManager();
-        IControlCenterView controlCenterFragment = (ControlCenterFragment)fragmentManager.findFragmentByTag("control_center");
+        IControlCenterView controlCenterFragment = FragmentHelper.getFragment(ControlCenterFragment.class, fragmentManager, FragmentHelper.CONTROL_CENTER);
         //Handle the back button
+        if (keyCode == KeyEvent.KEYCODE_BACK)
+        {
+            Tracking.logBackButton();
+        }
         if(keyCode == KeyEvent.KEYCODE_BACK && controlCenterVisibleAndOnBackStack(fragmentManager, (Fragment)controlCenterFragment)) {
             //Ask the user if they want to quit
             new AlertDialog.Builder(this)

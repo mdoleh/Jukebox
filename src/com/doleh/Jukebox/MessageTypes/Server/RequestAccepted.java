@@ -20,7 +20,7 @@ public class RequestAccepted extends ServerMessage implements Serializable
     @Override
     public void Execute()
     {
-        MessageDialog.showMessageBox(NetworkClient.mainActivity, NetworkClient.mainActivity.getString(R.string.requestAccepted), String.format(NetworkClient.mainActivity.getString(R.string.requestAcceptedMsg), _requestsRemaining));
+        MessageDialog.showMessageBox(NetworkClient.mainActivity, NetworkClient.mainActivity.getString(R.string.requestAccepted), String.format(NetworkClient.mainActivity.getString(R.string.requestAcceptedMsg), _requestsRemaining), null);
         FragmentHelper.getFragment(SongRequestFragment.class, NetworkClient.mainActivity.getFragmentManager(), FragmentHelper.SONG_REQUEST).unBlockUI();
     }
 }

@@ -11,9 +11,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import com.doleh.Jukebox.AnimationSetting;
-import com.doleh.Jukebox.Static.Config;
 import com.doleh.Jukebox.Interfaces.IFunction;
 import com.doleh.Jukebox.R;
+import com.doleh.Jukebox.Static.Config;
+import com.doleh.Jukebox.Static.Tracking;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
@@ -53,6 +54,7 @@ public class FragmentHelper
             case MotionEvent.ACTION_CANCEL: {
                 touchHandler.execute(button);
                 button.clearColorFilter();
+                Tracking.logTouch(button);
                 break;
             }
         }
@@ -60,6 +62,7 @@ public class FragmentHelper
 
     public static void showFragment(String currentFragmentTag, Fragment currentFragment, String newFragmentTag, Fragment newFragment, FragmentManager fragmentManager)
     {
+        Tracking.logFragmentChange(newFragment);
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setCustomAnimations(R.animator.slide_in_up, R.animator.slide_out_up, R.animator.slide_in_down, R.animator.slide_out_down);
         transaction.remove(currentFragment);
@@ -70,6 +73,7 @@ public class FragmentHelper
 
     public static void showFragment(String newFragmentTag, Fragment newFragment, FragmentManager fragmentManager)
     {
+        Tracking.logFragmentChange(newFragment);
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         transaction.add(R.id.main, newFragment, newFragmentTag);
@@ -102,6 +106,7 @@ public class FragmentHelper
 
     public static void unHideFragment(Fragment fragment, FragmentManager fragmentManager, AnimationSetting animationSetting)
     {
+        Tracking.logFragmentChange(fragment);
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setCustomAnimations(animationSetting.enter, animationSetting.exit, animationSetting.popEnter, animationSetting.popExit);
         transaction.show(fragment);
@@ -128,6 +133,7 @@ public class FragmentHelper
 
     public static void blockUI(Activity mainActivity, final Button button, final View view)
     {
+        Tracking.logTouch(button);
         mainActivity.runOnUiThread(new Runnable()
         {
             @Override

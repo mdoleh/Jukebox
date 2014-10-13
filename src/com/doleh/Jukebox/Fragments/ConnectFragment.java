@@ -81,7 +81,7 @@ public class ConnectFragment extends Fragment implements IConnectView
                 }
                 else
                 {
-                    MessageDialog.showMessageBox(mainActivity, getString(R.string.notOnWifi), getString(R.string.notOnWifiMsgConnect));
+                    MessageDialog.showMessageBox(mainActivity, getString(R.string.notOnWifi), getString(R.string.notOnWifiMsgConnect), null);
                 }
             }});
     }

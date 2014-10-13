@@ -12,7 +12,7 @@ public class ConnectionClosed extends ServerMessage implements Serializable
     @Override
     public void Execute()
     {
-        MessageDialog.showMessageBox(NetworkClient.mainActivity, NetworkClient.mainActivity.getString(R.string.connectionLost), NetworkClient.mainActivity.getString(R.string.connectionLostMsg));
+        MessageDialog.showMessageBox(NetworkClient.mainActivity, NetworkClient.mainActivity.getString(R.string.connectionLost), NetworkClient.mainActivity.getString(R.string.connectionLostMsg), null);
         FragmentHelper.goBackToBeginning(NetworkClient.mainActivity.getFragmentManager());
     }
 }

@@ -65,11 +65,11 @@ public class NetworkServer implements Networked, INetworkServer
                 // wait for clients to connect
                 new Thread(new AcceptClientsThread()).start();
             }
-            MessageDialog.showMessageBox(mainActivity, mainActivity.getString(R.string.toggleListener), mainActivity.getString(R.string.toggleListenerMessageOn));
+            MessageDialog.showMessageBox(mainActivity, mainActivity.getString(R.string.toggleListener), mainActivity.getString(R.string.toggleListenerMessageOn), null);
         }
         else
         {
-            MessageDialog.showMessageBox(mainActivity, mainActivity.getString(R.string.toggleListener), mainActivity.getString(R.string.toggleListenerMessageOff));
+            MessageDialog.showMessageBox(mainActivity, mainActivity.getString(R.string.toggleListener), mainActivity.getString(R.string.toggleListenerMessageOff), null);
         }
     }
 
