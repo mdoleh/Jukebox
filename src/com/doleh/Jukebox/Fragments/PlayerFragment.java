@@ -58,8 +58,6 @@ public class PlayerFragment extends Fragment implements IPlayerView
         mediaPlayer.release();
         stopUpdatingUI();
         MediaLibraryHelper.isPaused = false;
-        Fragment testFailure = null;
-        testFailure.onDestroy();
     }
 
     private void setupButtonEventListeners()
