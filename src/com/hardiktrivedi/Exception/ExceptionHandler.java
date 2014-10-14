@@ -1,11 +1,14 @@
 package com.hardiktrivedi.Exception;
 
 import android.app.Activity;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
-import com.doleh.Jukebox.R;
-import com.doleh.Jukebox.Static.*;
+import com.doleh.Jukebox.CrashActivity;
+import com.doleh.Jukebox.Static.Config;
+import com.doleh.Jukebox.Static.Email;
+import com.doleh.Jukebox.Static.Tracking;
+import com.doleh.Jukebox.Static.Utils;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -13,7 +16,7 @@ import java.io.StringWriter;
 public class ExceptionHandler implements
         java.lang.Thread.UncaughtExceptionHandler {
     private final static String LINE_SEPARATOR = "\n";
-    private Activity _mainActivity;
+    private final Activity _mainActivity;
 
     public ExceptionHandler(Activity mainActivity)
     {
@@ -23,7 +26,9 @@ public class ExceptionHandler implements
     public void uncaughtException(Thread thread, Throwable exception) {
         Email.sendErrorReport(exception);
         Log.e(Config.APP_TITLE, exception.getMessage(), exception);
-        MessageDialog.showMessageBox(_mainActivity, _mainActivity.getString(R.string.forceClose), _mainActivity.getString(R.string.forceCloseMsg), errorDialogCloseHandler);
+        Intent intent = new Intent(_mainActivity, CrashActivity.class);
+        _mainActivity.startActivity(intent);
+        Utils.closeApplication();
     }
 
     public static String generateReport(Throwable exception)
@@ -65,13 +70,4 @@ public class ExceptionHandler implements
 
         return errorReport.toString();
     }
-
-    private static DialogInterface.OnClickListener errorDialogCloseHandler = new DialogInterface.OnClickListener()
-    {
-        @Override
-        public void onClick(DialogInterface dialog, int which)
-        {
-            Utils.closeApplication();
-        }
-    };
 }
