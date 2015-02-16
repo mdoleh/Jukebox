@@ -3,6 +3,7 @@ package com.doleh.Jukebox;
 import android.app.Activity;
 import com.doleh.Jukebox.Fragments.ConnectFragment;
 import com.doleh.Jukebox.Fragments.FragmentHelper;
+import com.doleh.Jukebox.Interfaces.IConnectView;
 import com.doleh.Jukebox.Interfaces.INetworkClient;
 import com.doleh.Jukebox.MessageTypes.Server.ServerMessage;
 import com.doleh.Jukebox.Static.Config;
@@ -54,7 +55,7 @@ public class NetworkClient implements Networked, INetworkClient
     {
         netComm = null;
         MessageDialog.showMessageBox(mainActivity, mainActivity.getString(R.string.connectionFailed), mainActivity.getString(R.string.connectionFailedMsg2), null);
-        ConnectFragment fragment = FragmentHelper.getFragment(ConnectFragment.class, mainActivity.getFragmentManager(), FragmentHelper.CONNECT);
+        IConnectView fragment = FragmentHelper.getFragment(ConnectFragment.class, mainActivity.getFragmentManager(), FragmentHelper.CONNECT);
         if (fragment != null) fragment.unBlockUI();
     }
 }
