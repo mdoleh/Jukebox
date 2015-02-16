@@ -52,9 +52,9 @@ public class FragmentHelper
             }
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL: {
+                Tracking.logTouch(button);
                 touchHandler.execute(button);
                 button.clearColorFilter();
-                Tracking.logTouch(button);
                 break;
             }
         }
