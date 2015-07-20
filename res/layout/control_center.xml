@@ -4,7 +4,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:ads="http://schemas.android.com/apk/res-auto">
+        xmlns:ads="http://schemas.android.com/apk/lib/com.doleh.Jukebox">
 
     <TextView
             android:layout_width="wrap_content"
@@ -104,11 +104,11 @@
             android:layout_below="@+id/requestersLabel"
             android:src="@drawable/request_list_icon"/>
 
-    <com.google.android.gms.ads.AdView android:id="@+id/bottomBanner"
-                                       android:layout_width="wrap_content"
-                                       android:layout_height="wrap_content"
-                                       android:layout_alignParentBottom="true"
-                                       android:layout_centerHorizontal="true"
-                                       ads:adUnitId="@string/banner_control_center"
-                                       ads:adSize="SMART_BANNER"/>
+    <!--<com.google.android.gms.ads.AdView android:id="@+id/bottomBanner"-->
+                                       <!--android:layout_width="wrap_content"-->
+                                       <!--android:layout_height="wrap_content"-->
+                                       <!--android:layout_alignParentBottom="true"-->
+                                       <!--android:layout_centerHorizontal="true"-->
+                                       <!--ads:adUnitId="@string/banner_control_center"-->
+                                       <!--ads:adSize="SMART_BANNER"/>-->
 </RelativeLayout>

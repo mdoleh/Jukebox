@@ -15,8 +15,8 @@ import com.doleh.Jukebox.Interfaces.IFunction;
 import com.doleh.Jukebox.R;
 import com.doleh.Jukebox.Static.Config;
 import com.doleh.Jukebox.Static.Tracking;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
+//import com.google.android.gms.ads.AdRequest;
+//import com.google.android.gms.ads.AdView;
 
 public class FragmentHelper
 {
@@ -33,12 +33,12 @@ public class FragmentHelper
     {
         if (Config.SHOULD_SHOW_ADS) {
             // Look up the AdView as a resource and load a request.
-            AdView adView = (AdView)view.findViewById(R.id.bottomBanner);
-            AdRequest adRequest = new AdRequest.Builder()
-    //                .addTestDevice("05EB5BB05700B41A96F9FAA7933F2832")
-    //                .addTestDevice("A6A88EF525F683BB326EECB11E4504D6")
-                    .build();
-            adView.loadAd(adRequest);
+//            AdView adView = (AdView)view.findViewById(R.id.bottomBanner);
+//            AdRequest adRequest = new AdRequest.Builder()
+//    //                .addTestDevice("05EB5BB05700B41A96F9FAA7933F2832")
+//    //                .addTestDevice("A6A88EF525F683BB326EECB11E4504D6")
+//                    .build();
+//            adView.loadAd(adRequest);
         }
     }
 

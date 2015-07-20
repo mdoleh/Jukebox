@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:ads="http://schemas.android.com/apk/res-auto"
+                xmlns:ads="http://schemas.android.com/apk/lib/com.doleh.Jukebox"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -65,7 +65,6 @@
                 android:contentDescription="@string/send_a_request"
                 android:id="@+id/send_a_request"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@id/startupTitle"
                 android:src="@drawable/send_requests"/>
 
         <TextView
@@ -78,12 +77,12 @@
                 android:layout_below="@+id/send_a_request"/>
     </RelativeLayout>
 
-    <com.google.android.gms.ads.AdView android:id="@+id/bottomBanner"
-                                       android:layout_width="wrap_content"
-                                       android:layout_height="wrap_content"
-                                       android:layout_alignParentBottom="true"
-                                       android:layout_centerHorizontal="true"
-                                       ads:adUnitId="@string/banner_startup"
-                                       ads:adSize="SMART_BANNER"/>
+    <!--<com.google.android.gms.ads.AdView android:id="@+id/bottomBanner"-->
+                                       <!--android:layout_width="wrap_content"-->
+                                       <!--android:layout_height="wrap_content"-->
+                                       <!--android:layout_alignParentBottom="true"-->
+                                       <!--android:layout_centerHorizontal="true"-->
+                                       <!--ads:adUnitId="@string/banner_startup"-->
+                                       <!--ads:adSize="SMART_BANNER"/>-->
 
 </RelativeLayout>
